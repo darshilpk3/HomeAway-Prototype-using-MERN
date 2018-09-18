@@ -15,11 +15,20 @@ class NavBar extends Component {
 
     }
 
+    componentWillMount(){
+        this.setState({
+            expression:""
+        })
+    }
     handleInput(e) {
         console.log(this.state.expression)
-        this.setState({
-            expression: e.target.value
-        })
+        // var regex1 = RegExp('[A-za-z!@#$%^&*()]');
+        // let str = e.target.value
+        //  if(!regex1.test(str)){
+            this.setState({
+                expression: e.target.value
+            })
+        //  }
         console.log(this.state.expression)
     }
 
@@ -46,13 +55,13 @@ class NavBar extends Component {
             evalString: this.state.expression
         }
         axios.defaults.withCredentials = true;
-        axios.post('#', data)
+        axios.post('http://localhost:3001/solve', data)
             .then(response => {
                 console.log("Status Code: " + response.status)
                 console.log(response.data)
                 if (response.status === 200) {
                     this.setState({
-                        expression: response.data
+                        expression: response.data + ""
                     });
                 }
             })
