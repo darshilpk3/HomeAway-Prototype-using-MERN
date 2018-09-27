@@ -232,4 +232,19 @@ h1, .h1 {
     background-color: #353e44;
 }
 
+.transparent{
+    background: none;
+}
 
+.btn-primary {
+    position: relative;
+    border-radius: 100px;
+    background-color: #0067db;
+    border-color: #0067db;
+    color: #fff;
+    text-shadow: none;
+    -webkit-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+    line-height: 24px;
+    box-shadow: none;
+}

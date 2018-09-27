@@ -4,6 +4,7 @@ import LoginNavBar from '../../LoginNavBar'
 import {Redirect} from 'react-router'
 import axios from 'axios'
 import '../../App.css'
+import cookie from 'react-cookies';
 class LoginPage extends Component {
 
     constructor(props){
@@ -13,7 +14,6 @@ class LoginPage extends Component {
             password:"",
             message:"",
             redirect:false,
-            responsedata:null
         }
         this.handleEmail = this.handleEmail.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
@@ -54,7 +54,6 @@ class LoginPage extends Component {
                     console.log(response.data)
                     this.setState({
                         redirect:true,
-                        responsedata:response.data
                     })
                 }
             })
@@ -63,10 +62,8 @@ class LoginPage extends Component {
     render() {
 
         let redirectVar = null;
-        if(this.state.redirect === true){
-            redirectVar = <Redirect to={{
-                pathname: "/home", 
-                state: {user:this.state.responsedata}}}></Redirect>
+        if(cookie.load("loginuser")){
+            redirectVar = <Redirect to="/home"/>
         }
         return (
             <div>
