@@ -31,6 +31,12 @@ class NavBar extends Component {
         cookie.remove('loginuser',{
             path:"/"
         });
+        cookie.remove('loginemail',{
+            path:"/"
+        });
+        this.setState({
+            logininfo:"Logged out"
+        })
     }
 
     componentWillMount(){
@@ -39,7 +45,7 @@ class NavBar extends Component {
     render() {
 
         let navVar = null;
-        if (this.state.logininfo === "Login") {
+        if (!cookie.load("loginuser")) {
             navVar = <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Login</a>
                 <div class="dropdown-menu">
@@ -83,16 +89,11 @@ class NavBar extends Component {
                                     <div class="dropdown-divider"></div>
                                     <p class="dropdown-header">Homeowners</p>
                                     <a class="dropdown-item" href="#">How it works</a>
-                                    <a class="dropdown-item" href="#">List your property</a>
                                     <a class="dropdown-item" href="#">Community</a>
                                     <a class="dropdown-item" href="#">Discovery Hub</a>
                                     <div class="dropdown-divider"></div>
                                     <p class="dropdown-header">Property Managers</p>
-                                    <a class="dropdown-item" href="#">List your property</a>
                                 </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#listproperty" disabled>List your property</a>
                             </li>
                             <li class="nav-item dropdown navbar-brand">
                                 <img class="navbar-brand" src="birdhouse-bceheader-white.svg" />

@@ -11,7 +11,7 @@ class InlineForm extends Component {
         this.handleChange = this.handleChange.bind(this);
         console.log("inside inline form: "+(this.props.form_values && this.props.form_values.place))
         this.state = {
-            place: (this.props.form_values && this.props.form_values.place),
+            place: (((this.props.form_values && this.props.form_values.place))||(this.props.place && this.props.place)),
             available_from: (this.props.form_values && this.props.form_values.available_from),
             available_to: (this.props.form_values && this.props.form_values.available_to),
             accomodates: (this.props.form_values && this.props.form_values.accomodates),

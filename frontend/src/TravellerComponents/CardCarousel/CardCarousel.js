@@ -1,7 +1,11 @@
 import React,{Component} from 'react'
+import Popup from 'reactjs-popup'
 import '../../App.css'
 
 class CardCarousel extends Component{
+    constructor(props){
+        super(props)
+    }
     render(){
         return(
             <div class="container">

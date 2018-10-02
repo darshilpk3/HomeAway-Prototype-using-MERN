@@ -57,13 +57,6 @@ class Home extends Component {
                 <div class="clearfix"></div>
                 <CardCarousel />
                 <div class="clearfix"></div>
-                <div class="flex-container" id="listproperty">
-                    <p class=" list-property-header text-center">List your property on HomeAway and open your door to rental income</p>
-                    <button class="btn btn-primary btn-inverse text-center">List Your Property</button>
-                </div>
-                <div class="clearfix"></div>
-                <CardCarousel />
-                <div class="clearfix"></div>
                 <Footer />
             </div>
         )
@@ -71,3 +64,9 @@ class Home extends Component {
 }
 
 export default Home;
+    // <div class="clearfix"></div>
+    //     <div class="flex-container" id="listproperty">
+    //         <p class=" list-property-header text-center">List your property on HomeAway and open your door to rental income</p>
+    //         <button class="btn btn-primary btn-inverse text-center">List Your Property</button>
+    //     </div>
+    //     <div class="clearfix"></div>
