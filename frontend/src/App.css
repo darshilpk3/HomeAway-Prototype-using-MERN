@@ -31,6 +31,7 @@ html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    font-family: "Roboto",Arial,sans-serif;
     }
 
 *, *:before, *:after {
@@ -42,6 +43,7 @@ html {
 h1, .h1 {
   font-size: 20px;
   font-weight: 300;
+  padding: 10px;
   font-family: "Roboto",Arial,sans-serif;
   color: #353e44;
   }
@@ -149,10 +151,18 @@ h1, .h1 {
 
 .form-body{
     background-color: white;
-    margin:auto;
     padding:10px;
+    margin: 10px 60px;
     border: 1px solid #e6e6e6;
-    width: 300px;
+    width: auto;
+}
+
+.form-body-login{
+    background-color: white;
+    padding:10px;
+    margin: auto;
+    border: 1px solid #e6e6e6;
+    width: 400px;
 }
 
 .btn-primary{
@@ -229,7 +239,7 @@ h1, .h1 {
 }
 
 .page-footer{
-    background-color: #353e44;
+    background-color:#A4A4A4;
 }
 
 .transparent{
@@ -247,4 +257,103 @@ h1, .h1 {
     transition: all .25s ease-in-out;
     line-height: 24px;
     box-shadow: none;
+}
+
+.listing-property{
+    
+    height: 90px;
+}
+
+.property-image-carousel{
+    width:30%;
+}
+
+.property-detail{
+    width:70%;
+}
+
+.fixed-left{
+    position:fixed;
+    left:0;
+}
+
+.left-nav {
+    float: left;
+    width: 20%;
+    height: 500px;
+    background: grey;
+  }
+  
+  .main-div {
+    float: left;
+    width: 60%;
+    height: 500px;
+    background: lightblue;
+  }
+
+  .avatar-pic {
+    width: 150px;
+  }
+
+  .file-upload{
+      width:200px;
+  }
+
+  .col-xs-12{
+      width:100%;
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    height: 56px;
+    padding: 15px 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5rem;
+    color: #323f4d;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d3d8de;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: 0;
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+  .form-control-login {
+    display: block;
+    width: 100%;
+    height: 56px;
+    padding: 15px 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5rem;
+    background-image: none;
+    border: 1px solid #d3d8de;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: 0;
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.property-addition-navbar{
+    float:left
+}
+
+.photo-drop{
+    border: #353e44 dashed 5px;
+}
+
+.hidden{
+    display: none !important ;
+}
+
+.svg-brand {
+    stroke: #0067db;
+    fill: #0067db;
 }

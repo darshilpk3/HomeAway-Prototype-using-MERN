@@ -15,23 +15,26 @@ import OwnerEditProfile from '../OwnerComponents/EditProfile/OwnerEditProfile'
 import OwnerHomePage from '../OwnerComponents/HomePage/OwnerHomePage';
 import AddProperty from '../OwnerComponents/Property/AddProperty';
 import ShowProperties from '../OwnerComponents/Property/ShowProperties';
+import BookProperty from './BookProperty/BookProperty';
+import AddProperty2 from '../OwnerComponents/Property/AddProperty2';
 
 class Main extends Component{
 
     render(){
         return(
             <div>
-                <Route path="/login" component = {LoginPage}/>
-                <Route path="/signup" component = {SignUpPage}/>
-                <Route path="/home" component = {Home}/>
-                <Route path="/edit" component = {EditProfile}/>
-                <Route path="/list" component={ListPlaces}/>
+                <Route path="/traveller/login" component = {LoginPage}/>
+                <Route path="/traveller/signup" component = {SignUpPage}/>
+                <Route path="/traveller/home" component = {Home}/>
+                <Route path="/traveller/edit" component = {EditProfile}/>
+                <Route path="/traveller/show" component={ListPlaces}/>
+                <Route path="/traveller/property/show" component={BookProperty}/>
                 <Route path="/owner/login" component={OwnerLoginPage}/>
                 <Route path="/owner/signup" component={OwnerSignUpPage}/>
                 <Route path="/owner/edit" component={OwnerEditProfile} />
                 <Route path="/owner/home" component={OwnerHomePage}/>
-                <Route path="/owner/property" component={ShowProperties}/>
-                <Route path="/owner/property/add" component={AddProperty}/>
+                <Route path="/owner/property/show" component={ShowProperties}/>
+                <Route path="/owner/property/add" component={AddProperty2}/>
             </div>
         )
     }

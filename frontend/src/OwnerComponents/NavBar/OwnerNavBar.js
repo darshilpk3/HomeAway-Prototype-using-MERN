@@ -50,10 +50,10 @@ class OwnerNavBar extends Component {
         }
         else{
             navVar = <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {this.props && this.props.owner}</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {cookie.load('owneremail') && cookie.load('owneremail')}</a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href={"/owner/edit/"+cookie.load("ownerlogin")}>Profile Settings</a>
-                    <a class="dropdown-item" href={"/owner/property/"}>Property Details</a>
+                    <a class="dropdown-item" href={"/owner/property/show"}>Property Details</a>
                     <a class="dropdown-item" href={"/owner/property/add"}>Add new Property</a>
                     <button class="dropdown-item" onClick={this.handleLogout}>Sign out</button>
                 </div>
@@ -62,7 +62,7 @@ class OwnerNavBar extends Component {
         return (
             <nav class="navbar navbar-expand navbar-light">
                 <div class="container-fluid padding">
-                    <a href="/owner/home" class="navbar-brand"><img class="navbar-brand" src="logo-white.svg" /></a>
+                    <a href="/owner/home" class="navbar-brand"><img class="navbar-brand" src="../../logo-white.svg" /></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -70,7 +70,7 @@ class OwnerNavBar extends Component {
                         <ul class="navbar-nav ml-auto">
                             {navVar}
                             <li class="nav-item dropdown navbar-brand">
-                                <img class="navbar-brand" src="birdhouse-bceheader-white.svg" />
+                                <img class="navbar-brand" src="../../birdhouse-bceheader-white.svg" />
                             </li>
                         </ul>
                     </div>

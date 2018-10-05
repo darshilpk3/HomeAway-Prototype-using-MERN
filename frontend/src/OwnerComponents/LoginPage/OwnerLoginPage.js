@@ -4,6 +4,7 @@ import {Redirect} from 'react-router'
 import axios from 'axios'
 import '../../App.css'
 import cookie from 'react-cookies';
+import NavBar from '../../TravellerComponents/NavBar/NavBar';
 
 class OwnerLoginPage extends Component {
 
@@ -71,7 +72,7 @@ class OwnerLoginPage extends Component {
             <div>
                 {redirectVar}
                 <div>
-                    <OwnerNavBar />
+                    <NavBar/>
                 </div>
                 <div class="clearfix"></div>
                 <div class="bg-grey">
@@ -82,12 +83,12 @@ class OwnerLoginPage extends Component {
                             </div>
                             <div class="col-md-4 offset-md-4 text-align-center">
                                 <footer class="form-footer">Need an account? <a href="/owner/signup">Sign Up</a></footer>
-                                <footer class="form-footer">{this.state.message}</footer>
+                                <footer class="form-footer text-danger">{this.state.message}</footer>
                             </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="form-body">
+                    <div class="form-body-login">
                         <fieldset>
                             <p>Owner Account login</p>
                             <hr></hr>

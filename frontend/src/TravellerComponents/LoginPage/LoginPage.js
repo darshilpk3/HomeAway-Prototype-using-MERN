@@ -63,13 +63,13 @@ class LoginPage extends Component {
 
         let redirectVar = null;
         if(cookie.load("loginuser")){
-            redirectVar = <Redirect to="/home"/>
+            redirectVar = <Redirect to="/traveller/home"/>
         }
         return (
             <div>
                 {redirectVar}
                 <div>
-                    <LoginNavBar />
+                    <Navbar/>
                 </div>
                 <div class="clearfix"></div>
                 <div class="bg-grey">
@@ -79,13 +79,13 @@ class LoginPage extends Component {
                                 <h1 class="form-header text-center">Log in to HomeAway</h1>
                             </div>
                             <div class="col-md-4 offset-md-4 text-align-center">
-                                <footer class="form-footer">Need an account? <a href="/signup">Sign Up</a></footer>
-                                <footer class="form-footer">{this.state.message}</footer>
+                                <footer class="form-footer">Need an account? <a href="/traveller/signup">Sign Up</a></footer>
+                                <footer class="form-footer text-danger">{this.state.message}</footer>
                             </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="form-body">
+                    <div class="form-body-login">
                         <fieldset>
                             <p>Account login</p>
                             <hr></hr>
@@ -96,14 +96,16 @@ class LoginPage extends Component {
                                 <div class="clearfix"></div>
                                 <a class="form-footer" href="#">Forgot password?</a>
                                 <div class="clearfix"></div>
-                                <input type="button" class="form-control btn btn-primary" onClick = {this.login} value="Log in"></input>
-                                <div class="clearfix"></div>
                                 <input type="checkbox" value="Keep me signed in" checked></input>
                                 <label class="form-footer">Keep me signed in</label>
+                                <input type="button" class="form-control-login btn btn-warning btn-lg" onClick = {this.login} value="Log in"></input>
+                                <div class="clearfix"></div>
                             </form>
                         </fieldset>
                     </div>
                     <div class="clearfix"></div>
+                    <p class="form-footer text-center">Use of this Web site constitutes acceptance of the HomeAway.com <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>.</p>
+                    <p class="form-footer text-center">©2018 HomeAway. All rights reserved.</p>
                 </div>
             </div>
         )

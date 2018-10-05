@@ -3,8 +3,10 @@ import Navbar from '../NavBar/NavBar'
 import { Redirect } from 'react-router'
 import axios from 'axios'
 import cookie from 'react-cookies'
-import '../../App.css'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
+import '../../App.css'
+import 'react-tabs/style/react-tabs.css'
 class EditProfile extends Component {
 
     constructor(props) {
@@ -13,72 +15,27 @@ class EditProfile extends Component {
             email: "",
             firstname: "",
             lastname: "",
+            password:"",
             school: "",
             company: "",
             address: "",
             number: "",
-            message: ""
+            message: "",
+            selectedFile:"",
+            image:""
         }
-        // this.handleemail = this.handleemail.bind(this);
-        // this.handlefirstname = this.handlefirstname.bind(this);
-        // this.handlelastname = this.handlelastname.bind(this);
-        // this.handleschool = this.handleschool.bind(this);
-        // this.handlecompany = this.handlecompany.bind(this);
-        // this.handleaddress = this.handleaddress.bind(this);
-        // this.handlenumber = this.handlenumber.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.saveChange = this.saveChange.bind(this);
+        this.changeProfilePic = this.changeProfilePic.bind(this);
     }
 
-    handleChange = (e) => {
+    componentWillMount() {
         this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
-
-    handleemail = (e) => {
-        this.setState({
-            email: e.target.value
-        });
-    }
-    handlefirstname = (e) => {
-        this.setState({
-            firstname: e.target.value
-        });
-    }
-    handlelastname = (e) => {
-        this.setState({
-            lastname: e.target.value
-        });
-    }
-    handleschool = (e) => {
-        this.setState({
-            school: e.target.value
-        });
-    }
-    handlecompany = (e) => {
-        this.setState({
-            company: e.target.value
-        });
-    }
-    handleaddress = (e) => {
-        this.setState({
-            address: e.target.value
-        });
-    }
-    handlenumber = (e) => {
-        this.setState({
-            number: e.target.value
-        });
-    }
-
-    componentWillMount(){
-        this.setState({
-            message:""
+            message: ""
         })
     }
-    componentDidMount() {
 
+    componentDidMount() {
         var headers = new Headers();
         axios.defaults.withCredentials = true;
         var id = cookie.load("loginuser")
@@ -97,9 +54,24 @@ class EditProfile extends Component {
                         address: data.address,
                         company: data.company,
                         number: data.number,
+                        image: "http://localhost:3001"+data.profilepic
                     })
                 }
             })
+    }
+
+    handleChange = (e) => {
+        console.log("handleChange called")
+        if([e.target.name] == "profileImage"){
+            console.log("e.target.file: ",e.target.files[0])
+            this.setState({
+                selectedFile:e.target.files[0]
+            })
+            console.log(this.state.selectedFile)
+        }
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
     saveChange = (e) => {
@@ -128,12 +100,40 @@ class EditProfile extends Component {
             })
     }
 
+
+    changeProfilePic = (e) => {
+        
+        var headers = new Headers();
+        e.preventDefault();
+
+        axios.defaults.withCredentials = true;
+        console.log("While sending post request: "+this.state.selectedFile)
+        let formData = new FormData();
+        
+        formData.append('email',this.state.email)
+        formData.append('selectedFile',this.state.selectedFile)
+
+        console.log("formData is: ",formData.get('selectedFile'))
+        axios.post("http://localhost:3001/upload",formData)
+            .then(response => {
+                console.log("file should be  uploaded")
+                if(response.status === 200){
+                    console.log("http://localhost:3001/"+response.data)
+                    this.setState({
+                        image:"http://localhost:3001"+response.data
+                    })
+                }
+            })
+    }
+
     render() {
 
         let redirectVar = null;
         if (!cookie.load("loginuser")) {
-            redirectVar = <Redirect to="/login" />
+            redirectVar = <Redirect to="/traveller/login" />
         }
+        console.log("Rendering")
+        console.log("Image path: "+this.state.image)
         return (
             <div>
                 {redirectVar}
@@ -141,48 +141,172 @@ class EditProfile extends Component {
                     <Navbar />
                 </div>
                 <div class="clearfix"></div>
-                <div class="bg-grey">
-                    <div class="container-fluid bg-grey">
-                        <div class="row">
-                            <div class="col-md-4 offset-md-4 text-align-center">
-                                <h1 class="form-header text-center">Edit Profile</h1>
+                <div>
+                    <Tabs defaultIndex={1}>
+                        <TabList>
+                            <Tab>My Trips</Tab>
+                            <Tab>Profile</Tab>
+                            <Tab>Account</Tab>
+                        </TabList>
+                        <TabPanel>
+                            <h1><b>Previous Trips</b></h1>
+                            <div class="form-body">
+                                <div class="d-flex justify-content-left">
+                                    <table class="w-100">
+                                        <tr>
+                                            <td class="property-image-carousel">
+                                                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                                    <div class="carousel-inner">
+                                                        <div class="carousel-item active">
+                                                            <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
+                                                        </div>
+                                                    </div>
+                                                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </a>
+                                                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                        <span class="sr-only">Next</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="property-detail p-5">
+                                                <h3>San Jose</h3>
+                                                <lable>Arrived on: <p>2018-09-21</p></lable>
+                                                <label>Departed on: <p>2018-09-23</p></label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="col-md-4 offset-md-4 text-align-center">
-                                <footer class="form-footer">Keep it up-to-date! <a>Its always better</a></footer>
-                                <footer class="form-footer">{this.state.message}</footer>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="form-body">
-                        <fieldset>
-                            <p>Traveller's Information</p>
-                            <hr></hr>
-                            <form class="form-group">
-                                <input class="form-control" type="text" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
-                                <div class="clearfix"></div>
-                                <div class="flex-it">
-                                    <input class="form-control" type="text" value={this.state.firstname} onChange={this.handleChange} placeholder="First Name" name="firstname" required />
-                                    <input class="form-control" type="text" value={this.state.lastname} onChange={this.handleChange} placeholder="Last Name" name="lastname" required />
+                        </TabPanel>
+                        <TabPanel>
+                            <div class="bg-grey">
+                                <div class="container-fluid bg-grey">
+                                    <div class="row">
+                                        <div class="col-md-4 offset-md-4 text-align-center">
+                                            <h1 class="form-header text-center">Edit Profile</h1>
+                                        </div>
+                                        <div class="col-md-4 offset-md-4 text-align-center">
+                                            <footer class="form-footer">Keep it up-to-date! <a>Its always better</a></footer>
+                                            <footer class="form-footer">{this.state.message}</footer>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="clearfix"></div>
-                                <input class="form-control" value={this.state.address} onChange={this.handleChange} type="text" placeholder="city" name="address" />
+                                <div class="form-body">
+                                    <fieldset>
+                                        <h3><b>Profile Information</b></h3>
+                                        <hr></hr>
+                                        <form class="form-group">
+                                            <div class="flex-it">
+                                                <input class="form-control" type="text" value={this.state.firstname} onChange={this.handleChange} placeholder="First Name" name="firstname" required />
+                                                <input class="form-control" type="text" value={this.state.lastname} onChange={this.handleChange} placeholder="Last Name" name="lastname" required />
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <input class="form-control" value={this.state.address} onChange={this.handleChange} type="text" placeholder="city" name="address" />
+                                            <div class="clearfix"></div>
+                                            <input class="form-control" value={this.state.school} type="text" onChange={this.handleChange} placeholder="school" name="school" />
+                                            <div class="clearfix"></div>
+                                            <input class="form-control" type="text" value={this.state.company} onChange={this.handleChange} placeholder="company" name="company" />
+                                            <div class="clearfix"></div>
+                                            <input class="form-control" type="text" value={this.state.number} onChange={this.handleChange} placeholder="mobile No" name="number" />
+                                            <div class="clearfix"></div>
+                                            <input type="button" class="form-control-login btn btn-warning" value="Save changes" onClick={this.saveChange}></input>
+                                            <div class="clearfix"></div>
+                                        </form>
+                                    </fieldset>
+                                </div>
                                 <div class="clearfix"></div>
-                                <input class="form-control" value={this.state.school} type="text" onChange={this.handleChange} placeholder="school" name="school" />
-                                <div class="clearfix"></div>
-                                <input class="form-control" type="text" value={this.state.company} onChange={this.handleChange} placeholder="company" name="company" />
-                                <div class="clearfix"></div>
-                                <input class="form-control" type="text" value={this.state.number} onChange={this.handleChange} placeholder="mobile No" name="number" />
-                                <div class="clearfix"></div>
-                                <input type="button" class="form-control btn btn-primary" value="Save changes" onClick={this.saveChange}></input>
-                                <div class="clearfix"></div>
-                                <input type="button" class="form-control btn btn-primary" value="back"></input>
-                            </form>
-                        </fieldset>
-                    </div>
-                    <div class="clearfix"></div>
+                            </div>
+                        </TabPanel>
+                        <TabPanel>
+                            <div>
+                                <div class="bg-grey">
+                                    <div class="container-fluid bg-grey">
+                                        <div class="row">
+                                            <div class="col-md-4 offset-md-4 text-align-center">
+                                                <h1 class="form-header text-center">Account Settings</h1>
+                                            </div>
+                                            <div class="col-md-4 offset-md-4 text-align-center">
+                                                <footer class="form-footer">Keep it up-to-date! <a>Its always better</a></footer>
+                                                <footer class="form-footer text-danger">{this.state.message}</footer>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr></hr>
+                                    <form class="md-form" enctype="multipart/form-data" onSubmit={this.changeProfilePic}>
+                                        <div class="file-field d-flex justify-content-center">
+                                            <div class="mb-4">
+                                                <img src={"http://localhost:3001/public/uploads/"+this.state.email+"/profile.jpg"} class="rounded-circle z-depth-1-half avatar-pic" alt="example placeholder avatar" />
+                                                <h4><b>Darshil Kapadia</b></h4>
+                                            </div>
+                                        </div>
+                                        <div class="file-field d-flex justify-content-center ">
+                                            <input type="file" name="profileImage" onChange={this.handleChange}></input>
+                                            <input type="submit" class="btn btn-warning" value="Change"/>
+                                        </div>
+                                    </form>
+
+                                    <div class="form-body">
+                                        <fieldset>
+                                            <h5><b>Change your email address</b></h5>
+                                            <hr></hr>
+                                            <form class="form-group">
+                                                <div class="flex-it">
+                                                    <label>Email Address: </label>
+                                                    <input class="form-control" type="text" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                                                </div>
+                                                <br></br>
+                                                <p class="text-danger text-center">This will update your account email address for future reservations. If you need to update your email address for an existing reservation, please reach out to the owner or property manager, and they can update their records.</p>
+                                                <div class="clearfix"></div>
+                                                <input type="button" class="form-control-login btn btn-warning" value="Save changes" onClick={this.saveChange}></input>
+                                                <div class="clearfix"></div>
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-body">
+                                        <fieldset>
+                                            <h5><b>Change your password</b></h5>
+                                            <hr></hr>
+                                            <form class="form-group">
+                                                <div class="flex-it">
+                                                    <label>Old Password: </label>
+                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="flex-it">
+                                                    <label>New Password: </label>
+                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <div class="flex-it">
+                                                    <label>Retpe New Password: </label>
+                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                <input type="button" class="form-control-login btn btn-warning" value="Save changes" onClick={this.saveChange}></input>
+                                                <div class="clearfix"></div>
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </TabPanel>
+                    </Tabs>
                 </div>
             </div>
+
         )
     }
 }

@@ -102,12 +102,12 @@ class OwnerSignUpPage extends Component {
                             </div>
                             <div class="col-md-4 offset-md-4 text-align-center">
                                 <footer class="form-footer">Already have an account? <a href="/owner/login">Log in</a></footer>
-                                <footer class="form-footer">{this.state.message}</footer>
+                                <footer class="form-footer text-danger">{this.state.message}</footer>
                             </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="form-body">
+                    <div class="form-body-login">
                         <fieldset>
                             <form class="form-group">
                                 <div class="flex-it">
@@ -119,7 +119,7 @@ class OwnerSignUpPage extends Component {
                                 <div class="clearfix"></div>
                                 <input class="form-control" type="password" onChange={this.handlePassword} placeholder="Password" id="password" required/>
                                 <div class="clearfix"></div>
-                                <button class="form-control btn btn-primary" value="Sign me up" onClick={this.signUp}>Sign me up</button>
+                                <button class="form-control-login btn btn-warning" value="Sign me up" onClick={this.signUp}>Sign me up</button>
                                 <div class="clearfix"></div>
                                 <footer class="form-footer">By creating an account you are accepting our <a href="#">Terms and Conditions and Privacy Policy</a>.</footer>
                             </form>

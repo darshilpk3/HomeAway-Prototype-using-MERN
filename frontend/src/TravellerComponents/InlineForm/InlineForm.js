@@ -60,10 +60,10 @@ class InlineForm extends Component {
     render() {
         var redirectVar = null
         if (!cookie.load("loginuser")) {
-            redirectVar = <Redirect to="/login" />
+            redirectVar = <Redirect to="/traveller/login" />
         } else if (this.state.responsedata) {
             redirectVar = <Redirect to={{
-                pathname: '/list',
+                pathname: '/traveller/show',
                 state: {
                     places_list: this.state.responsedata,
                     place: this.state.place,
@@ -97,7 +97,7 @@ class InlineForm extends Component {
                             </div>
                         </div>
                         <div class="col-sm-2 ">
-                            <button type="button" class="btn btn-primary" onClick={this.submitSearch}>Search</button>
+                            <button type="button" class="form-control-login btn btn-primary" onClick={this.submitSearch}>Search</button>
                         </div>
                     </div>
                 </form>

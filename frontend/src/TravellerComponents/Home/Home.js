@@ -6,6 +6,7 @@ import CardCarousel from '../CardCarousel/CardCarousel'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import InlineForm from '../InlineForm/InlineForm';
+import NavBar2 from '../NavBar/NavBar2';
 
 class Home extends Component {
 
@@ -24,16 +25,16 @@ class Home extends Component {
         let redirectVar = null;
         console.log(cookie.load("loginuser"))
         if (!cookie.load("loginuser")) {
-            redirectVar = <Redirect to="/login" />
+            redirectVar = <Redirect to="/traveller/login" />
         }
         return (
             <div>
                 {redirectVar}
                 <div class="home-header">
-                    <NavBar user={cookie.load("loginemail") && cookie.load("loginemail")} />
+                    <NavBar2/>
                     <div class="jumbotron transparent">
-                        <h1 class="form-header">Book beach houses, cabins,</h1>
-                        <h1 class="form-header">condos and more, worldwide</h1>
+                        <h1 class="form-header text-white">Book beach houses, cabins,</h1>
+                        <h1 class="form-header text-white">condos and more, worldwide</h1>
                         <div class="clearfix"></div>
                         <InlineForm />
                     </div>

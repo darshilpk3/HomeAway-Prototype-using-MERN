@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var cors = require('cors');
 var mysql = require('mysql');
-
+var fileUpload = require('express-fileupload')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -21,8 +21,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+//app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(__dirname + '/public'));
+app.use(fileUpload())
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(session({
   secret              : 'cmpe273_kafka_passport_mongo',
