@@ -221,7 +221,7 @@ router.get("/edit/:travelid", function (req, res, next) {
       })
       res.end("Couldnt get a connection")
     } else {
-      sql = "select email,firstname,lastname,school,company,number,address,profilepic from traveluser,traveluserinfo where traveluser.travel_id=" + req.params.travelid + " and traveluser.travel_id=traveluserinfo.travel_id";
+      sql = "select email,password,firstname,lastname,school,company,number,address,profilepic from traveluser,traveluserinfo where traveluser.travel_id=" + req.params.travelid + " and traveluser.travel_id=traveluserinfo.travel_id";
       con.query(sql, function (err, result) {
         if (err) {
           console.log("error in select query")
@@ -273,6 +273,7 @@ router.get("/owner/edit/:ownerid", function (req, res, next) {
 router.post("/edit/:travelid", function (req, res, next) {
   console.log("changing user details")
   var email = req.body.email;
+  var password = md5(req.body.password);
   var firstname = req.body.firstname;
   var lastname = req.body.lastname;
   var school = req.body.school;
@@ -287,7 +288,7 @@ router.post("/edit/:travelid", function (req, res, next) {
       })
       res.end("Couldnt get a connection")
     } else {
-      sql = "update traveluser set email='" + email + "' where travel_id='" + req.params.travelid + "'";
+      sql = "update traveluser set email='" + email + "',password='" + password + "' where travel_id='" + req.params.travelid + "'";
       console.log(sql)
       con.query(sql, function (err, result) {
         if (err) {
@@ -391,7 +392,7 @@ router.post("/search", function (req, res, next) {
       res.end("Couldnt get a connection")
     } else {
       //sql = "select place_id from booking where place_id in (select place_id from place where (location_city='"+place+"') and ('"+available_from+"' between available_from and available_to) and ('"+available_to+"' between available_from and available_to) and (accomodates>='"+accomodates+"')) and ('"+available_from+"' not between booking_from and booking_to) and ('"+available_to+"' not between booking_from and booking_to)"
-      sql = "select * from place where (location_city='" + place + "') and ('" + available_from + "' between available_from and available_to) and ('" + available_to + "' between available_from and available_to) and (accomodates>='" + accomodates + "') and place_id not in (select place_id from booking where ('" + available_from + "' between booking_from and booking_to) or ('" + available_to + "' between booking_from and booking_to))"
+      sql = "select p.*,pi.* from place as p,place_info as pi where (p.location_city='" + place + "') and ('" + available_from + "' between p.available_from and p.available_to) and ('" + available_to + "' between p.available_from and p.available_to) and (p.accomodates>='" + accomodates + "') and p.place_id not in (select place_id from booking where ('" + available_from + "' between booking_from and booking_to) or ('" + available_to + "' between booking_from and booking_to)) and p.place_id=pi.place_id"
       console.log(sql);
       con.query(sql, function (err, result) {
         if (err) {
@@ -511,7 +512,7 @@ router.get("/property/:propertyid", function (req, res, next) {
       })
       res.end("Couldnt get connection")
     } else {
-      sql = "select * from place where place_id = '" + req.params.propertyid + "'"
+      sql = "select p.*,pi.* from place as p, place_info as pi where p.place_id = '" + req.params.propertyid + "' and p.place_id = pi.place_id"
       console.log(sql)
       con.query(sql, function (err, result) {
         if (err) {
@@ -644,6 +645,36 @@ router.post("/upload", function (req, res, next) {
               res.end(`public/uploads/${req.body.email}/profile${path.extname(imageFile.name)}`)
             }
           })
+        }
+      })
+    }
+  })
+})
+
+
+router.get("/bookingdetails/:travel_id", function (req, res, next) {
+  console.log("Trying to fetch booking details")
+  pool.getConnection(function (err, con) {
+    if (err) {
+      res.writeHead(400, {
+        'Content-Type': 'text/plain'
+      })
+      res.end("Couldnt get connection")
+    } else {
+      sql = "select p.*,pi.*,b.* from place as p,place_info as pi, booking as b where p.place_id in (select place_id from booking where travel_id='" + req.params.travel_id + "') and p.place_id = pi.place_id and p.place_id = b.place_id";
+      console.log(sql);
+      con.query(sql, function (err, result) {
+        if (err) {
+          res.writeHead(400, {
+            'Content-Type': 'text/plain'
+          })
+          res.end("Couldnt get connection")
+        } else {
+          res.writeHead(200, {
+            'Content-Type': 'application/json'
+          })
+          console.log(JSON.stringify(result))
+          res.end(JSON.stringify(result))
         }
       })
     }

@@ -23,6 +23,7 @@ class ListPlaces extends Component {
         axios.defaults.withCredentials = true
 
         const place_id = e.target.id
+        console.log("Details should be shown: " + place_id)
         axios.get("http://localhost:3001/property/" + place_id)
             .then(response => {
                 console.log("Response from get method: ", response.data)
@@ -57,44 +58,47 @@ class ListPlaces extends Component {
         }
         console.log(form_values)
         //var places_list = this.props.loaction.state && this.props.location.state.places_list;
-        var buttons = this.props.location.state.places_list.map(placeDetail => {
-            return (
-                <tr>
-                    <td class="property-image-carousel">
-                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
+        //console.log(this.props.location.state.places_list)
+        if (typeof this.props.location.state != "undefined") {
+            var buttons = this.props.location.state.places_list.map(placeDetail => {
+                return (
+                    <tr>
+                        <td class="property-image-carousel">
+                            <div id={"carouselExampleControls" + placeDetail.place_id} class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
+                                    </div>
                                 </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
-                                </div>
+                                <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail.place_id} role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href={"#carouselExampleControls" + placeDetail.place_id} role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
-                            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    </td>
-                    <td class="property-detail p-5">
-                        <a href="#" onClick={this.showDetails} id={placeDetail.place_id}>{placeDetail.place_name}</a>
-                        <br></br>
-                        <p>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
-                        <br></br>
-                        <p>{placeDetail.location_city}</p>
-                        <p>$149 <b>per night</b></p>
-                    </td>
-                </tr>
+                        </td>
+                        <td class="property-detail p-2">
+                            <h3><a href="#" class="text-dark" id={placeDetail.place_id} onClick={this.showDetails}>{placeDetail.place_name}</a></h3>
+                            <p class="text-warning">{placeDetail.headline}</p>
+                            <p><b>Description: </b>{placeDetail.description}</p>
+                            <p><b>Property Details: </b>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
+                            <p><b>Location, City: </b>{placeDetail.location_city}</p>
+                            <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
+                        </td>
+                    </tr>
+                )
+            });
+        }
 
-            )
-        });
         return (
             <div>
                 {redirectVar}
@@ -108,9 +112,10 @@ class ListPlaces extends Component {
                 <div class="clearfix"></div>
                 <hr></hr>
                 <div>
+                    <h2 class="text-dark text-center">Search Results</h2>
                     <div class="form-body">
                         <div class="d-flex justify-content-left">
-                            <table class="w-100">
+                            <table class="w-100 table-bordered bg-grey">
                                 {buttons}
                             </table>
                         </div>

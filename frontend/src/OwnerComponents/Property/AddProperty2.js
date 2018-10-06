@@ -14,16 +14,51 @@ class AddProperty2 extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            tab: 0
+            images: null
         }
-        this.handleTabs = this.handleTabs.bind(this)
+        this.handleChange = this.handleChange.bind(this);
+        this.uploadPhotos = this.uploadPhotos.bind(this);
+        this.addProperty = this.addProperty.bind(this);
     }
 
-    handleTabs = (e) => {
-        this.setState({
-            tab: Number(e.target.id)
-        })
-        console.log("changing the state of tab index", this.state.tab)
+    handleChange = (e) => {
+        if (e.target.name == "propertyImages") {
+            console.log("Images selected: " + e.target.files)
+            this.setState({
+                images: e.target.files
+            })
+        } else {
+            this.setState({
+                [e.target.name]: e.target.value
+            })
+        }
+    }
+
+    uploadPhotos = (e) => {
+        var headers = new Headers();
+        e.preventDefault();
+
+        axios.defaults.withCredentials = true;
+        console.log("While sending post request: " + this.state.selectedFile)
+        let formData = new FormData();
+        
+        formData.append('selectedFile', this.state.selectedFile)
+
+        console.log("formData is: ", formData.get('selectedFile'))
+        axios.post("http://localhost:3001/properties/upload", formData)
+            .then(response => {
+                console.log("file should be  uploaded")
+                if (response.status === 200) {
+                    console.log("http://localhost:3001/" + response.data)
+                    this.setState({
+                        image: "http://localhost:3001" + response.data
+                    })
+                }
+            })
+    }
+
+    addProperty = () => {
+
     }
     render() {
         console.log("rendering")
@@ -153,10 +188,14 @@ class AddProperty2 extends Component {
                                         <hr></hr>
                                         <h2 class="text-center p-2">Drop photos here</h2>
                                         <p class="text-center p-2">or</p>
-                                        <input type="file" id="files" class="hidden" />
-                                        <label for="files" class="btn btn-primary btn-lg">Select photos to upload</label>
+                                        <form enctype="multipart/form-data" class="d-flex flex-column justify-content-center">
+                                            <input type="file" id="files" name="propertyImages" class="hidden" multiple />
+                                            <label for="files" class="btn btn-primary btn-lg">Select photos to upload</label>
+                                            <br></br>
+                                            <button type="button" class="btn btn-warning btn-lg" onClick={this.uploadPhotos}>Done</button>
+                                        </form>
                                         <br></br>
-                                        <button type="button" id="1" class="btn btn-primary btn-large" onClick={this.handleTabs}>Continue</button>
+                                        <button type="button" id="1" class="btn btn-primary btn-lg" onClick={this.handleTabs}>Continue</button>
                                         <br></br>
                                         <p class="form-footer">Use of this Web site constitutes acceptance of the HomeAway.com Terms and conditions and Privacy policy.</p>
                                         <p class="form-footer">©2018 HomeAway. All rights reserved</p>

@@ -66,15 +66,12 @@ class NavBar extends Component {
         return (
                 <nav class="navbar navbar-expand navbar-light">
                     <div class="container-fluid padding">
-                        <a href="/traveller/home" class="navbar-brand"><img class="navbar-brand" src="../../logo-white.svg" /></a>
+                        <a href="/traveller/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarResponsive">
                             <ul class="navbar-nav ml-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" disabled>Trip Boards</a>
-                                </li>
                                 {navVar}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
@@ -91,8 +88,6 @@ class NavBar extends Component {
                                         <a class="dropdown-item" href="#">How it works</a>
                                         <a class="dropdown-item" href="#">Community</a>
                                         <a class="dropdown-item" href="#">Discovery Hub</a>
-                                        <div class="dropdown-divider"></div>
-                                        <p class="dropdown-header">Property Managers</p>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown navbar-brand">

@@ -4,6 +4,7 @@ import { Redirect } from 'react-router'
 import axios from 'axios'
 import cookie from 'react-cookies'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import md5 from 'md5'
 
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
@@ -15,18 +16,21 @@ class EditProfile extends Component {
             email: "",
             firstname: "",
             lastname: "",
-            password:"",
+            password: "",
             school: "",
             company: "",
             address: "",
             number: "",
             message: "",
-            selectedFile:"",
-            image:""
+            selectedFile: "",
+            image: "",
+            bookingDetails: null,
+            responseData : null
         }
         this.handleChange = this.handleChange.bind(this);
         this.saveChange = this.saveChange.bind(this);
         this.changeProfilePic = this.changeProfilePic.bind(this);
+        this.showDetails = this.showDetails.bind(this);
     }
 
     componentWillMount() {
@@ -49,12 +53,24 @@ class EditProfile extends Component {
                     this.setState({
                         email: data.email,
                         firstname: data.firstname,
+                        password: md5(data.password),
                         lastname: data.lastname,
                         school: data.school,
                         address: data.address,
                         company: data.company,
                         number: data.number,
-                        image: "http://localhost:3001"+data.profilepic
+                        image: "http://localhost:3001" + data.profilepic
+                    })
+                }
+            })
+
+        console.log("Sending get request to http://localhost:3001/bookingdetails/" + id)
+        axios.get("http://localhost:3001/bookingdetails/" + id)
+            .then(response => {
+                console.log("Booking details available")
+                if (response.status == 200) {
+                    this.setState({
+                        bookingDetails: response.data
                     })
                 }
             })
@@ -62,10 +78,10 @@ class EditProfile extends Component {
 
     handleChange = (e) => {
         console.log("handleChange called")
-        if([e.target.name] == "profileImage"){
-            console.log("e.target.file: ",e.target.files[0])
+        if ([e.target.name] == "profileImage") {
+            console.log("e.target.file: ", e.target.files[0])
             this.setState({
-                selectedFile:e.target.files[0]
+                selectedFile: e.target.files[0]
             })
             console.log(this.state.selectedFile)
         }
@@ -79,6 +95,7 @@ class EditProfile extends Component {
         axios.defaults.withCredentials = true;
         const data = {
             email: this.state.email,
+            password: this.state.password,
             firstname: this.state.firstname,
             lastname: this.state.lastname,
             address: this.state.address,
@@ -102,38 +119,106 @@ class EditProfile extends Component {
 
 
     changeProfilePic = (e) => {
-        
+
         var headers = new Headers();
         e.preventDefault();
 
         axios.defaults.withCredentials = true;
-        console.log("While sending post request: "+this.state.selectedFile)
+        console.log("While sending post request: " + this.state.selectedFile)
         let formData = new FormData();
-        
-        formData.append('email',this.state.email)
-        formData.append('selectedFile',this.state.selectedFile)
 
-        console.log("formData is: ",formData.get('selectedFile'))
-        axios.post("http://localhost:3001/upload",formData)
+        formData.append('email', this.state.email)
+        formData.append('selectedFile', this.state.selectedFile)
+
+        console.log("formData is: ", formData.get('selectedFile'))
+        axios.post("http://localhost:3001/upload", formData)
             .then(response => {
                 console.log("file should be  uploaded")
-                if(response.status === 200){
-                    console.log("http://localhost:3001/"+response.data)
+                if (response.status === 200) {
+                    console.log("http://localhost:3001/" + response.data)
                     this.setState({
-                        image:"http://localhost:3001"+response.data
+                        image: "http://localhost:3001" + response.data
                     })
                 }
             })
     }
 
+    showDetails = (e) => {
+
+        var headers = new Headers()
+        e.preventDefault()
+        axios.defaults.withCredentials = true
+
+        const place_id = e.target.id
+        console.log("Details should be shown: " + place_id)
+        axios.get("http://localhost:3001/property/" + place_id)
+            .then(response => {
+                console.log("Response from get method: ", response.data)
+                this.setState({
+                    responseData: response.data[0]
+                })
+            })
+    }
+
     render() {
 
-        let redirectVar = null;
+        let redirectVar = null
         if (!cookie.load("loginuser")) {
             redirectVar = <Redirect to="/traveller/login" />
         }
+        if (this.state.responseData) {
+            console.log("should be redirected")
+            redirectVar = <Redirect to={{
+                pathname: "/traveller/property/show",
+                state: {
+                    response: this.state.responseData,
+                }
+            }} />
+        }
         console.log("Rendering")
-        console.log("Image path: "+this.state.image)
+        console.log(this.state.bookingDetails)
+        var placeDetail = null;
+        console.log(typeof this.state.bookingDetails)
+        if (this.state.bookingDetails) {
+            var buttons = this.state.bookingDetails.map(placeDetail => {
+                return (
+                    <tr>
+                        <td class="property-image-carousel">
+                            <div id={"carouselExampleControls" + placeDetail.place_id} class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail.place_id} role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href={"#carouselExampleControls" + placeDetail.place_id} role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+                        </td>
+                        <td class="property-detail p-2">
+                            <h3><a href="#" class="text-dark" id={placeDetail.place_id} onClick={this.showDetails}>{placeDetail.place_name}</a></h3>
+                            <p><b>Location, City: </b>{placeDetail.location_city}</p>
+                            <p class="text-warning">{placeDetail.headline}</p>
+                            <p><b>From: </b>{placeDetail.booking_from}</p>
+                            <p><b>To: </b>{placeDetail.booking_to}</p>
+                            <p><b>Guests: </b>{placeDetail.guests}</p>
+                            <p class="bg-light"><b>Base Nightly Rate was:</b>{" $" + placeDetail.price}</p>
+                        </td>
+                    </tr>
+                )
+            })
+        }
         return (
             <div>
                 {redirectVar}
@@ -153,36 +238,7 @@ class EditProfile extends Component {
                             <div class="form-body">
                                 <div class="d-flex justify-content-left">
                                     <table class="w-100">
-                                        <tr>
-                                            <td class="property-image-carousel">
-                                                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                                    <div class="carousel-inner">
-                                                        <div class="carousel-item active">
-                                                            <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
-                                                        </div>
-                                                        <div class="carousel-item">
-                                                            <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
-                                                        </div>
-                                                        <div class="carousel-item">
-                                                            <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
-                                                        </div>
-                                                    </div>
-                                                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td class="property-detail p-5">
-                                                <h3>San Jose</h3>
-                                                <lable>Arrived on: <p>2018-09-21</p></lable>
-                                                <label>Departed on: <p>2018-09-23</p></label>
-                                            </td>
-                                        </tr>
+                                        {buttons}
                                     </table>
                                 </div>
                             </div>
@@ -246,13 +302,13 @@ class EditProfile extends Component {
                                     <form class="md-form" enctype="multipart/form-data" onSubmit={this.changeProfilePic}>
                                         <div class="file-field d-flex justify-content-center">
                                             <div class="mb-4">
-                                                <img src={"http://localhost:3001/public/uploads/"+this.state.email+"/profile.jpg"} class="rounded-circle z-depth-1-half avatar-pic" alt="example placeholder avatar" />
+                                                <img src={"http://localhost:3001/public/uploads/" + this.state.email + "/profile.jpg"} class="rounded-circle z-depth-1-half avatar-pic" alt="example placeholder avatar" />
                                                 <h4><b>Darshil Kapadia</b></h4>
                                             </div>
                                         </div>
                                         <div class="file-field d-flex justify-content-center ">
                                             <input type="file" name="profileImage" onChange={this.handleChange}></input>
-                                            <input type="submit" class="btn btn-warning" value="Change"/>
+                                            <input type="submit" class="btn btn-warning" value="Change" />
                                         </div>
                                     </form>
 
@@ -280,18 +336,8 @@ class EditProfile extends Component {
                                             <hr></hr>
                                             <form class="form-group">
                                                 <div class="flex-it">
-                                                    <label>Old Password: </label>
-                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div class="flex-it">
-                                                    <label>New Password: </label>
-                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div class="flex-it">
-                                                    <label>Retpe New Password: </label>
-                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                                                    <label>Password: </label>
+                                                    <input class="form-control" type="password" onChange={this.handleChange} value={this.state.password} placeholder="password" name="password" />
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <input type="button" class="form-control-login btn btn-warning" value="Save changes" onClick={this.saveChange}></input>

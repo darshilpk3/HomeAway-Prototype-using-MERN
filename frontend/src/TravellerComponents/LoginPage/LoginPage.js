@@ -87,7 +87,7 @@ class LoginPage extends Component {
                     <div class="clearfix"></div>
                     <div class="form-body-login">
                         <fieldset>
-                            <p>Account login</p>
+                            <p>Travel Account login</p>
                             <hr></hr>
                             <form class="form-group">
                                 <input class="form-control" type="text" onChange = {this.handleEmail} placeholder="Email address" id="email" />

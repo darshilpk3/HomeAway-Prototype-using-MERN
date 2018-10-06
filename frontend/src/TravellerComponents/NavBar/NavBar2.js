@@ -66,7 +66,7 @@ class NavBar2 extends Component {
         return (
                 <nav class="navbar navbar-expand navbar-dark">
                     <div class="container-fluid padding">
-                        <a href="/traveller/home" class="navbar-brand"><img class="navbar-brand" src="../../logo-white.svg" /></a>
+                        <a href="/traveller/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                             <span class="navbar-toggler-icon"></span>
                         </button>

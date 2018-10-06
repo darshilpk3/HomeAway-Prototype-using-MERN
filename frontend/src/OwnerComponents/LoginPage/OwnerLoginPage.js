@@ -99,10 +99,10 @@ class OwnerLoginPage extends Component {
                                 <div class="clearfix"></div>
                                 <a class="form-footer" href="#">Forgot password?</a>
                                 <div class="clearfix"></div>
-                                <input type="button" class="form-control btn btn-primary" onClick = {this.login} value="Log in"></input>
-                                <div class="clearfix"></div>
                                 <input type="checkbox" value="Keep me signed in" checked></input>
                                 <label class="form-footer">Keep me signed in</label>
+                                <div class="clearfix"></div>
+                                <input type="button" class="form-control-login btn btn-warning" onClick = {this.login} value="Log in"></input>
                             </form>
                         </fieldset>
                     </div>

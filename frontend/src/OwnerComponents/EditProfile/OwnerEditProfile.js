@@ -153,9 +153,8 @@ class OwnerEditProfile extends Component {
                                 <div class="clearfix"></div>
                                 <input class="form-control" type="text" value={this.state.number} onChange={this.handleChange} placeholder="mobile No" name="number" />
                                 <div class="clearfix"></div>
-                                <input type="button" class="form-control btn btn-primary" value="Save changes" onClick={this.saveChange}></input>
+                                <input type="button" class="form-control-login btn btn-warning" value="Save changes" onClick={this.saveChange}></input>
                                 <div class="clearfix"></div>
-                                <input type="button" class="form-control btn btn-primary" value="back"></input>
                             </form>
                         </fieldset>
                     </div>
