@@ -304,7 +304,7 @@ import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
 
 
-class AddProperty2 extends Component {
+class EditProperty extends Component {
 
     constructor(props) {
         super(props)
@@ -355,7 +355,7 @@ class AddProperty2 extends Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
-        this.addProperty = this.addProperty.bind(this);
+        this.editProperty = this.editProperty.bind(this);
     }
 
     componentDidMount() {
@@ -503,11 +503,12 @@ class AddProperty2 extends Component {
         this.setState({ formValid: this.state.streetValid && this.state.location_cityValid && this.state.stateValid && this.state.countryValid && this.state.zipcodeValid && this.state.bedroomsValid && this.state.bathroomsValid && this.state.accomodatesValid && this.state.priceValid && this.state.available_fromValid && this.state.available_toValid });
     }
 
-    addProperty = (e) => {
+    editProperty = (e) => {
         var headers = new Headers();
         e.preventDefault();
         axios.defaults.withCredentials = true;
-        console.log("Trying to add property");
+        var id = this.props.location.state.responseData[0].place_id
+        console.log("Trying to edit property");
         const data = {
             owner_id: cookie.load("ownerlogin") && cookie.load("ownerlogin"),
             place_name: this.state.place_name,
@@ -527,7 +528,7 @@ class AddProperty2 extends Component {
             price: this.state.price
         }
 
-        axios.post("http://localhost:3001/property/", data)
+        axios.put("http://localhost:3001/property/"+id, data)
             .then(response => {
                 console.log(response.data);
                 if (response.data === "Could not add the property") {
@@ -536,7 +537,7 @@ class AddProperty2 extends Component {
                         message: "Property addition unsuccessfull"
                     })
                 } else {
-                    console.log("added")
+                    console.log("updated")
                     this.setState({
                         redirect: true
                     })
@@ -553,7 +554,7 @@ class AddProperty2 extends Component {
             redirectVar = <Redirect to="/owner/login" />
         }
         if (this.state.redirect) {
-            redirectVar = <Redirect to="/owner/home" />
+            redirectVar = <Redirect to="/owner/property/show" />
         }
         return (
             <div>
@@ -678,7 +679,7 @@ class AddProperty2 extends Component {
                                         <p>Enter the amount you want to charge for 1 night(in $)</p>
                                         <input type="number" class="form-control" onChange={this.handleChange} value={this.state.price} placeholder="Nightly Base Rate" name="price"></input>
                                         <br></br>
-                                        <input type="submit" class="btn btn-primary btn-large" disabled={!this.state.formValid} onClick={this.addProperty} value="Add my property"></input>
+                                        <input type="submit" class="btn btn-primary btn-large" disabled={!this.state.formValid} onClick={this.editProperty} value="Edit my property"></input>
                                         <br></br>
                                         <p class="form-footer">Use of this Web site constitutes acceptance of the HomeAway.com Terms and conditions and Privacy policy.</p>
                                         <p class="form-footer">©2018 HomeAway. All rights reserved</p>
@@ -694,4 +695,4 @@ class AddProperty2 extends Component {
     }
 }
 
-export default AddProperty2
+export default EditProperty

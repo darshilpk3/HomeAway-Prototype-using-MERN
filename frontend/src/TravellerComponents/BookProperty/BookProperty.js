@@ -11,7 +11,11 @@ class BookProperty extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            bookingConfirmation:""
+            bookingConfirmation:"",
+            formValid:false,
+            booking_from: "",
+            booking_to: "",
+            guests: ""
         }
         this.bookPlace = this.bookPlace.bind(this)
     }
@@ -29,7 +33,7 @@ class BookProperty extends Component {
             guests: this.props.location.state && this.props.location.state.guests
         }
         console.log(this.props.location.state && this.props.location.state.response.place_id)
-        axios.post("http://localhost:3001/property/" + data.id + "/book", data)
+        axios.post("http://localhost:3001/property/" + data.place_id + "/book", data)
             .then(response => {
                 console.log("Got the data from post request to localhost")
                 if (response.status === 200) {
@@ -38,6 +42,20 @@ class BookProperty extends Component {
                     })
                 }
             })
+    }
+
+    componentDidMount(){
+        this.setState({
+            booking_from: this.props.location.state && this.props.location.state.book_from,
+            booking_to: this.props.location.state && this.props.location.state.book_to,
+            guests: this.props.location.state && this.props.location.state.guests
+        }, () => {
+            if(this.props.location.state && this.props.location.state.book_from){
+                this.setState({
+                    formValid:true
+                })
+            }
+        })
     }
 
     render() {
@@ -169,7 +187,7 @@ class BookProperty extends Component {
                                 <p>{nights}</p>
                                 <h4 class="text-center text-danger"><strong>Total to be paid at checkout</strong></h4>
                                 <h4 class="text-center text-danger"><strong>${nights*(this.props.location.state && this.props.location.state.response.price)}</strong></h4>
-                                <button class="form-control-login btn btn-warning btn-lg" onClick={this.bookPlace}>Book Now</button>
+                                <button class="form-control-login btn btn-warning btn-lg" disabled={!this.state.formValid} onClick={this.bookPlace}>Book Now</button>
                             </div>
                         </div>
                     </div>

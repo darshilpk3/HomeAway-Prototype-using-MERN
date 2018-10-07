@@ -5,6 +5,7 @@ import axios from 'axios'
 import '../../App.css'
 import cookie from 'react-cookies';
 import NavBar from '../../TravellerComponents/NavBar/NavBar';
+import { FormErrors } from '../../FormErrors';
 
 class OwnerLoginPage extends Component {
 
@@ -15,23 +16,54 @@ class OwnerLoginPage extends Component {
             password:"",
             message:"",
             redirect:false,
+            formErrors: { email: "", password: "" },
+            emailValid: false,
+            passwordValid: false,
+            formValid: false
         }
-        this.handleEmail = this.handleEmail.bind(this);
-        this.handlePassword = this.handlePassword.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.login = this.login.bind(this)
     }
 
-    handleEmail = (e) => {
+    handleChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
         this.setState({
-            email:e.target.value,
+            [name]: value,
+        }, () => {
+            this.validateField(name, value)
         })
     }
 
-    handlePassword = (e) => {
+    validateField(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let emailValid = this.state.emailValid;
+        let passwordValid = this.state.passwordValid;
+
+        switch (fieldName) {
+            case 'email':
+                //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                emailValid = value.length >= 1;
+                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                break;
+            case 'password':
+                passwordValid = value.length >= 1;
+                fieldValidationErrors.password = passwordValid ? '' : ' is too short';
+                break;
+            default:
+                break;
+        }
         this.setState({
-            password:e.target.value,
-        })
+            formErrors: fieldValidationErrors,
+            emailValid: emailValid,
+            passwordValid: passwordValid
+        }, this.validateForm);
     }
+
+    validateForm() {
+        this.setState({ formValid: this.state.emailValid && this.state.passwordValid });
+    }
+
 
     login = (e) => {
 
@@ -83,6 +115,7 @@ class OwnerLoginPage extends Component {
                             </div>
                             <div class="col-md-4 offset-md-4 text-align-center">
                                 <footer class="form-footer">Need an account? <a href="/owner/signup">Sign Up</a></footer>
+                                <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
                                 <footer class="form-footer text-danger">{this.state.message}</footer>
                             </div>
                         </div>
@@ -93,16 +126,16 @@ class OwnerLoginPage extends Component {
                             <p>Owner Account login</p>
                             <hr></hr>
                             <form class="form-group">
-                                <input class="form-control" type="text" onChange = {this.handleEmail} placeholder="Email address" id="email" />
+                                <input class="form-control" type="text" onChange = {this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
                                 <div class="clearfix"></div>
-                                <input class="form-control" type="password" onChange = {this.handlePassword} placeholder="Password" id="password" />
+                                <input class="form-control" type="password" onChange = {this.handleChange} value={this.state.password} placeholder="Password" name="password" />
                                 <div class="clearfix"></div>
                                 <a class="form-footer" href="#">Forgot password?</a>
                                 <div class="clearfix"></div>
                                 <input type="checkbox" value="Keep me signed in" checked></input>
                                 <label class="form-footer">Keep me signed in</label>
                                 <div class="clearfix"></div>
-                                <input type="button" class="form-control-login btn btn-warning" onClick = {this.login} value="Log in"></input>
+                                <input type="submit" class="form-control-login btn btn-warning" disabled={!this.state.formValid} onClick = {this.login} value="Log in"></input>
                             </form>
                         </fieldset>
                     </div>

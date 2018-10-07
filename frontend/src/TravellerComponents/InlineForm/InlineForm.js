@@ -3,28 +3,122 @@ import '../../App.css'
 import axios from 'axios'
 import { Redirect } from 'react-router'
 import cookie from 'react-cookies'
+import { FormErrors } from '../../FormErrors';
 class InlineForm extends Component {
 
     constructor(props) {
         super(props)
         this.submitSearch = this.submitSearch.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        console.log("inside inline form: "+(this.props.form_values && this.props.form_values.place))
+        console.log("inside inline form: " + (this.props.form_values && this.props.form_values.place))
         this.state = {
-            place: (((this.props.form_values && this.props.form_values.place))||(this.props.place && this.props.place)),
+            place: (((this.props.form_values && this.props.form_values.place)) || (this.props.place && this.props.place)),
             available_from: (this.props.form_values && this.props.form_values.available_from),
             available_to: (this.props.form_values && this.props.form_values.available_to),
             accomodates: (this.props.form_values && this.props.form_values.accomodates),
-            responsedata: null
+            responsedata: null,
+            placeValid: false,
+            available_fromValid: false,
+            available_toValid: false,
+            accomodatesValid: false,
+            formErrors: { place: "", available_from: "", available_to: "", accomodates: "" }
         }
         // this.responsedata = this.responsedata.bind(this)
     }
 
+    componentDidMount(){
+        if(this.props.form_values){
+            console.log("form should be valid")
+            // this.setState({
+            //     place: ((this.props.form_values && this.props.form_values.place))
+            // },() => {
+            //     this.validateField('place',this.props.form_values.place)
+            // })
+            // this.setState({
+            //     available_from: ((this.props.form_values && this.props.form_values.available_from))
+            // },() => {
+            //     this.validateField('available_from',this.props.form_values.available_from)
+            // })
+            // this.setState({
+            //     available_to: ((this.props.form_values && this.props.form_values.available_to))
+            // },() => {
+            //     this.validateField('available_to',this.props.form_values.available_to)
+            // })
+            // this.setState({
+            //     accomodates: ((this.props.form_values && this.props.form_values.accomodates))
+            // },() => {
+            //     this.validateField('accomodates',this.props.form_values.accomodates)
+            // })
+            this.setState({
+                place: (((this.props.form_values && this.props.form_values.place)) || (this.props.place && this.props.place)),
+                available_from: (this.props.form_values && this.props.form_values.available_from),
+                available_to: (this.props.form_values && this.props.form_values.available_to),
+                accomodates: (this.props.form_values && this.props.form_values.accomodates),
+                placeValid: true,
+                available_fromValid: true,
+                available_toValid: true,
+                accomodatesValid: true,
+                formValid :true
+            })
+        }
+    }
+
     handleChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
         this.setState({
-            [e.target.name]: e.target.value
+            [name]: e.target.value
+        }, () => {
+            this.validateField(name, value)
         })
     }
+
+    validateField(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let placeValid = this.state.placeValid;
+        let available_fromValid = this.state.available_fromValid;
+        let available_toValid = this.state.available_toValid;
+        let accomodatesValid = this.state.accomodatesValid;
+
+        switch (fieldName) {
+            case 'place':
+                //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                placeValid = value.length >= 1;
+                fieldValidationErrors.place = placeValid ? '' : ' is invalid';
+                break;
+            case 'available_from':
+                //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                available_fromValid = new Date(value) >= Date.now();
+                fieldValidationErrors.available_from = available_fromValid ? '' : ' is invalid';
+                break;
+            case 'available_to':
+                //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                available_toValid = new Date(value) >= Date.now() && new Date(value) > new Date(this.state.available_from);
+                fieldValidationErrors.available_to = available_toValid ? '' : ' is invalid';
+                break;
+            case 'accomodates':
+                //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                accomodatesValid = value > 0;
+                fieldValidationErrors.accomodates = accomodatesValid ? '' : ' is invalid';
+                break;
+
+            default:
+                break;
+        }
+        this.setState({
+            formErrors: fieldValidationErrors,
+            placeValid: placeValid,
+            available_fromValid: available_fromValid,
+            available_toValid: available_toValid,
+            accomodatesValid:accomodatesValid
+        }, this.validateForm);
+    }
+
+    validateForm() {
+        this.setState({ formValid: this.state.placeValid && this.state.available_fromValid && this.state.available_toValid && this.state.accomodatesValid });
+    }
+
+
     submitSearch = (e) => {
         var headers = new Headers();
         e.preventDefault();
@@ -36,15 +130,15 @@ class InlineForm extends Component {
             available_to: this.state.available_to,
             accomodates: this.state.accomodates
         }
-
-        axios.post("http://localhost:3001/search", data)
+        console.log(data)
+        axios.post("http://localhost:3001/property/search", data)
             .then(response => {
                 console.log("properties should be listed")
                 var rowdata;
                 if (response.status === 400) {
                     console.log(response.data)
                 } else if (response.status === 200 && response.data !== "No places available") {
-                    for(rowdata of response.data){
+                    for (rowdata of response.data) {
                         console.log(rowdata.place_name)
                     }
                     this.setState({
@@ -77,6 +171,7 @@ class InlineForm extends Component {
         return (
             <div>
                 {redirectVar}
+                <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
                 <form class="form-inline text-center">
                     <div class="row">
                         <div class="col-sm-2 mx-auto">
@@ -97,10 +192,11 @@ class InlineForm extends Component {
                             </div>
                         </div>
                         <div class="col-sm-2 ">
-                            <button type="button" class="form-control-login btn btn-primary" onClick={this.submitSearch}>Search</button>
+                            <button type="submit" class="form-control-login btn btn-primary" disabled={!this.state.formValid} onClick={this.submitSearch}>Search</button>
                         </div>
                     </div>
                 </form>
+    
             </div>
         )
     }

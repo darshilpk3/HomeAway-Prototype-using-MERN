@@ -3,18 +3,30 @@ import '../../App.css'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import OwnerNavBar from '../NavBar/OwnerNavBar'
+import axios from 'axios'
 
 class OwnerHomePage extends Component {
 
     constructor(props) {
         super(props)
-        console.log(props)
+        this.state = {
+            responseData: null
+        }
     }
 
     componentDidMount() {
-        // if(this.props.location.user && this.props.location.state.user){
-        console.log(this.props.location.state && this.props.location.state.user.email)
-        // }
+        var headers = new Headers()
+        axios.defaults.withCredentials = true;
+
+        let id = cookie.load("ownerlogin")
+        axios.get("http://localhost:3001/owner/" + id+"/dashboard")
+            .then(response => {
+                if (response.status === 200) {
+                    this.setState({
+                        responseData: response.data
+                    })
+                }
+            })
     }
     render() {
 
@@ -23,13 +35,41 @@ class OwnerHomePage extends Component {
         if (!cookie.load("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
+
+        if (this.state.responseData) {
+            var buttons = this.state.responseData.map(placeDetail => {
+                return (
+                    <tr>
+                        <td class="property-detail p-2">
+                            <h3><p class="text-dark" id={placeDetail.place_id}>{placeDetail.place_name}</p></h3>
+                            <p class="text-warning">{placeDetail.headline}</p>
+                            <p><b>Booked By: </b>{placeDetail.firstname + " " +placeDetail.lastname}</p>
+                            <p><b>From: </b>{new Date(placeDetail.booking_from).getFullYear()+"-"+new Date(placeDetail.booking_from).getMonth() +"-"+new Date(placeDetail.booking_from).getDate()}</p>
+                            <p><b>To: </b>{new Date(placeDetail.booking_to).getFullYear()+"-"+new Date(placeDetail.booking_to).getMonth()+"-"+new Date(placeDetail.booking_to).getDate()}</p>
+                            <p><b>Guests: </b>{placeDetail.guests}</p>
+                            <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
+                        </td>
+                    </tr>
+                )
+            })
+        }
         return (
             <div>
                 {redirectVar}
                 <div>
-                    <OwnerNavBar owner={cookie.load("owneremail") && cookie.load("owneremail")} />
+                    <OwnerNavBar />
                 </div>
                 <div class="clearfix"></div>
+                <div>
+                    <h2 class="text-dark text-center">Recent Bookings</h2>
+                    <div class="form-body">
+                        <div class="d-flex justify-content-left">
+                            <table class="w-100 table-bordered bg-grey">
+                                {buttons}
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }

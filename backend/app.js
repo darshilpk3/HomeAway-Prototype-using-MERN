@@ -9,7 +9,9 @@ var cors = require('cors');
 var mysql = require('mysql');
 var fileUpload = require('express-fileupload')
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var propertyRouter = require('./routes/property');
+var travelRouter = require('./routes/travel');
+var ownerRouter = require('./routes/owner');
 
 var app = express();
 
@@ -46,7 +48,10 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/property', propertyRouter);
+app.use('/travel', travelRouter);
+app.use('/owner', ownerRouter);
+
 
 
 module.exports = app;

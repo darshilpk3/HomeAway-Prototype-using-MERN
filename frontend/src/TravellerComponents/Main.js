@@ -13,10 +13,10 @@ import OwnerLoginPage from '../OwnerComponents/LoginPage/OwnerLoginPage';
 import OwnerSignUpPage from '../OwnerComponents/SignUpPage/OwnerSignUpPage';
 import OwnerEditProfile from '../OwnerComponents/EditProfile/OwnerEditProfile'
 import OwnerHomePage from '../OwnerComponents/HomePage/OwnerHomePage';
-import AddProperty from '../OwnerComponents/Property/AddProperty';
 import ShowProperties from '../OwnerComponents/Property/ShowProperties';
 import BookProperty from './BookProperty/BookProperty';
 import AddProperty2 from '../OwnerComponents/Property/AddProperty2';
+import EditProperty from '../OwnerComponents/Property/EditProperty';
 
 class Main extends Component{
 
@@ -35,6 +35,7 @@ class Main extends Component{
                 <Route path="/owner/home" component={OwnerHomePage}/>
                 <Route path="/owner/property/show" component={ShowProperties}/>
                 <Route path="/owner/property/add" component={AddProperty2}/>
+                <Route path="/owner/property/edit" component={EditProperty}/>
             </div>
         )
     }

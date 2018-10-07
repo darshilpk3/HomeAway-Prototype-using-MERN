@@ -1,35 +1,66 @@
 import React, { Component } from 'react'
 import Navbar from '../NavBar/NavBar'
 import LoginNavBar from '../../LoginNavBar'
-import {Redirect} from 'react-router'
+import { Redirect } from 'react-router'
 import axios from 'axios'
 import '../../App.css'
 import cookie from 'react-cookies';
+import { FormErrors } from '../../FormErrors';
 class LoginPage extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            email:"",
-            password:"",
-            message:"",
-            redirect:false,
+            email: "",
+            password: "",
+            message: "",
+            redirect: false,
+            formErrors: { email: "", password: "" },
+            emailValid: false,
+            passwordValid: false,
+            formValid: false
         }
-        this.handleEmail = this.handleEmail.bind(this);
-        this.handlePassword = this.handlePassword.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.login = this.login.bind(this)
     }
 
-    handleEmail = (e) => {
+    handleChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
         this.setState({
-            email:e.target.value,
+            [name]: value,
+        }, () => {
+            this.validateField(name, value)
         })
     }
 
-    handlePassword = (e) => {
+    validateField(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let emailValid = this.state.emailValid;
+        let passwordValid = this.state.passwordValid;
+
+        switch (fieldName) {
+            case 'email':
+                //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+                emailValid = value.length >= 1;
+                fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+                break;
+            case 'password':
+                passwordValid = value.length >= 1;
+                fieldValidationErrors.password = passwordValid ? '' : ' is too short';
+                break;
+            default:
+                break;
+        }
         this.setState({
-            password:e.target.value,
-        })
+            formErrors: fieldValidationErrors,
+            emailValid: emailValid,
+            passwordValid: passwordValid
+        }, this.validateForm);
+    }
+
+    validateForm() {
+        this.setState({ formValid: this.state.emailValid && this.state.passwordValid });
     }
 
     login = (e) => {
@@ -37,23 +68,23 @@ class LoginPage extends Component {
         var headers = new Headers();
         e.preventDefault();
         axios.defaults.withCredentials = true;
-        
+
         const data = {
-            email:this.state.email,
-            password:this.state.password
+            email: this.state.email,
+            password: this.state.password
         }
-        axios.post("http://localhost:3001/login",data)
+        axios.post("http://localhost:3001/travel/login", data)
             .then(response => {
-                console.log("Got the response",response.data);
-                if(response.data === "Invalid Credentials"){
+                console.log("Got the response", response.data);
+                if (response.data === "Invalid Credentials") {
                     this.setState({
                         message: "Invalid Credentials"
                     })
                 }
-                else{
+                else {
                     console.log(response.data)
                     this.setState({
-                        redirect:true,
+                        redirect: true,
                     })
                 }
             })
@@ -62,14 +93,14 @@ class LoginPage extends Component {
     render() {
 
         let redirectVar = null;
-        if(cookie.load("loginuser")){
-            redirectVar = <Redirect to="/traveller/home"/>
+        if (cookie.load("loginuser")) {
+            redirectVar = <Redirect to="/traveller/home" />
         }
         return (
             <div>
                 {redirectVar}
                 <div>
-                    <Navbar/>
+                    <Navbar />
                 </div>
                 <div class="clearfix"></div>
                 <div class="bg-grey">
@@ -80,6 +111,7 @@ class LoginPage extends Component {
                             </div>
                             <div class="col-md-4 offset-md-4 text-align-center">
                                 <footer class="form-footer">Need an account? <a href="/traveller/signup">Sign Up</a></footer>
+                                <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
                                 <footer class="form-footer text-danger">{this.state.message}</footer>
                             </div>
                         </div>
@@ -90,15 +122,17 @@ class LoginPage extends Component {
                             <p>Travel Account login</p>
                             <hr></hr>
                             <form class="form-group">
-                                <input class="form-control" type="text" onChange = {this.handleEmail} placeholder="Email address" id="email" />
+                                <input class="form-control" type="text" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                                <p class="form-footer text-danger">{this.state.emailError}</p>
                                 <div class="clearfix"></div>
-                                <input class="form-control" type="password" onChange = {this.handlePassword} placeholder="Password" id="password" />
+                                <input class="form-control" type="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" name="password" />
+                                <p class="form-footer text-danger">{this.state.passwordError}</p>
                                 <div class="clearfix"></div>
                                 <a class="form-footer" href="#">Forgot password?</a>
                                 <div class="clearfix"></div>
                                 <input type="checkbox" value="Keep me signed in" checked></input>
                                 <label class="form-footer">Keep me signed in</label>
-                                <input type="button" class="form-control-login btn btn-warning btn-lg" onClick = {this.login} value="Log in"></input>
+                                <input type="submit" class="form-control-login btn btn-warning btn-lg" disabled={!this.state.formValid} onClick={this.login} value="Log in"></input>
                                 <div class="clearfix"></div>
                             </form>
                         </fieldset>
@@ -107,7 +141,7 @@ class LoginPage extends Component {
                     <p class="form-footer text-center">Use of this Web site constitutes acceptance of the HomeAway.com <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a>.</p>
                     <p class="form-footer text-center">©2018 HomeAway. All rights reserved.</p>
                 </div>
-            </div>
+            </div >
         )
     }
 }
