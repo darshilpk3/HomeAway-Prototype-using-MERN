@@ -61,19 +61,20 @@ class ListPlaces extends Component {
         //console.log(this.props.location.state.places_list)
         if (typeof this.props.location.state != "undefined") {
             var buttons = this.props.location.state.places_list.map(placeDetail => {
+                var images = placeDetail.property_images.split(",")
                 return (
                     <tr>
                         <td class="property-image-carousel">
                             <div id={"carouselExampleControls" + placeDetail.place_id} class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001" + images[1]} alt="First slide" />
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001" + images[2]} alt="Second slide" />
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001" + images[3]} alt="Third slide" />
                                     </div>
                                 </div>
                                 <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail.place_id} role="button" data-slide="prev">

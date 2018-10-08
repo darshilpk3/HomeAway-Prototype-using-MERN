@@ -12,9 +12,10 @@ class ShowProperties extends Component {
         this.state = {
             responseData: null,
             propertyData: null,
-            redirect: false
+            redirect: null
         }
         this.showDetails = this.showDetails.bind(this)
+        this.uploadPropertyImages = this.uploadPropertyImages.bind(this)
     }
 
     componentDidMount() {
@@ -31,7 +32,6 @@ class ShowProperties extends Component {
                     })
                 }
             })
-
     }
 
     showDetails = (e) => {
@@ -50,6 +50,13 @@ class ShowProperties extends Component {
             })
 
     }
+
+    uploadPropertyImages = (e) => {
+        console.log("should be redirected")
+        this.setState({
+            redirect:e.target.id
+        })
+    }
     render() {
         let renderRedirect = null;
         if (!cookie.load("ownerlogin")) {
@@ -62,22 +69,32 @@ class ShowProperties extends Component {
                 state: { responseData: this.state.propertyData }
             }} />
         }
+        if(this.state.redirect){
+            renderRedirect = <Redirect to={{
+                pathname: '/property/upload',
+                state: { place_id: this.state.redirect }
+            }} />
+        }
         var list = null
         if (this.state.responseData) {
+
+            
             var buttons = this.state.responseData.map(placeDetail => {
+                var images = placeDetail.property_images.split(",")
+                console.log(images)
                 return (
                     <tr>
                         <td class="property-image-carousel">
                             <div id={"carouselExampleControls" + placeDetail.place_id} class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/walk-thru-closet-100x50.jpg" alt="First slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001"+images[1]} alt="First slide" />
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/living-room-windows.jpg" alt="Second slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001"+images[2]} alt="Second slide" />
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="http://www.33souththird.com/wp-content/uploads/revslider/interior/bathroom.jpg" alt="Third slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001"+images[3]} alt="Third slide" />
                                     </div>
                                 </div>
                                 <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail.place_id} role="button" data-slide="prev">
@@ -97,11 +114,13 @@ class ShowProperties extends Component {
                             <p><b>Property Details: </b>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
                             <p><b>Location, City: </b>{placeDetail.location_city}</p>
                             <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
+                            <button type="button" id={placeDetail.place_id} onClick={this.uploadPropertyImages} class="form-control-login btn-warning">Add Photos</button>
                         </td>
                     </tr>
                 )
             });
         }
+
 
         return (
 

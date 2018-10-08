@@ -17,6 +17,7 @@ import ShowProperties from '../OwnerComponents/Property/ShowProperties';
 import BookProperty from './BookProperty/BookProperty';
 import AddProperty2 from '../OwnerComponents/Property/AddProperty2';
 import EditProperty from '../OwnerComponents/Property/EditProperty';
+import AddPropertyPhoto from '../OwnerComponents/Property/AddPropertPhoto';
 
 class Main extends Component{
 
@@ -36,6 +37,7 @@ class Main extends Component{
                 <Route path="/owner/property/show" component={ShowProperties}/>
                 <Route path="/owner/property/add" component={AddProperty2}/>
                 <Route path="/owner/property/edit" component={EditProperty}/>
+                <Route path="/property/upload" component={AddPropertyPhoto}/>
             </div>
         )
     }

@@ -4,7 +4,6 @@ import { Redirect } from 'react-router'
 import axios from 'axios'
 import cookie from 'react-cookies'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import md5 from 'md5'
 
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
