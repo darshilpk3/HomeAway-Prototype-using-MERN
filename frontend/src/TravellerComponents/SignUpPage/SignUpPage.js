@@ -84,7 +84,7 @@ class SignUpPage extends Component {
         let renderRedirect = null;
         if(this.state.redirect == true){
             console.log("should redirect")
-            renderRedirect = <Redirect to="/login"/>
+            renderRedirect = <Redirect to="/traveller/login"/>
         } 
         return (
             

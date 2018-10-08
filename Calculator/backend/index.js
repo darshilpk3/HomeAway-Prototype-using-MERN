@@ -29,6 +29,7 @@ app.post("/solve",function(req,res,next){
     try{
         let answer = eval(req.body.evalString)
         if(answer.toString()==="Infinity"){
+            console.log("Division by zero was attempted")
             throw SyntaxError;
         }
         else{

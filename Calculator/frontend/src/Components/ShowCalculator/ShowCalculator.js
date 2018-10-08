@@ -50,10 +50,9 @@ class NavBar extends Component {
 
         var headers = new Headers()
         e.preventDefault()
-
         const data = {
-            evalString: this.state.expression
-        }
+            evalString : this.state.expression
+        }   
         axios.defaults.withCredentials = true;
         axios.post('http://localhost:3001/solve', data)
             .then(response => {
