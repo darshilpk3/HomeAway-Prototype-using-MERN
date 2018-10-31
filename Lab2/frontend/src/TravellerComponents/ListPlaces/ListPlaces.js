@@ -104,137 +104,6 @@ class ListPlaces extends Component {
         if (typeof this.props.location.state != "undefined") {
             var buttons = this.props.location.state.places_list.map(placeDetail => {
                 var images = placeDetail.property_images
-                if (this.state.price && this.state.bedrooms) {
-                    if (placeDetail.bedrooms == this.state.bedrooms && placeDetail.price == this.state.price) {
-                        return (
-                            <tr>
-                                <td class="property-image-carousel">
-                                    <div id={"carouselExampleControls" + placeDetail._id} class="carousel slide" data-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img class="d-block w-100" src={"http://localhost:3001" + images[1]} alt="First slide" />
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img class="d-block w-100" src={"http://localhost:3001" + images[2]} alt="Second slide" />
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img class="d-block w-100" src={"http://localhost:3001" + images[3]} alt="Third slide" />
-                                            </div>
-                                        </div>
-                                        <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail._id} role="button" data-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                        <a class="carousel-control-next" href={"#carouselExampleControls" + placeDetail._id} role="button" data-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td class="property-detail p-2">
-                                    <h3><a href="#" class="text-dark" id={placeDetail._id} onClick={this.showDetails}>{placeDetail.place_name}</a></h3>
-                                    <p class="text-warning">{placeDetail.headline}</p>
-                                    <p><b>Description: </b>{placeDetail.description}</p>
-                                    <p><b>Property Details: </b>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
-                                    <p><b>Location, City: </b>{placeDetail.location_city}</p>
-                                    <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                                        Ask Owner a Question
-                              </button>
-                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">Ask a question</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form>
-                                                        <input type="text" class="form-control" placeholder="Title" name="topic" onChange={this.handleChange}></input>
-                                                        <textarea class="form-control" rows={10} placeholder="Type your question" name="question" onChange={this.handleChange} />
-                                                        <input type="button" id={placeDetail._id} onClick={this.askQuestion} class="form-control-login btn-primary" value="Ask" />
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        )
-                    }
-                } else if (this.state.price || this.state.bedrooms) {
-                    if ((this.state.price && this.state.price <= placeDetail.price) || (this.state.bedrooms && this.state.bedrooms == placeDetail.bedrooms)) {
-                        return (
-                            <tr>
-                                <td class="property-image-carousel">
-                                    <div id={"carouselExampleControls" + placeDetail._id} class="carousel slide" data-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img class="d-block w-100" src={"http://localhost:3001" + images[1]} alt="First slide" />
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img class="d-block w-100" src={"http://localhost:3001" + images[2]} alt="Second slide" />
-                                            </div>
-                                            <div class="carousel-item">
-                                                <img class="d-block w-100" src={"http://localhost:3001" + images[3]} alt="Third slide" />
-                                            </div>
-                                        </div>
-                                        <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail._id} role="button" data-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                        <a class="carousel-control-next" href={"#carouselExampleControls" + placeDetail._id} role="button" data-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td class="property-detail p-2">
-                                    <h3><a href="#" class="text-dark" id={placeDetail._id} onClick={this.showDetails}>{placeDetail.place_name}</a></h3>
-                                    <p class="text-warning">{placeDetail.headline}</p>
-                                    <p><b>Description: </b>{placeDetail.description}</p>
-                                    <p><b>Property Details: </b>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
-                                    <p><b>Location, City: </b>{placeDetail.location_city}</p>
-                                    <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-                                        Ask Owner a Question
-                              </button>
-                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">Ask a question</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form>
-                                                        <input type="text" class="form-control" placeholder="Title" name="topic" onChange={this.handleChange}></input>
-                                                        <textarea class="form-control" rows={10} placeholder="Type your question" name="question" onChange={this.handleChange} />
-                                                        <input type="button" id={placeDetail._id} onClick={this.askQuestion} class="form-control-login btn-primary" value="Ask" />
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        )
-                    }
-                } else {
                     return (
                         <tr>
                             <td class="property-image-carousel">
@@ -297,7 +166,6 @@ class ListPlaces extends Component {
                             </td>
                         </tr>
                     )
-                }
             });
         }
 
@@ -323,7 +191,7 @@ class ListPlaces extends Component {
                     <div class="form-body">
                         <div class="d-flex justify-content-left">
                             <table class="w-100 table-bordered bg-grey">
-                            <Pagination items={buttons} onChangePage={this.onChangePage} />
+                                {buttons}
                             </table>
                         </div>
                     </div>

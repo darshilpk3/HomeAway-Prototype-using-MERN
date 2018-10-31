@@ -8,6 +8,14 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
+
+import { store } from '../../store';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux'
+import {travelerProfile,travelerBookings,editProfile,editPassword,editProfilePic} from '../../Actions'
+
+
+
 class EditProfile extends Component {
 
     constructor(props) {
@@ -54,52 +62,90 @@ class EditProfile extends Component {
     }
 
     componentDidMount() {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
+        console.log(this.props.travelerId)
         var id = cookie.load("loginuser")
+        this.props.travelerProfile(id)
+        this.props.travelerBookings(id)
         console.log("Sending get request to http://localhost:3001/edit/" + id)
-        axios.get("http://localhost:3001/travel/" + id)
-            .then(response => {
-                console.log("inside response")
-                if (response.status === 200) {
-                    var data = response.data
-                    console.log(data.profilePic)
-                    this.setState({
-                        email: data.email,
-                        firstname: data.firstname,
-                        password: data.password,
-                        lastname: data.lastname,
-                        school: data.school,
-                        address: data.address,
-                        company: data.company,
-                        number: data.number,
-                        aboutme:data.aboutme,
-                        languages:data.languages,
-                        gender:data.gender,
-                        image: "http://localhost:3001" + data.profilePic,
-                        emailValid: true,
-                        firstnameValid: true,
-                        lastnameValid: true,
-                        passwordValid: true,
-                        schoolValid: true,
-                        addressValid: true,
-                        companyValid: true,
-                        numberValid: true,
-                        formValid: true
-                    })
-                }
-            })
+        // axios.get("http://localhost:3001/travel/" + id)
+        //     .then(response => {
+        //         console.log("inside response")
+        //         if (response.status === 200) {
+        //             var data = response.data
+        //             console.log(data.profilePic)
+            //         this.setState({
+            //             email: data.email,
+            //             firstname: data.firstname,
+            //             password: data.password,
+            //             lastname: data.lastname,
+            //             school: data.school,
+            //             address: data.address,
+            //             company: data.company,
+            //             number: data.number,
+            //             aboutme:data.aboutme,
+            //             languages:data.languages,
+            //             gender:data.gender,
+            //             image: "http://localhost:3001" + data.profilePic,
+            //             emailValid: true,
+            //             firstnameValid: true,
+            //             lastnameValid: true,
+            //             passwordValid: true,
+            //             schoolValid: true,
+            //             addressValid: true,
+            //             companyValid: true,
+            //             numberValid: true,
+            //             formValid: true
+            //         })
+            //     }
+            // })
 
-        console.log("Sending get request to http://localhost:3001/bookingdetails/" + id)
-        axios.get("http://localhost:3001/travel/"+id+"/bookingdetails" )
-            .then(response => {
-                console.log("Booking details available")
-                if (response.status == 200) {
-                    this.setState({
-                        bookingDetails: response.data
-                    })
-                }
+        // console.log("Sending get request to http://localhost:3001/bookingdetails/" + id)
+        // axios.get("http://localhost:3001/travel/"+id+"/bookingdetails" )
+        //     .then(response => {
+        //         console.log("Booking details available")
+        //         if (response.status == 200) {
+        //             this.setState({
+        //                 bookingDetails: response.data
+        //             })
+        //         }
+        //     })
+    }
+
+    componentWillReceiveProps(nextProps){
+        console.log(nextProps.bookingInfo)
+        console.log(nextProps.profileInfo)
+        if(nextProps.profileInfo){
+            var data = nextProps.profileInfo
+            this.setState({
+                email: data.email,
+                firstname: data.firstname,
+                password: data.password,
+                lastname: data.lastname,
+                school: data.school,
+                address: data.address,
+                company: data.company,
+                number: data.number,
+                aboutme:data.aboutme,
+                languages:data.languages,
+                gender:data.gender,
+                image: "http://localhost:3001" + data.profilePic,
+                emailValid: true,
+                firstnameValid: true,
+                lastnameValid: true,
+                passwordValid: true,
+                schoolValid: true,
+                addressValid: true,
+                companyValid: true,
+                numberValid: true,
+                formValid: true
             })
+        }
+
+        if(nextProps.bookingDetails){
+            this.setState({
+                bookingDetails: nextProps.bookingDetails
+            })
+        }
     }
 
     handleChange = (e) => {
@@ -196,8 +242,8 @@ class EditProfile extends Component {
 
 
     saveChange = (e) => {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
+        // var headers = new Headers();
+        // axios.defaults.withCredentials = true;
         const data = {
             email: this.state.email,
             password: this.state.password,
@@ -212,65 +258,70 @@ class EditProfile extends Component {
             gender: this.state.gender
         }
         const id = cookie.load("loginuser")
-
-        axios.put("http://localhost:3001/travel/" + id, data)
-            .then(response => {
-                //console.log("Trying to update")
-                if (response.status === 200) {
-                    console.log("Updated")
-                    this.setState({
-                        message: response.data,
-                        edited:true
-                    })
-                }
-            })
+        this.props.editProfile(id,data)
+        this.props.history.push("/traveller/home")
+        // axios.put("http://localhost:3001/travel/" + id, data)
+        //     .then(response => {
+        //         //console.log("Trying to update")
+        //         if (response.status === 200) {
+        //             console.log("Updated")
+        //             this.setState({
+        //                 message: response.data,
+        //                 edited:true
+        //             })
+        //         }
+        //     })
     }
 
 
     changeProfilePic = (e) => {
 
-        var headers = new Headers();
+        // var headers = new Headers();
         e.preventDefault();
 
-        axios.defaults.withCredentials = true;
+        // axios.defaults.withCredentials = true;
         console.log("While sending post request: " + this.state.selectedFile)
         let formData = new FormData();
-
+        let id = cookie.load('loginuser')
+        
         formData.append('email', this.state.email)
         formData.append('selectedFile', this.state.selectedFile)
         formData.append('id', cookie.load('loginuser'))
 
         console.log("formData is: ", formData.get('selectedFile'))
-        axios.post("http://localhost:3001/travel/"+cookie.load('loginuser')+"/upload", formData)
-            .then(response => {
-                console.log("file should be  uploaded")
-                if (response.status === 200) {
-                    console.log("http://localhost:3001/" + response.data)
-                    this.setState({
-                        image: "http://localhost:3001" + response.data
-                    })
-                }
-            })
+        this.props.editProfilePic(id,formData)
+        this.props.history.push("/traveller/home")
+        // axios.post("http://localhost:3001/travel/"+cookie.load('loginuser')+"/upload", formData)
+        //     .then(response => {
+        //         console.log("file should be  uploaded")
+        //         if (response.status === 200) {
+        //             console.log("http://localhost:3001/" + response.data)
+        //             this.setState({
+        //                 image: "http://localhost:3001" + response.data
+        //             })
+        //         }
+        //     })
     }
 
     changePassword = (e) => {
-        var headers = new Headers();
-        axios.defaults.withCredentials = true;
+        //var headers = new Headers();
+        //axios.defaults.withCredentials = true;
         const data = {
             password: this.state.password
         }
         const id = cookie.load("loginuser")
-
-        axios.put("http://localhost:3001/travel/editpassword/" + id, data)
-            .then(response => {
-                //console.log("Trying to update")
-                if (response.status === 200) {
-                    console.log("Updated")
-                    this.setState({
-                        message: response.data
-                    })
-                }
-            })
+        this.props.editPassword(id,data)
+        this.props.history.push("/traveller/home")
+        // axios.put("http://localhost:3001/travel/editpassword/" + id, data)
+        //     .then(response => {
+        //         //console.log("Trying to update")
+        //         if (response.status === 200) {
+        //             console.log("Updated")
+        //             this.setState({
+        //                 message: response.data
+        //             })
+        //         }
+        //     })
     }
     showDetails = (e) => {
 
@@ -477,4 +528,20 @@ class EditProfile extends Component {
     }
 }
 
-export default EditProfile;
+EditProfile.propTypes = {
+    travelerProfile : PropTypes.func.isRequired,
+    travelerBookings : PropTypes.func.isRequired,
+    editProfile: PropTypes.func.isRequired,
+    editPassword:PropTypes.func.isRequired,
+    editProfilePic : PropTypes.func.isRequired,
+    profileInfo:PropTypes.object,
+    bookingInfo:PropTypes.object
+}
+
+const mapStatetoProps = state => ({
+    bookingInfo : state.traveler.bookingInfo,
+    profileInfo : state.traveler.profileInfo
+})
+
+
+export default connect (mapStatetoProps,{travelerProfile,travelerBookings,editProfile,editPassword,editProfilePic})(EditProfile);

@@ -20,12 +20,6 @@ router.post("/search", function (req, res, next) {
   var available_from = req.body.available_from
   var available_to = req.body.available_to
   var accomodates = req.body.accomodates
-  // var itr = moment.twix(new Date(available_from),new Date(available_to)).iterate("days");
-  // var range=[];
-  // while(itr.hasNext()){
-  //     range.push(itr.next().toDate())
-  // }
-  var range = []
   var range = Array(Math.floor((new Date(available_to) - new Date(available_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(available_from).getTime() + idx * 86400000)))
   console.log(range)
   Property.find({
@@ -36,7 +30,7 @@ router.post("/search", function (req, res, next) {
     dates: { $in: range }
   })
     .then(result => {
-      console.log(result)
+      //console.log(result)
       res.writeHead(200, {
         'Content-Type': 'application/json'
       })
@@ -47,61 +41,13 @@ router.post("/search", function (req, res, next) {
       res.writeHead(400, {
         'Content-Type': 'text/plain'
       })
-      //     res.end("Couldnt find properties")
     })
-    //   .then(result => {
-    //     console.log(result.length)
-    // //     Booking.find({
-    // //       property : result//{$in : result},
-    // //       // booking_from : { $gt: available_from , $lt: available_to},
-    // //       // booking_to : {$gt: available_from, $lt: available_to}
-    // //     }).exec()
-    // //       .then(result2 => {
-    // //         console.log(result2)
-    // //       })
-    // res.writeHead(200,{
-    //   'Content-Type':'application/json'
-    // })
-    // res.end(JSON.stringify(result))
-    //       })
     .catch(err => {
       console.log(err)
       res.writeHead(400, {
         'Content-Type': 'text/plain'
       })
-      //     res.end("Couldnt find properties")
     })
-  // pool.getConnection(function (err, con) {
-  //   if (err) {
-  //     res.writeHead(400, {
-  //       'Content-Type': 'text/plain'
-  //     })
-  //     res.end("Couldnt get a connection")
-  //   } else {
-  //     //sql = "select _id from booking where _id in (select _id from place where (location_city='"+place+"') and ('"+available_from+"' between available_from and available_to) and ('"+available_to+"' between available_from and available_to) and (accomodates>='"+accomodates+"')) and ('"+available_from+"' not between booking_from and booking_to) and ('"+available_to+"' not between booking_from and booking_to)"
-  //     sql = "select p.*,pi.* from place as p,place_info as pi where (p.location_city='" + place + "') and ('" + available_from + "' between p.available_from and p.available_to) and ('" + available_to + "' between p.available_from and p.available_to) and (p.accomodates>='" + accomodates + "') and p._id not in (select _id from booking where ('" + available_from + "' between booking_from and booking_to) or ('" + available_to + "' between booking_from and booking_to)) and p._id=pi._id"
-  //     console.log(sql);
-  //     con.query(sql, function (err, result) {
-  //       if (err) {
-  //         res.writeHead(400, {
-  //           'Content-Type': 'text/plain'
-  //         })
-  //         res.end("Details not proper")
-  //       } else if (result.length === 0) {
-  //         res.writeHead(200, {
-  //           'Content-Type': 'text/plain'
-  //         })
-  //         console.log("No places available")
-  //         res.end("No places available")
-  //       } else {
-  // res.writeHead(200, {
-  //   'Content-Type': 'application/json'
-  // })
-  // res.end(JSON.stringify(result))
-  //       }
-  //     })
-  //   }
-  // })
 })
 
 router.post("/", function (req, res, next) {
@@ -122,12 +68,6 @@ router.post("/", function (req, res, next) {
   var headline = req.body.headline
   var description = req.body.description
   var price = req.body.price
-  // var itr = moment.twix(new Date(available_from),new Date(available_to)).iterate("days");
-  // var range=[];
-  // while(itr.hasNext()){
-  //     range.push(itr.next().toDate())
-  // }
-  var range = []
   var range = Array(Math.floor((new Date(available_to) - new Date(available_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(available_from).getTime() + idx * 86400000)))
   var property = new Property({
     place_name: place_name,
@@ -150,33 +90,19 @@ router.post("/", function (req, res, next) {
 
   property.save()
     .then(result => {
-      console.log(result._id)
       Owner.findByIdAndUpdate(owner_id, { $push: { properties: result._id } }).exec()
-        .then(result2 => {
-          console.log(result2)
-          booking = new Booking({
-            property: result._id
+        .then(result => {
+          //console.log(result2)
+          res.writeHead(200, {
+            'Content-Type': 'text/plain'
           })
-          booking.save()
-            .then(result => {
-              res.writeHead(200, {
-                'Content-Type': 'text/plain'
-              })
-              res.end("Sucessfully added the property")
-            })
-        })
-        .catch(err => {
-          console.log("Error while inserting into owner: ", err)
+          res.end("Sucessfully added the property")
         })
     })
     .catch(err => {
-      res.writeHead(400, {
-        'Content-Type': 'text/plain'
-      })
-      res.end("Couldnt add details into placeinfo table")
+      console.log("Error while inserting into owner: ", err)
     })
 })
-
 
 
 router.put("/:property_id", function (req, res, next) {
@@ -196,6 +122,9 @@ router.put("/:property_id", function (req, res, next) {
   var headline = req.body.headline
   var description = req.body.description
   var price = req.body.price
+  var available_from = req.body.available_from
+  var available_to = req.body.available_to
+  var range = Array(Math.floor((new Date(available_to) - new Date(available_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(available_from).getTime() + idx * 86400000)))
 
   Property.findByIdAndUpdate(property_id, {
     $set: {
@@ -211,7 +140,10 @@ router.put("/:property_id", function (req, res, next) {
       accomodates: accomodates,
       headline: headline,
       description: description,
-      price: price
+      price: price,
+      available_from: available_from,
+      available_to: available_to,
+      dates: range
     }
   }).exec()
     .then(result => {
@@ -237,7 +169,7 @@ router.get("/:propertyid", function (req, res, next) {
       res.writeHead(200, {
         'Content-Type': 'application/json'
       })
-      console.log(JSON.stringify(result))
+      //console.log(JSON.stringify(result))
       res.end(JSON.stringify(result))
     })
     .catch(err => {
@@ -256,15 +188,8 @@ router.post("/:propertyid/book", function (req, res, next) {
   const booking_from = req.body.booking_from
   const booking_to = req.body.booking_to
   const guests = req.body.guests
-  // var itr = moment.twix(new Date(booking_from),new Date(booking_to)).iterate("days");
-  // var range=[];
-  // while(itr.hasNext()){
-  //     range.push(itr.next().toDate())
-  // }
-  var range = []
   var range = Array(Math.floor((new Date(booking_to) - new Date(booking_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(booking_from).getTime() + idx * 86400000)))
-  console.log("Booking range")
-  console.log(range)
+
   Owner.findOne({
     properties: _id
   }, { "_id": 1 }).exec()
@@ -313,66 +238,7 @@ router.post("/:propertyid/book", function (req, res, next) {
       res.end("Couldnt book")
       console.log(err)
     })
-  // pool.getConnection(function (err, con) {
-  //   if (err) {
-  //     res.writeHead(400, {
-  //       'Content-Type': 'text/plain'
-  //     })
-  //     res.end("Couldnt get connection")
-  //   } else {
-  //     sql = "select owner_id from place where _id='" + _id + "'";
-  //     console.log(sql)
-  //     con.query(sql, function (err, result) {
-  //       if (err) {
-  //         res.writeHead(400, {
-  //           'Content-Type': 'text/plain'
-  //         })
-  //         res.end("Couldnt get owner_id")
-  //       } else {
-  //         const owner_id = result[0].owner_id
-  //         sql = "insert into booking(travel_id,owner_id,_id,booking_from,booking_to,guests) values('" + travel_id + "','" + owner_id + "','" + _id + "','" + booking_from + "','" + booking_to + "','" + guests + "')"
-  //         console.log(sql);
-  //         con.query(sql, function (err, result) {
-  //           if (err) {
-  // res.writeHead(400, {
-  //   'Content-Type': 'text/plain'
-  // })
-  // console
-  // res.end("Couldnt add details")
-  //           } else {
-  // res.writeHead(200, {
-  //   'Content-Type': 'text/plain'
-  // })
-  // res.end("Booked")
-  //           }
-  //         })
-  //       }
-  //     })
-  //   }
-  // })
 })
-
-
-// router.post("/upload", function (req, res, next) {
-//   console.log("Trying to upload multiple images")
-//   var imagePaths = "";
-//   for (let i = 0; i <= req.body.totalImages; i++) {
-
-//     console.log(req.files["image" + i])
-//     imageFile = req.files["image" + i]
-//     imageFile.mv(`./public/uploads/property-${i}${path.extname(imageFile.name)}`, function (err) {
-//       if (err) {
-//         console.log(err)
-//         return res.status(500).send(err);
-//       } else {
-//         imagePaths = imagePaths + "./public/uploads/property-" + i + "" + path.extname(imageFile.name) + ","
-//         console.log(imagePaths.split(","))
-//       }
-//     })
-//   }
-//   res.send(200)
-// })
-
 
 router.post("/:property_id/upload", function (req, res, next) {
   var property_id = req.params.property_id
@@ -393,7 +259,7 @@ router.post("/:property_id/upload", function (req, res, next) {
           res.writeHead(200, {
             'Content-Type': 'text/plain'
           });
-          console.log(JSON.stringify(result.property_images))
+          //  console.log(JSON.stringify(result.property_images))
           res.end(JSON.stringify(result.property_images))
         })
         .catch(err => {
@@ -402,43 +268,6 @@ router.post("/:property_id/upload", function (req, res, next) {
           });
           res.send(err)
         })
-      // pool.getConnection(function (err, con) {
-      //   if (err) {
-      //     res.writeHead(400, {
-      //       'Content-Type': 'text/plain'
-      //     });
-      //     res.end("Couldnt get connection")
-      //   } else {
-      //     sql = `select property_images from place_info where _id='${property_id}'`
-      //     con.query(sql, function (err, result) {
-      //       if (err) {
-      //         res.writeHead(400, {
-      //           'Content-Type': 'text/plain'
-      //         });
-      //         res.end("Couldnt get connection")
-      //       } else {
-      //         var property_images = result[0].property_images;
-      //         property_images = property_images + "," + `/public/uploads/property-${property_id}-${imageFile.name}`;
-      //         sql = `update place_info set property_images=concat(ifnull(property_images,""),'${property_images}') where _id='${property_id}'`;
-      //         console.log(sql);
-      //         con.query(sql, function (err, result) {
-      //           if (err) {
-      //             res.writeHead(400, {
-      //               'Content-Type': 'text/plain'
-      //             });
-      //           } else {
-      //             res.writeHead(200, {
-      //               'Content-Type': 'text/plain'
-      //             });
-      //             console.log(property_images)
-      //             res.end(property_images)
-      //           }
-      //         })
-      //       }
-      //     })
-
-      //   }
-      // })
     }
   })
 })
@@ -455,7 +284,7 @@ router.delete("/:property_id/upload", function (req, res, next) {
       res.writeHead(200, {
         'Content-Type': 'text/plain'
       });
-      console.log(JSON.stringify(result.property_images))
+      //console.log(JSON.stringify(result.property_images))
       res.end(JSON.stringify(result))
     })
     .catch(err => {
@@ -464,34 +293,6 @@ router.delete("/:property_id/upload", function (req, res, next) {
       });
       res.send(err)
     })
-  // let imageFile = req.files.file
-  // console.log(imageFile.name);
-  // imageFile.mv(`./public/uploads/property-${property_id}-${imageFile.name}`, function (err) {
-  //   if (err) {
-  //     console.log(err)
-  //     return res.status(500).send(err);
-  //   } else {
-  //     Property.findByIdAndUpdate(property_id,{
-  //       $push:{
-  //         property_images:`/public/uploads/property-${property_id}-${imageFile.name}`
-  //       }
-  //     }).exec()
-  //       .then(result => {
-  //         console.log("should be pushed")
-  // res.writeHead(200, {
-  //   'Content-Type': 'text/plain'
-  // });
-  // console.log(JSON.stringify(result.property_images))
-  // res.end(JSON.stringify(result.property_images))
-  //       })
-  //       .catch(err => {
-  //         res.writeHead(400, {
-  //           'Content-Type': 'text/plain'
-  //         });
-  //         res.send(err)
-  //       })
-  //   }
-  // })
 })
 
 
@@ -505,18 +306,18 @@ router.post("/filter", function (req, res, next) {
   var bedrooms = req.body.bedrooms
   var range = []
   var range = Array(Math.floor((new Date(available_to) - new Date(available_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(available_from).getTime() + idx * 86400000)))
-  console.log(range)
+
   Property.find({
     available_from: { $lte: available_from },
     available_to: { $gte: available_to },
     accomodates: { $gte: accomodates },
     location_city: { $regex: new RegExp('^' + place, 'i') },
-    price : { $lte : price},
-    bedrooms: { $eq: bedrooms},
+    price: { $lte: price },
+    bedrooms: { $eq: bedrooms },
     dates: { $in: range }
   })
     .then(result => {
-      console.log(result)
+      //console.log(result)
       res.writeHead(200, {
         'Content-Type': 'application/json'
       })

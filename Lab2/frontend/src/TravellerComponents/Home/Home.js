@@ -75,7 +75,7 @@ Home.propTypes = {
 }
 
 const mapStatetoProps = state => ({
-    travelerInfo:store.getState().traveler.travelerInfo
+    travelerInfo:state.traveler.travelerInfo
 })
 
 export default connect (mapStatetoProps,null)(Home);

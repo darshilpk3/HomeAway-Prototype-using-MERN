@@ -77,8 +77,10 @@ class LoginPage extends Component {
             password: this.state.password
         }
         this.props.authenticatetraveler(data)
-        console.log(store.getState().traveler.travelerInfo)
+    }
 
+    componentWillReceiveProps(nextProps){
+        console.log(nextProps.travelerInfo)
     }
 
     render() {

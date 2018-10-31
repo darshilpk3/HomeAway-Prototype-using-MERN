@@ -14,49 +14,70 @@ var Booking = require('../models/booking')
 var Question = require('../models/question')
 var jwt = require('jsonwebtoken')
 var passport = require('passport')
+var kafka = require('../kafka/client');
 
-router.post('/login', function (req, res, next) {
 
-    console.log("Inside Login Post Request");
-    var email = req.body.email;
-    var password = (req.body.password);
-    console.log(email, password)
-    Traveler.findOne({ email: email })
-        .exec()
-        .then(result => {
-            console.log(result)
-            if (bcrypt.compareSync(password, result.password)) {
-                var token = jwt.sign({userid:result._id}, 'secretToken', {
-                    expiresIn: 60*60*24
-                });
-                req.session.user = result;
-                res.cookie("loginuser",result._id.toString(), {
-                    maxAge: 900000,
-                    httpOnly: false,
-                    path: '/'
-                })
-                res.cookie("loginemail",result.email, {
-                    maxAge: 900000,
-                    httpOnly: false,
-                    path: '/',
-                    overwrite: true
-                })
-                res.cookie("token",token,{
-                    maxAge: 900000,
-                    httpOnly: false,
-                    path: '/',
-                    overwrite: true
-                })
-                res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                })
-                res.end(JSON.stringify(result));
-            }
-        })
-        .catch( err => {
+// router.post('/login', function (req, res, next) {
+
+//     console.log("Inside Login Post Request");
+//     var email = req.body.email;
+//     var password = (req.body.password);
+//     console.log(email, password)
+//     Traveler.findOne({ email: email })
+//         .exec()
+//         .then(result => {
+//             //console.log(result)
+//             if (bcrypt.compareSync(password, result.password)) {
+//                 var token = jwt.sign({userid:result._id}, 'secretToken', {
+//                     expiresIn: 60*60*24
+//                 });
+//                 req.session.user = result;
+//                 res.cookie("loginuser",result._id.toString(), {
+//                     maxAge: 900000,
+//                     httpOnly: false,
+//                     path: '/'
+//                 })
+//                 res.cookie("loginemail",result.email, {
+//                     maxAge: 900000,
+//                     httpOnly: false,
+//                     path: '/',
+//                     overwrite: true
+//                 })
+//                 res.cookie("token",token,{
+//                     maxAge: 900000,
+//                     httpOnly: false,
+//                     path: '/',
+//                     overwrite: true
+//                 })
+//                 const jsonResponse = {
+//                     "_id" : result._id,
+//                     "email" : result.email,
+//                     "token" : token,
+//                 }
+//                 res.writeHead(200, {
+//                     'Content-Type': 'application/json'
+//                 })
+//                 res.end(JSON.stringify(jsonResponse));
+//             }
+//         })
+//         .catch( err => {
+//             console.log(err)
+//         })
+// });
+
+
+router.post('/login',function(req,res,next){
+    kafka.make_request('post_login',req.body, function(err,results){
+        if(err){
             console.log(err)
-        })
-});
+        }else{
+            console.log(results)
+        }
+    })
+})
+
+
+
 
 router.post('/signup', function (req, res, next) {
     console.log("Inside signup Post Request");
@@ -221,7 +242,7 @@ router.get("/:travel_id/bookingdetails", function (req, res, next) {
     .populate('traveler')
     .exec()
         .then(result => {
-            console.log(JSON.stringify(result))
+            //console.log(JSON.stringify(result))
             res.writeHead(200,{
                 'Content-Type': 'application/json'
             })
@@ -230,22 +251,7 @@ router.get("/:travel_id/bookingdetails", function (req, res, next) {
         .catch(err => {
             console.log(err)
         })
-    // Traveler.findById(req.params.travel_id)
-    // .populate('bookings')
-    // .exec()
-    //     .then(result => {
-    //         res.writeHead(200, {
-    //             'Content-Type': 'application/json'
-    //         })
-    //         console.log(JSON.stringify(result.bookings))
-    //         res.end(JSON.stringify(result.bookings))
-    //     })
-    //     .catch(err => {
-    //         res.writeHead(400, {
-    //             'Content-Type': 'text/plain'
-    //         })
-    //         res.end("Couldnt get booking details")
-    //     })
+
 })
 
 router.post("/:travelid/upload", function (req, res, next) {

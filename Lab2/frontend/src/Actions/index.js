@@ -1,8 +1,11 @@
 import axios from "axios";
-import cookies from 'react-cookies'
 export const AUTHENTICATE_TRAVELER = "authenticate_traveler";
-export const FETCH_TRAVELER = "fetch_traveler";
-//export const CREATE_BOOK = "create_book";
+export const TRAVELER_PROFILE = "traveler_profile"
+export const TRAVELER_BOOKINGS = "traveler_bookings"
+export const EDIT_PROFILE = "edit_profile"
+export const EDIT_PROFILEPIC = "edit_profilepic"
+export const EDIT_PASSWORD = "edit_password"
+
 
 const ROOT_URL = "http://localhost:3001";
 
@@ -18,16 +21,69 @@ export const authenticatetraveler = (credentials) => dispatch => {
                 payload:response.data
             })
         });
-
-    return {
-        type: AUTHENTICATE_TRAVELER,
-        payload: request
-    };
 }
 
-export const fetchtraveler = () => dispatch => {
-    dispatch({
-        type: FETCH_TRAVELER,
-        payload: "hello"
-    })
+export const  travelerProfile= (id) => dispatch => {
+
+    axios.defaults.withCredentials = true
+    const request = axios
+        .get(`${ROOT_URL}/travel/${id}`)
+        .then( response => {
+            dispatch({ 
+                type:TRAVELER_PROFILE,
+                payload:response.data
+            })
+        });
+}
+
+export const  travelerBookings= (id) => dispatch => {
+
+    axios.defaults.withCredentials = true
+    const request = axios
+        .get(`${ROOT_URL}/travel/${id}/bookingdetails`)
+        .then( response => {
+            dispatch({ 
+                type:TRAVELER_BOOKINGS,
+                payload:response.data
+            })
+        });
+}
+
+export const  editProfile= (id,data) => dispatch => {
+
+    axios.defaults.withCredentials = true
+    const request = axios
+        .put(`${ROOT_URL}/travel/${id}`,data)
+        .then( response => {
+            dispatch({ 
+                type:EDIT_PROFILE,
+                payload:response.data
+            })
+        });
+}
+
+export const  editProfilePic= (id,formData) => dispatch => {
+
+    axios.defaults.withCredentials = true
+    const request = axios
+        .post(`${ROOT_URL}/travel/${id}/upload`,formData)
+        .then( response => {
+            dispatch({ 
+                type:EDIT_PROFILEPIC,
+                payload:response.data
+            })
+        });
+}
+
+export const  editPassword= (id,data) => dispatch => {
+
+    axios.defaults.withCredentials = true
+    const request = axios
+        .put(`${ROOT_URL}/travel/editpassword/${id}`,data)
+        .then( response => {
+            dispatch({ 
+                type:EDIT_PASSWORD,
+                payload:response.data
+            })
+        });
 }

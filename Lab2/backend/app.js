@@ -6,7 +6,6 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var cors = require('cors');
-var mysql = require('mysql');
 var fileUpload = require('express-fileupload')
 var indexRouter = require('./routes/index');
 var propertyRouter = require('./routes/property');

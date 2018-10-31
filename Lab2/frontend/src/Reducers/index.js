@@ -4,7 +4,6 @@ import TravelReducer from "./traveler_reducer";
 
 const rootReducer = combineReducers({
   traveler: TravelReducer
-//   form: formReducer
 });
 
 export default rootReducer;
