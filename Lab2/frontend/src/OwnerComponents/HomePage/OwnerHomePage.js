@@ -5,6 +5,12 @@ import { Redirect } from 'react-router'
 import OwnerNavBar from '../NavBar/OwnerNavBar'
 import axios from 'axios'
 
+import PropTypes from 'prop-types';
+import {ownerBookings} from '../../Actions/ownerActions'
+
+
+import {connect} from 'react-redux'
+
 class OwnerHomePage extends Component {
 
     constructor(props) {
@@ -19,15 +25,25 @@ class OwnerHomePage extends Component {
         axios.defaults.withCredentials = true;
 
         let id = cookie.load("ownerlogin")
-        axios.get("http://localhost:3001/owner/" + id+"/dashboard")
-            .then(response => {
-                if (response.status === 200) {
-                    this.setState({
-                        responseData: response.data
-                    })
-                }
-            })
+        this.props.ownerBookings(id)
+        // axios.get("http://localhost:3001/owner/" + id+"/dashboard")
+        //     .then(response => {
+        //         if (response.status === 200) {
+                    // this.setState({
+                    //     responseData: response.data
+                    // })
+        //         }
+        //     })
     }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.bookingInfo){
+            this.setState({
+                responseData: nextProps.bookingInfo
+            })
+        }
+    }
+
     render() {
 
         let redirectVar = null;
@@ -75,11 +91,14 @@ class OwnerHomePage extends Component {
         )
     }
 }
+OwnerHomePage.PropTypes = {
+    ownerBookings:PropTypes.func.isRequired,
+    bookingInfo : PropTypes.object
+}
 
-export default OwnerHomePage;
-    // <div class="clearfix"></div>
-    //     <div class="flex-container" id="listproperty">
-    //         <p class=" list-property-header text-center">List your property on HomeAway and open your door to rental income</p>
-    //         <button class="btn btn-primary btn-inverse text-center">List Your Property</button>
-    //     </div>
-    //     <div class="clearfix"></div>
+const mapStatetoProps = state => ({
+    bookingInfo:state.owner.bookingInfo
+})
+
+
+export default connect(mapStatetoProps,{ownerBookings})(OwnerHomePage);

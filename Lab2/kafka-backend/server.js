@@ -1,6 +1,6 @@
 var connection =  new require('./kafka/Connection');
 var mongoose = require('mongoose')
-mongoose.connect(config.database,{
+mongoose.connect('mongodb://localhost:27017/homeaway',{
     poolSize:100
   })
     .then(() => console.log("Connected"))

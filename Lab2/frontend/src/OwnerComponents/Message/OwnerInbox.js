@@ -8,6 +8,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
+
+
+import PropTypes from 'prop-types';
+import {loadInbox, answerQuestion} from '../../Actions/ownerActions'
+
+
+import {connect} from 'react-redux'
+
+
 class OwnerInbox extends Component {
 
     constructor(props) {
@@ -26,43 +35,44 @@ class OwnerInbox extends Component {
     } 
 
     answerQuestion = (e) => {
-        var headers = new Headers()
-        axios.defaults.withCredentials = true
+        // var headers = new Headers()
+        // axios.defaults.withCredentials = true
+        console.log(e.target.id)
         const data = {
             _id : e.target.id,
             answer:this.state.answer
         }
-        axios.post("http://localhost:3001/owner/"+cookie.load("ownerlogin")+"/question",data)
-            .then(response => {
-                if(response.status === 200){
-                    console.log("Answered")
-                    this.setState({
-                        redirect:true
-                    })
-                }                
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        const id = cookie.load("ownerlogin")
+        this.props.answerQuestion(id,data)
+        this.props.history.go(0)
     }
     componentDidMount() {
         var headers = new Headers();
         axios.defaults.withCredentials = true;
         var id = cookie.load("ownerlogin")
+
+        this.props.loadInbox(id);
         // console.log("Sending get request to http://localhost:3001/edit/" + id)
-        axios.get("http://localhost:3001/owner/" + id + "/question")
-            .then(response => {
-                console.log("inside response")
-                if (response.status === 200) {
-                    var data = response.data
-                    this.setState({
-                        questions: data
-                    })
-                    console.log(data)
-                }
-            })
+        // axios.get("http://localhost:3001/owner/" + id + "/question")
+        //     .then(response => {
+        //         console.log("inside response")
+        //         if (response.status === 200) {
+        //             var data = response.data
+                    // this.setState({
+                    //     questions: data
+                    // })
+        //             console.log(data)
+        //         }
+        //     })
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.ownerInbox){
+            this.setState({
+                questions: nextProps.ownerInbox
+            })
+        }
+    }
     render() {
 
         let redirectVar = null
@@ -70,17 +80,14 @@ class OwnerInbox extends Component {
         if (!cookie.load("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
-        if(this.state.redirect){
-            redirectVar = <Redirect to="/owner/inbox" />
-        }
         console.log("Rendering")
         console.log(this.state.bookingDetails)
         var placeDetail = null;
-        console.log(typeof this.state.bookingDetails)
+        console.log(typeof this.state.questions)
 
-        if (this.state.questions) {
+        if (this.state.questions !== null) {
             var buttons = this.state.questions.map(question => {
-                console.log(question)
+                console.log(question._id)
                 return (
                     <tr>
                         <td class="property-detail p-2">
@@ -89,10 +96,10 @@ class OwnerInbox extends Component {
                             <h3 class="text-dark"><b>Topic:</b>{question.topic}</h3>
                             <p><b>Question: {question.question}</b></p>
                             <p><b>Answer: </b>{question.answer}</p>
-                            <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                            <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target={"#exampleModalCenter"+question._id}>
                                 Answer
                             </button>
-                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal fade" id={"exampleModalCenter"+question._id} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -140,4 +147,15 @@ class OwnerInbox extends Component {
     }
 }
 
-export default OwnerInbox;
+
+OwnerInbox.PropTypes = {
+    loadInbox : PropTypes.func.isRequired,
+    answerQuestion : PropTypes.func.isRequired,
+    ownerInbox : PropTypes.object   
+}
+
+const mapStatetoProps = state => ({
+    ownerInbox:state.owner.ownerInbox
+})
+
+export default connect(mapStatetoProps,{loadInbox,answerQuestion})(OwnerInbox);

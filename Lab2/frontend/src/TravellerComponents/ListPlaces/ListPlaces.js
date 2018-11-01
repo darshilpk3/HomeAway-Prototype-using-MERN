@@ -138,10 +138,10 @@ class ListPlaces extends Component {
                                 <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target={"#exampleModalCenter" + placeDetail._id}>
                                     Ask Owner a Question
                           </button>
-                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal fade" id={"exampleModalCenter"+placeDetail._id} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -153,7 +153,7 @@ class ListPlaces extends Component {
                                             <div class="modal-body">
                                                 <form>
                                                     <input type="text" class="form-control" placeholder="Title" name="topic" onChange={this.handleChange}></input>
-                                                    <textarea class="form-control" rows={10} placeholder="Type your question" name="question" onChange={this.handleChange} />
+                                                    <textarea class="form-control" rows={10} placeholder="Type your question" name="question" onChange={this.handleChange}/>
                                                     <input type="button" id={placeDetail._id} onClick={this.askQuestion} class="form-control-login btn-primary" value="Ask" />
                                                 </form>
                                             </div>

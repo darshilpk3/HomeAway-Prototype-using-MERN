@@ -7,6 +7,7 @@ import '../../App.css'
 import {authenticatetraveler} from '../../Actions'
 import cookie from 'react-cookies';
 import { FormErrors } from '../../FormErrors';
+
 import {connect} from 'react-redux'
 import { store } from '../../store';
 import {Link} from 'react-router-dom'
@@ -81,6 +82,9 @@ class LoginPage extends Component {
 
     componentWillReceiveProps(nextProps){
         console.log(nextProps.travelerInfo)
+        if(nextProps.travelerInfo){
+            this.props.history.push('/traveller/home')
+        }
     }
 
     render() {

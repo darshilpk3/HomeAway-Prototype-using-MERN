@@ -5,6 +5,12 @@ import { Redirect } from 'react-router'
 import cookie from 'react-cookies'
 import '../../App.css'
 
+import PropTypes from 'prop-types';
+import {getProperties} from '../../Actions/ownerActions'
+
+
+import {connect} from 'react-redux'
+
 class ShowProperties extends Component {
 
     constructor(props) {
@@ -24,32 +30,46 @@ class ShowProperties extends Component {
         var id = cookie.load("ownerlogin") && cookie.load("ownerlogin")
         axios.defaults.withCredentials = true;
         console.log("Getting the list of properties")
-        axios.get("http://localhost:3001/owner/" + id + "/property")
-            .then(response => {
-                console.log(response.data)
-                if (response.status === 200) {
-                    this.setState({
-                        responseData: response.data
-                    })
-                }
+        this.props.getProperties(id)
+        // axios.get("http://localhost:3001/owner/" + id + "/property")
+        //     .then(response => {
+        //         console.log(response.data)
+        //         if (response.status === 200) {
+                    // this.setState({
+                    //     responseData: response.data
+                    // })
+        //         }
+        //     })
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.ownerProperties){
+            this.setState({
+                responseData: nextProps.ownerProperties
             })
+        }
     }
 
     showDetails = (e) => {
 
-        var headers = new Headers()
-        axios.defaults.withCredentials = true
+        // var headers = new Headers()
+        // axios.defaults.withCredentials = true
 
-        axios.get("http://localhost:3001/property/" + e.target.id)
-            .then(response => {
-                if (response.status === 200) {
-                    console.log("Got the details");
-                    this.setState({
-                        propertyData: response.data
-                    })
-                }
-            })
-
+        // axios.get("http://localhost:3001/property/" + e.target.id)
+        //     .then(response => {
+        //         if (response.status === 200) {
+        //             console.log("Got the details");
+        //             this.setState({
+        //                 propertyData: response.data
+        //             })
+        //         }
+        //     })
+        this.props.history.push({
+            pathname:'/owner/property/edit',
+            state : {
+                _id : e.target.id
+            }
+        })
     }
 
     uploadPropertyImages = (e) => {
@@ -82,12 +102,12 @@ class ShowProperties extends Component {
             console.log("should redirect")
             renderRedirect = <Redirect to="/owner/login" />
         }
-        if (this.state.propertyData) {
-            renderRedirect = <Redirect to={{
-                pathname: '/owner/property/edit',
-                state: { responseData: this.state.propertyData }
-            }} />
-        }
+        // if (this.state.propertyData) {
+        //     renderRedirect = <Redirect to={{
+        //         pathname: '/owner/property/edit',
+        //         state: { responseData: this.state.propertyData }
+        //     }} />
+        // }
         if (this.state.redirect !== null) {
             console.log("should be redirected")
             renderRedirect = <Redirect to={{
@@ -169,4 +189,13 @@ class ShowProperties extends Component {
     }
 }
 
-export default ShowProperties
+ShowProperties.PropTypes = {
+    getProperties : PropTypes.func.isRequired,
+    ownerProperties : PropTypes.object
+}
+
+const mapStatetoProps = state => ({
+    ownerProperties: state.owner.ownerProperties
+})
+
+export default connect(mapStatetoProps,{getProperties})(ShowProperties)

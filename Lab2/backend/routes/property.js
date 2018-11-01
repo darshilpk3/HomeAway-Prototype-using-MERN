@@ -297,14 +297,94 @@ router.delete("/:property_id/upload", function (req, res, next) {
 
 
 router.post("/filter", function (req, res, next) {
+  console.log("Filtered result for ")
+  console.log("price: ",req.body.price)
+  console.log("bedrooms: ",req.body.bedrooms)
+  var place = req.body.place
+  var available_from = req.body.available_from
+  var available_to = req.body.available_to
+  var accomodates = req.body.accomodates
+  var range = Array(Math.floor((new Date(available_to) - new Date(available_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(available_from).getTime() + idx * 86400000)))
+
+  if(req.body.price & !req.body.bedrooms){
+    console.log("price filter should be there")
+    Property.find({
+      available_from: { $lte: available_from },
+      available_to: { $gte: available_to },
+      accomodates: { $gte: accomodates },
+      location_city: { $regex: new RegExp('^' + place, 'i') },
+      price: { $lte: req.body.price },
+      dates: { $in: range }
+    })
+      .then(result => {
+        //console.log(result)
+        res.writeHead(200, {
+          'Content-Type': 'application/json'
+        })
+        res.end(JSON.stringify(result))
+      })
+      .catch(err => {
+        console.log(err)
+        res.writeHead(400, {
+          'Content-Type': 'text/plain'
+        })
+      })
+  }else if(req.body.bedrooms && !req.body.price){
+    Property.find({
+      available_from: { $lte: available_from },
+      available_to: { $gte: available_to },
+      accomodates: { $gte: accomodates },
+      location_city: { $regex: new RegExp('^' + place, 'i') },
+      bedrooms: { $gte: req.body.bedrooms },
+      dates: { $in: range }
+    })
+      .then(result => {
+        //console.log(result)
+        res.writeHead(200, {
+          'Content-Type': 'application/json'
+        })
+        res.end(JSON.stringify(result))
+      })
+      .catch(err => {
+        console.log(err)
+        res.writeHead(400, {
+          'Content-Type': 'text/plain'
+        })
+      })
+  }else if(req.body.price && req.body.bedrooms){
+    Property.find({
+      available_from: { $lte: available_from },
+      available_to: { $gte: available_to },
+      accomodates: { $gte: accomodates },
+      location_city: { $regex: new RegExp('^' + place, 'i') },
+      price: { $lte: req.body.price },
+      bedrooms:{$gte:req.body.bedrooms},
+      dates: { $in: range }
+    })
+      .then(result => {
+        console.log(result)
+        res.writeHead(200, {
+          'Content-Type': 'application/json'
+        })
+        res.end(JSON.stringify(result))
+      })
+      .catch(err => {
+        console.log(err)
+        res.writeHead(400, {
+          'Content-Type': 'text/plain'
+        })
+      })
+  }
+  
+})
+
+router.post("/filterbedrooms", function (req, res, next) {
   console.log("Filtered result")
   var place = req.body.place
   var available_from = req.body.available_from
   var available_to = req.body.available_to
   var accomodates = req.body.accomodates
-  var price = req.body.price
   var bedrooms = req.body.bedrooms
-  var range = []
   var range = Array(Math.floor((new Date(available_to) - new Date(available_from)) / 86400000) + 1).fill().map((_, idx) => (new Date(new Date(available_from).getTime() + idx * 86400000)))
 
   Property.find({
@@ -312,8 +392,7 @@ router.post("/filter", function (req, res, next) {
     available_to: { $gte: available_to },
     accomodates: { $gte: accomodates },
     location_city: { $regex: new RegExp('^' + place, 'i') },
-    price: { $lte: price },
-    bedrooms: { $eq: bedrooms },
+    bedrooms: { $gte: bedrooms },
     dates: { $in: range }
   })
     .then(result => {

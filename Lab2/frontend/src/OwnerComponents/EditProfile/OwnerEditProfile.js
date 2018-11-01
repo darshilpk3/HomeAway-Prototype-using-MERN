@@ -9,7 +9,14 @@ import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
 import OwnerNavBar from '../NavBar/OwnerNavBar';
-class EditProfile extends Component {
+
+import PropTypes from 'prop-types';
+import {ownerProfile,editProfile,editPassword} from '../../Actions/ownerActions'
+
+
+import {connect} from 'react-redux'
+
+class OwnerEditProfile extends Component {
 
     constructor(props) {
         super(props)
@@ -62,40 +69,70 @@ class EditProfile extends Component {
         axios.defaults.withCredentials = true;
         var id = cookie.load("ownerlogin")
         console.log("Sending get request to http://localhost:3001/owner/edit/" + id)
-        axios.get("http://localhost:3001/owner/" + id)
-            .then(response => {
-                console.log("inside response")
-                if (response.status === 200) {
-                    var data = response.data
-                    console.log(data.email)
-                    this.setState({
-                        email: data.email,
-                        firstname: data.firstname,
-                        lastname: data.lastname,
-                        address: data.billing_address,
-                        company: data.company,
-                        city: data.city,
-                        state: data.state,
-                        zipcode: data.zipcode,
-                        country: data.country,
-                        number: data.number,
-                        emailValid: true,
-                        firstnameValid: true,
-                        lastnameValid: true,
-                        passwordValid: true,
-                        addressValid: true,
-                        cityValid: true,
-                        stateValid: true,
-                        zipcodeValid: true,
-                        countryValid: true,
-                        companyValid: true,
-                        numberValid: true,
-                        formValid: true
-                    })
-                }
-            })
+        this.props.ownerProfile(id)
+        // axios.get("http://localhost:3001/owner/" + id)
+        //     .then(response => {
+        //         console.log("inside response")
+        //         if (response.status === 200) {
+        //             var data = response.data
+        //             console.log(data.email)
+                    // this.setState({
+                    //     email: data.email,
+                    //     firstname: data.firstname,
+                    //     lastname: data.lastname,
+                    //     address: data.billing_address,
+                    //     company: data.company,
+                    //     city: data.city,
+                    //     state: data.state,
+                    //     zipcode: data.zipcode,
+                    //     country: data.country,
+                    //     number: data.number,
+                    //     emailValid: true,
+                    //     firstnameValid: true,
+                    //     lastnameValid: true,
+                    //     passwordValid: true,
+                    //     addressValid: true,
+                    //     cityValid: true,
+                    //     stateValid: true,
+                    //     zipcodeValid: true,
+                    //     countryValid: true,
+                    //     companyValid: true,
+                    //     numberValid: true,
+                    //     formValid: true
+                    // })
+        //         }
+        //     })
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.profileInfo){
+            var data = nextProps.profileInfo
+            this.setState({
+                email: data.email,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                address: data.billing_address,
+                company: data.company,
+                city: data.city,
+                state: data.state,
+                zipcode: data.zipcode,
+                country: data.country,
+                number: data.number,
+                emailValid: true,
+                firstnameValid: true,
+                lastnameValid: true,
+                passwordValid: true,
+                addressValid: true,
+                cityValid: true,
+                stateValid: true,
+                zipcodeValid: true,
+                countryValid: true,
+                companyValid: true,
+                numberValid: true,
+                formValid: true
+            })
+        }
+    }
     handleChange = (e) => {
         console.log("handleChange called")
         const name = e.target.name
@@ -218,22 +255,23 @@ class EditProfile extends Component {
             country:this.state.country
         }
         const id = cookie.load("ownerlogin")
-
-        axios.put("http://localhost:3001/owner/" + id, data)
-            .then(response => {
-                //console.log("Trying to update")
-                if (response.status === 200) {
-                    console.log("Updated")
-                    this.setState({
-                        message: response.data
-                    })
-                }else{
-                    console.log("Couldn't Update")
-                    this.setState({
-                        message: "Something wrong with data"
-                    })
-                }
-            })
+        this.props.editProfile(id,data)
+        this.props.history.push('/owner/home')
+        // axios.put("http://localhost:3001/owner/" + id, data)
+        //     .then(response => {
+        //         //console.log("Trying to update")
+        //         if (response.status === 200) {
+        //             console.log("Updated")
+        //             this.setState({
+        //                 message: response.data
+        //             })
+        //         }else{
+        //             console.log("Couldn't Update")
+        //             this.setState({
+        //                 message: "Something wrong with data"
+        //             })
+        //         }
+        //     })
     }
 
 
@@ -244,19 +282,19 @@ class EditProfile extends Component {
             password: this.state.password
         }
         const id = cookie.load("ownerlogin")
-
-        axios.put("http://localhost:3001/owner/"+id+"/editpassword", data)
-            .then(response => {
-                //console.log("Trying to update")
-                if (response.status === 200) {
-                    console.log("Updated")
-                    this.setState({
-                        message: response.data
-                    })
-                }
-            })
+        this.props.editPassword(id,data)
+        this.props.history.push('owner/home')
+        // axios.put("http://localhost:3001/owner/"+id+"/editpassword", data)
+        //     .then(response => {
+        //         //console.log("Trying to update")
+        //         if (response.status === 200) {
+        //             console.log("Updated")
+        //             this.setState({
+        //                 message: response.data
+        //             })
+        //         }
+        //     })
     }
-
 
     render() {
 
@@ -390,6 +428,17 @@ class EditProfile extends Component {
     }
 }
 
-export default EditProfile;
+OwnerEditProfile.PropTypes = {
+    ownerProfile : PropTypes.func.isRequired,
+    editProfile : PropTypes.func.isRequired,
+    editPassword : PropTypes.func.isRequired,
+    profileInfo : PropTypes.object
+}
+
+const mapStatetoProps = state => ({
+    profileInfo:state.owner.profileInfo
+})
+
+export default connect(mapStatetoProps,{ownerProfile,editProfile,editPassword})(OwnerEditProfile);
 
 

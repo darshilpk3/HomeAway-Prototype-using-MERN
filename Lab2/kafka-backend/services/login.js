@@ -1,8 +1,20 @@
+var Traveler = require('../models/traveler')
+
 function handle_request(msg, callback){
    
     console.log("Inside login kafka backend");
     console.log(msg);
-    callback(null, msg);
+    const email = msg.email
+    const password = msg.password
+    Traveler.findOne({
+        email:email
+    }).exec()
+        .then(result => {
+            callback(null, result);
+        })
+        .catch(error => {
+            callback(err,error)
+        })
     console.log("after callback");
 };
 

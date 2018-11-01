@@ -29,26 +29,6 @@ class InlineForm extends Component {
     componentDidMount(){
         if(this.props.form_values){
             console.log("form should be valid")
-            // this.setState({
-            //     place: ((this.props.form_values && this.props.form_values.place))
-            // },() => {
-            //     this.validateField('place',this.props.form_values.place)
-            // })
-            // this.setState({
-            //     available_from: ((this.props.form_values && this.props.form_values.available_from))
-            // },() => {
-            //     this.validateField('available_from',this.props.form_values.available_from)
-            // })
-            // this.setState({
-            //     available_to: ((this.props.form_values && this.props.form_values.available_to))
-            // },() => {
-            //     this.validateField('available_to',this.props.form_values.available_to)
-            // })
-            // this.setState({
-            //     accomodates: ((this.props.form_values && this.props.form_values.accomodates))
-            // },() => {
-            //     this.validateField('accomodates',this.props.form_values.accomodates)
-            // })
             this.setState({
                 place: (((this.props.form_values && this.props.form_values.place)) || (this.props.place && this.props.place)),
                 available_from: (this.props.form_values && this.props.form_values.available_from),

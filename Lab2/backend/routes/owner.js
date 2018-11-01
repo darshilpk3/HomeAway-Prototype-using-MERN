@@ -35,10 +35,14 @@ router.post('/login', function (req, res, next) {
                 path: '/',
                 overwrite: true
             })
+            const jsonResponse = {
+                "_id" : result._id,
+                "email" : result.email
+            }
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             })
-            res.end(JSON.stringify(result));
+            res.end(JSON.stringify(jsonResponse));
         })
         .catch(err => {
             res.writeHead(200, {
@@ -121,32 +125,6 @@ router.put("/:ownerid/editpassword", function (req, res, next) {
             })
             res.end("something wrong with data while entering email and " + sql)
         })
-
-    // pool.getConnection(function (err, con) {
-    //     if (err) {
-    //         res.writeHead(400, {
-    //             'Content-Type': 'text/plain'
-    //         })
-    //         res.end("Couldnt get a connection")
-    //     } else {
-    //         sql = "update owneruser set password='" + password + "' where owner_id='" + req.params.ownerid + "'";
-    //         console.log(sql)
-    //         con.query(sql, function (err, result) {
-    //             if (err) {
-    //                 res.writeHead(400, {
-    //                     'Content-Type': 'text/plain'
-    //                 })
-    //                 res.end("something wrong with data while entering email and " + sql)
-    //             } else {
-
-    //                 res.writeHead(200, {
-    //                     'Content-Type': 'text/plain'
-    //                 })
-    //                 res.end("Successfully updated")
-    //             }
-    //         })
-    //     }
-    // })
 })
 
 router.put("/:ownerid", function (req, res, next) {
@@ -199,47 +177,6 @@ router.put("/:ownerid", function (req, res, next) {
         })
         res.end("something wrong with data while entering other details")
     }
-
-    // pool.getConnection(function (err, con) {
-    //     if (err) {
-    //         res.writeHead(400, {
-    //             'Content-Type': 'text/plain'
-    //         })
-    //         res.end("Couldnt get a connection")
-    //     } else {
-    //         sql = "update owneruser set email='" + email + "' where owner_id='" + req.params.ownerid + "'";
-    //         console.log(sql)
-    //         con.query(sql, function (err, result) {
-    //             if (err) {
-    //                 res.writeHead(400, {
-    //                     'Content-Type': 'text/plain'
-    //                 })
-    //                 res.end("something wrong with data while entering email and " + sql)
-    //             } else {
-    //                 sql = "update owneruserinfo set firstname='" + firstname + "',lastname='" + lastname + "',company='" + company + "',billing_address='" + address + "',city='" + city + "',state='" + state + "',zipcode='" + zipcode + "',country='" + country + "',number='" + number + "' where owner_id=" + req.params.ownerid;
-    //                 console.log(sql)
-    //                 con.query(sql, function (err, result) {
-    //                     if (err) {
-    // res.writeHead(400, {
-    //     'Content-Type': 'text/plain'
-    // })
-    // res.end("something wrong with data while entering other details")
-    //                     } else {
-
-    // res.cookie("owneremail", email, {
-    //     maxAge: 900000,
-    //     httpOnly: false,
-    // })
-    // res.writeHead(200, {
-    //     'Content-Type': 'text/plain'
-    // })
-    // res.end("Successfully updated")
-    //                     }
-    //                 })
-    //             }
-    //         })
-    //     }
-    // })
 })
 
 router.get("/:owner_id/property/", async (req, res, next) => {
@@ -284,7 +221,7 @@ router.get("/:owner_id/dashboard", function (req, res, next) {
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
-            res.end(err)
+            res.end(JSON.stringify(err))
         })
 })
 

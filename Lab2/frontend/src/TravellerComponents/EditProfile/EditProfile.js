@@ -141,9 +141,9 @@ class EditProfile extends Component {
             })
         }
 
-        if(nextProps.bookingDetails){
+        if(nextProps.bookingInfo){
             this.setState({
-                bookingDetails: nextProps.bookingDetails
+                bookingDetails: nextProps.bookingInfo
             })
         }
     }
@@ -290,7 +290,7 @@ class EditProfile extends Component {
 
         console.log("formData is: ", formData.get('selectedFile'))
         this.props.editProfilePic(id,formData)
-        this.props.history.push("/traveller/home")
+        this.props.history.go(0)
         // axios.post("http://localhost:3001/travel/"+cookie.load('loginuser')+"/upload", formData)
         //     .then(response => {
         //         console.log("file should be  uploaded")

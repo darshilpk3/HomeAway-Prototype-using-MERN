@@ -7,6 +7,14 @@ import cookie from 'react-cookies';
 import NavBar from '../../TravellerComponents/NavBar/NavBar';
 import { FormErrors } from '../../FormErrors';
 
+import PropTypes from 'prop-types';
+import {authenticateowner} from '../../Actions/ownerActions'
+
+
+import {connect} from 'react-redux'
+import { store } from '../../store';
+import {Link} from 'react-router-dom'
+
 class OwnerLoginPage extends Component {
 
     constructor(props){
@@ -75,22 +83,30 @@ class OwnerLoginPage extends Component {
             email:this.state.email,
             password:this.state.password
         }
-        axios.post("http://localhost:3001/owner/login",data)
-            .then(response => {
-                console.log("Got the response",response.data);
-                if(response.data === "Invalid Credentials"){
-                    this.setState({
-                        message: "Invalid Credentials"
-                    })
-                }
-                else{
-                    console.log(response.data)
-                    console.log("logged in")
-                    this.setState({
-                        redirect:true,
-                    })
-                }
-            })
+        this.props.authenticateowner(data)
+        // axios.post("http://localhost:3001/owner/login",data)
+        //     .then(response => {
+        //         console.log("Got the response",response.data);
+        //         if(response.data === "Invalid Credentials"){
+        //             this.setState({
+        //                 message: "Invalid Credentials"
+        //             })
+        //         }
+        //         else{
+        //             console.log(response.data)
+        //             console.log("logged in")
+        //             this.setState({
+        //                 redirect:true,
+        //             })
+        //         }
+        //     })
+    }
+
+    componentWillReceiveProps(nextProps){
+        console.log(nextProps.ownerInfo)
+        if(nextProps.ownerInfo){
+            this.props.history.push('/owner/home')
+        }
     }
 
     render() {
@@ -146,4 +162,13 @@ class OwnerLoginPage extends Component {
     }
 }
 
-export default OwnerLoginPage;
+OwnerLoginPage.propTypes = {
+    authenticateowner : PropTypes.func.isRequired,
+    ownerInfo:PropTypes.object
+}
+
+const mapStatetoProps = state => ({
+    ownerInfo:state.owner.ownerInfo
+})
+
+export default connect(mapStatetoProps,{authenticateowner})(OwnerLoginPage);
