@@ -8,8 +8,13 @@ mongoose.connect('mongodb://localhost:27017/homeaway',{
 //topics files
 //var signin = require('./services/signin.js');
 //var Books = require('./services/books.js');
-var Login = require('./services/login')
-
+var Login = require('./services/TravelServices/login')
+var GetUserDetails = require('./services/TravelServices/getUserDetails.js')
+var EditUserDetails = require('./services/TravelServices/editUserDetails.js')
+var EditUserPassword = require('./services/TravelServices/editUserPassword.js')
+var GetUserBookings = require('./services/TravelServices/getUserBookings.js')
+var GetUserInbox = require('./services/TravelServices/getUserInbox.js')
+var PostUserQuestion = require('./services/TravelServices/postUserQuestion.js')
 function handleTopicRequest(topic_name,fname){
     //var topic_name = 'root_topic';
     var consumer = connection.getConsumer(topic_name);
@@ -44,3 +49,9 @@ function handleTopicRequest(topic_name,fname){
 //second argument is a function that will handle this topic request
 //handleTopicRequest("post_book",Books)
 handleTopicRequest("post_login",Login)
+handleTopicRequest("getUserDetails",GetUserDetails)
+handleTopicRequest("editUserDetails",EditUserDetails)
+handleTopicRequest("editUserPassword",EditUserPassword)
+handleTopicRequest("getUserBookings",GetUserBookings)
+handleTopicRequest("getUserInbox",GetUserInbox)
+handleTopicRequest("postUserQuestion",PostUserQuestion)

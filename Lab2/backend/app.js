@@ -15,8 +15,10 @@ var mongoose = require('mongoose')
 var passport = require('passport')
 var config = require('./config/main')
 
-
+require('./config/passport')
 var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -51,16 +53,16 @@ app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache');
   next();
 });
-app.use(passport.initialize())
+// app.use(passport.initialize())
 
 mongoose.connect(config.database,{
   poolSize:100
 })
   .then(() => console.log("Connected"))
   .catch((err) => console.log(err))
-
-require('./config/passport')(passport)
   
+// require('./config/passport')(passport)
+app.use(passport.initialize());
 app.use('/', indexRouter);
 app.use('/property', propertyRouter);
 app.use('/travel', travelRouter);

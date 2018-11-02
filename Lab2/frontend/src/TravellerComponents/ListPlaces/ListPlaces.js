@@ -48,9 +48,7 @@ class ListPlaces extends Component {
             .then(response => {
                 if (response.status === 200) {
                     console.log("Question posted")
-                    this.setState({
-                        rerender: true
-                    })
+                    this.props.history.go(0)
                 }
             })
             .catch(err => {

@@ -96,7 +96,7 @@ class OwnerSignUpPage extends Component {
             password: this.state.password
         }
 
-        axios.post("http://localhost:3001/owner/signup", data)
+        axios.post("http://localhost:3001/ownersignup", data)
             .then(response => {
                 console.log(response.data);
 

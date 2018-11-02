@@ -14,7 +14,7 @@ export const authenticatetraveler = (credentials) => dispatch => {
 
     axios.defaults.withCredentials = true
     const request = axios
-        .post(`${ROOT_URL}/travel/login`, credentials)
+        .post(`${ROOT_URL}/travellogin`, credentials)
         .then( response => {
             dispatch({ 
                 type:AUTHENTICATE_TRAVELER,

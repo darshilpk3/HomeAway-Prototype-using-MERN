@@ -30,6 +30,7 @@ class AddProperty2 extends Component {
             bathrooms: "",
             accomodates: "",
             price: "",
+            propertyImages: null,
             streetValid: false,
             location_cityValid: false,
             stateValid: false,
@@ -41,6 +42,7 @@ class AddProperty2 extends Component {
             bedroomsValid: false,
             bathroomsValid: false,
             accomodatesValid: false,
+            propertyImagesValid: "",
             priceValid: false,
             formValid: false,
             formErrors: {
@@ -55,7 +57,8 @@ class AddProperty2 extends Component {
                 bedrooms: "",
                 bathrooms: "",
                 accomodates: "",
-                price: ""
+                price: "",
+                propertyImages: ""
             },
             redirect: false
         }
@@ -96,15 +99,25 @@ class AddProperty2 extends Component {
     //     }
     // }
     handleChange = (e) => {
+        if (e.target.name == "propertyImages") {
+            const name = e.target.name
+            const value = e.target.files.length
+            console.log(e.target.files.length)
+            this.setState({
+                propertyImages: e.target.files
+            }, () => {
+                this.validateField(name, value)
+            })
+        } else {
+            const name = e.target.name
+            const value = e.target.value
+            this.setState({
+                [name]: value
+            }, () => {
+                this.validateField(name, value)
+            });
+        }
 
-        const name = e.target.name
-        const value = e.target.value
-        console.log(name, ": ", value)
-        this.setState({
-            [name]: value
-        }, () => {
-            this.validateField(name, value)
-        });
     }
 
     validateField(fieldName, value) {
@@ -121,6 +134,7 @@ class AddProperty2 extends Component {
         let bathroomsValid = this.state.bathroomsValid;
         let accomodatesValid = this.state.accomodatesValid;
         let priceValid = this.state.priceValid;
+        let propertyImagesValid = this.state.propertyImagesValid
 
         switch (fieldName) {
             case 'street':
@@ -132,12 +146,12 @@ class AddProperty2 extends Component {
             case 'available_from':
                 //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
                 available_fromValid = new Date(value) >= Date.now();
-                fieldValidationErrors.available_from = available_fromValid ? '' : ' is invalid';
+                fieldValidationErrors.available_from = available_fromValid ? '' : ' should be 2 days from current date, as we take 2 days time to review your property';
                 break;
             case 'available_to':
                 //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
                 available_toValid = new Date(value) >= Date.now() && new Date(value) > new Date(this.state.available_from);
-                fieldValidationErrors.available_to = available_toValid ? '' : ' is invalid';
+                fieldValidationErrors.available_to = available_toValid ? '' : ' should be after the available_from date';
                 break;
             case 'location_city':
                 //emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
@@ -184,6 +198,12 @@ class AddProperty2 extends Component {
                 accomodatesValid = value > 0;
                 fieldValidationErrors.accomodates = accomodatesValid ? '' : ' is invalid';
                 break;
+            case 'propertyImages':
+                propertyImagesValid = (value > 1 && value < 6)
+                console.log((value > 1 && value < 6), " ", propertyImagesValid)
+                fieldValidationErrors.propertyImages = propertyImagesValid ? '' : 'should be minimum 2 and maximum 5';
+                console.log(fieldValidationErrors.propertyImages)
+                break;
             default:
                 break;
         }
@@ -201,12 +221,13 @@ class AddProperty2 extends Component {
             bathroomsValid: bathroomsValid,
             accomodatesValid: accomodatesValid,
             priceValid: priceValid,
+            propertyImagesValid: propertyImagesValid
         }, this.validateForm);
     }
 
     validateForm() {
-        console.log("this.state.streetValid: ", this.state.streetValid, "this.state.location_cityValid: ", this.state.location_cityValid, "this.state.stateValid: ", this.state.stateValid, "this.state.countryValid: ", this.state.countryValid, "this.state.zipcodeValid", this.state.zipcodeValid, "this.state.bedroomsValid", this.state.bedroomsValid, "this.state.bathroomsValid: ", this.state.bathroomsValid, "this.state.accomodatesValid", this.state.accomodatesValid, "this.state.priceValid: ", this.state.priceValid)
-        this.setState({ formValid: this.state.streetValid && this.state.location_cityValid && this.state.stateValid && this.state.countryValid && this.state.zipcodeValid && this.state.bedroomsValid && this.state.bathroomsValid && this.state.accomodatesValid && this.state.priceValid && this.state.available_fromValid && this.state.available_toValid });
+        console.log("this.state.streetValid: ", this.state.propertyImagesValid, "this.state.location_cityValid: ", this.state.location_cityValid, "this.state.stateValid: ", this.state.stateValid, "this.state.countryValid: ", this.state.countryValid, "this.state.zipcodeValid", this.state.zipcodeValid, "this.state.bedroomsValid", this.state.bedroomsValid, "this.state.bathroomsValid: ", this.state.bathroomsValid, "this.state.accomodatesValid", this.state.accomodatesValid, "this.state.priceValid: ", this.state.priceValid)
+        this.setState({ formValid: this.state.streetValid && this.state.location_cityValid && this.state.stateValid && this.state.countryValid && this.state.zipcodeValid && this.state.bedroomsValid && this.state.bathroomsValid && this.state.accomodatesValid && this.state.priceValid && this.state.available_fromValid && this.state.available_toValid && this.state.propertyImagesValid });
     }
 
     addProperty = (e) => {
@@ -214,7 +235,7 @@ class AddProperty2 extends Component {
         e.preventDefault();
         axios.defaults.withCredentials = true;
         console.log("Trying to add property");
-        console.log("ownerlogin",cookie.load("ownerlogin") && cookie.load("ownerlogin"))
+        console.log("ownerlogin", cookie.load("ownerlogin") && cookie.load("ownerlogin"))
         const data = {
             owner_id: cookie.load("ownerlogin") && cookie.load("ownerlogin"),
             place_name: this.state.place_name,
@@ -237,16 +258,32 @@ class AddProperty2 extends Component {
         axios.post("http://localhost:3001/property/", data)
             .then(response => {
                 console.log(response.data);
-                if (response.data === "Could not add the property") {
+                if (response.status === 200 && response.data === "Could not add the property") {
                     console.log("couldnt add")
                     this.setState({
                         message: "Property addition unsuccessfull"
                     })
                 } else {
-                    console.log("added")
-                    this.setState({
-                        redirect: true
-                    })
+                    console.log(response.data)
+                    var file;
+                    for (file of this.state.propertyImages) {
+                        console.log("While sending post request: " + file)
+                        let formData = new FormData();
+
+                        formData.append('id', response.data)
+                        formData.append('file', file)
+
+                        console.log("formData is: ", formData.get('id'))
+                        axios.post("http://localhost:3001/property/" + formData.get('id') + "/upload", formData)
+                            .then(response => {
+                                console.log("file should be  uploaded")
+                                if (response.status === 200) {
+                                    console.log("Photos Uploaded")
+                                }
+                            })
+                        console.log("added")
+                        this.props.history.push("/owner/home")
+                    }
                 }
             })
     }
@@ -275,10 +312,11 @@ class AddProperty2 extends Component {
                                 <Tab className="p-3">Location</Tab>
                                 <Tab className="p-3">Availability</Tab>
                                 <Tab className="p-3">General Information</Tab>
+                                <Tab className="p-3">Add Photos</Tab>
                                 <Tab className="p-3">Pricing</Tab>
                             </TabList>
 
-                            <form class="form-body mx-auto w-50"     >
+                            <form class="form-body mx-auto w-50" enctype="multipart/form-data">
                                 <TabPanel>
                                     <h4><b>Welcome! Verify the location</b></h4>
                                     <h4><b>of your rental</b></h4>
@@ -375,7 +413,24 @@ class AddProperty2 extends Component {
                                         <p class="form-footer">Start Co-browse</p>
                                     </div>
                                 </TabPanel>
-
+                                <TabPanel>
+                                    <div class="d-flex flex-column justify-content-center p-5">
+                                        <h2 class="text-center"><b>Add up to 5 photos of your property</b></h2>
+                                        <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
+                                        <hr></hr>
+                                        <p class="text-center">Showcase your property’s best features (no pets or people, please). Requirements: JPEG, at least 1920 x 1080 pixels, less than 20MB file size, 6 photos minimum. Need photos? Hire a professional.</p>
+                                        <p class="text-center form-footer text-danger">You cannot edit the photos later that you will upload right now.Be Careful!</p>
+                                        <hr></hr>
+                                        <h2 class="text-center p-2">Drop photos here</h2>
+                                        <p class="text-center p-2">or</p>
+                                        <input type="file" id="files" name="propertyImages" onChange={this.handleChange} class="hidden" multiple />
+                                        <label for="files" class="btn btn-primary btn-lg">Select photos to upload</label>
+                                        <br></br>
+                                        <p class="form-footer">Use of this Web site constitutes acceptance of the HomeAway.com Terms and conditions and Privacy policy.</p>
+                                        <p class="form-footer">©2018 HomeAway. All rights reserved</p>
+                                        <p class="form-footer">Start Co-browse</p>
+                                    </div>
+                                </TabPanel>
                                 <TabPanel>
                                     <div class="d-flex flex-column justify-content-center p-5">
                                         <h2><b>How much do you want to charge?</b></h2>

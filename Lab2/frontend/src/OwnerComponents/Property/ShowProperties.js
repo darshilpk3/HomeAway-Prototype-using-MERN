@@ -156,8 +156,7 @@ class ShowProperties extends Component {
                             <p><b>Property Details: </b>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
                             <p><b>Location, City: </b>{placeDetail.location_city}</p>
                             <p class="bg-light"><b>Base Nightly Rate:</b>{" $" + placeDetail.price}</p>
-                            <button type="button" id={placeDetail._id} onClick={this.uploadPropertyImages} class="form-control-login btn-warning">Add Photos</button>
-                            <button type="button" id={placeDetail._id} onClick={this.deletePropertyImages} class="form-control-login btn-danger">Delete Photos</button>
+                            <button type="button" id={placeDetail._id} onClick={this.showDetails} class="form-control-login btn-warning">Edit Property</button>
                         </td>
                     </tr>
                 )

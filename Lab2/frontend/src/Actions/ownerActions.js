@@ -17,7 +17,7 @@ export const authenticateowner = (credentials) => dispatch => {
 
     axios.defaults.withCredentials = true
     const request = axios
-        .post(`${ROOT_URL}/owner/login`, credentials)
+        .post(`${ROOT_URL}/ownerlogin`, credentials)
         .then( response => {
             dispatch({ 
                 type:AUTHENTICATE_OWNER,

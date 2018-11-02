@@ -91,12 +91,12 @@ router.post("/", function (req, res, next) {
   property.save()
     .then(result => {
       Owner.findByIdAndUpdate(owner_id, { $push: { properties: result._id } }).exec()
-        .then(result => {
+        .then(result2 => {
           //console.log(result2)
           res.writeHead(200, {
             'Content-Type': 'text/plain'
           })
-          res.end("Sucessfully added the property")
+          res.end(JSON.stringify(result._id))
         })
     })
     .catch(err => {
@@ -317,7 +317,7 @@ router.post("/filter", function (req, res, next) {
       dates: { $in: range }
     })
       .then(result => {
-        //console.log(result)
+        console.log(result.length)
         res.writeHead(200, {
           'Content-Type': 'application/json'
         })
@@ -339,7 +339,7 @@ router.post("/filter", function (req, res, next) {
       dates: { $in: range }
     })
       .then(result => {
-        //console.log(result)
+        console.log(result.length)
         res.writeHead(200, {
           'Content-Type': 'application/json'
         })
@@ -362,7 +362,28 @@ router.post("/filter", function (req, res, next) {
       dates: { $in: range }
     })
       .then(result => {
-        console.log(result)
+        console.log(result.length)
+        res.writeHead(200, {
+          'Content-Type': 'application/json'
+        })
+        res.end(JSON.stringify(result))
+      })
+      .catch(err => {
+        console.log(err)
+        res.writeHead(400, {
+          'Content-Type': 'text/plain'
+        })
+      })
+  }else{
+    Property.find({
+      available_from: { $lte: available_from },
+      available_to: { $gte: available_to },
+      accomodates: { $gte: accomodates },
+      location_city: { $regex: new RegExp('^' + place, 'i') },
+      dates: { $in: range }
+    })
+      .then(result => {
+        console.log(result.length)
         res.writeHead(200, {
           'Content-Type': 'application/json'
         })

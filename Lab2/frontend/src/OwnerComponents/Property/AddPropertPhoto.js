@@ -20,7 +20,7 @@ class AddPropertyPhoto extends Component {
     handleChange = (e) => {
         this.setState({
             propertyImage: e.target.files
-        })
+        }) 
     }
 
     addImage = (e) => {

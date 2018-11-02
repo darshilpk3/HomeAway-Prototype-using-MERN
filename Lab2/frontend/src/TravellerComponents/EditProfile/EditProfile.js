@@ -370,7 +370,7 @@ class EditProfile extends Component {
                             <h3><a href="#" class="text-dark" id={placeDetail._id} onClick={this.showDetails}>{placeDetail.property.place_name}</a></h3>
                             <p><b>Location, City: </b>{placeDetail.property.location_city}</p>
                             <p class="text-warning">{placeDetail.property.headline}</p>
-                            <p><b>From: {new Date(placeDetail.booking_from).toDateString}</b></p>
+                            <p><b>From: </b>{new Date(placeDetail.booking_from).getFullYear() + "-" + new Date(placeDetail.booking_from).getMonth() + "-" + new Date(placeDetail.booking_from).getDate()}</p>
                             <p><b>To: </b>{new Date(placeDetail.booking_to).getFullYear() + "-" + new Date(placeDetail.booking_to).getMonth() + "-" + new Date(placeDetail.booking_to).getDate()}</p>
                             <p><b>Guests: </b>{placeDetail.guests}</p>
                             <p class="bg-light"><b>Base Nightly Rate was:</b>{" $" + placeDetail.property.price}</p>

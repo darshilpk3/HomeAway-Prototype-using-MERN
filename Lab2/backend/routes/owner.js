@@ -14,74 +14,74 @@ var Property = require('../models/property')
 var Booking = require('../models/booking')
 
 
-router.post('/login', function (req, res, next) {
+// router.post('/login', function (req, res, next) {
 
-    console.log("Inside Login Post Request");
-    var email = req.body.email;
-    var password = req.body.password;
-    console.log(email, password)
-    Owner.findOne({ email: email }).exec()
-        .then(result => {
-            console.log("owner_id: ", result._id)
-            req.session.user = result;
-            res.cookie("ownerlogin", result._id.toString(), {
-                maxAge: 900000,
-                httpOnly: false,
-                path: '/'
-            })
-            res.cookie("owneremail", result.email, {
-                maxAge: 900000,
-                httpOnly: false,
-                path: '/',
-                overwrite: true
-            })
-            const jsonResponse = {
-                "_id" : result._id,
-                "email" : result.email
-            }
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end(JSON.stringify(jsonResponse));
-        })
-        .catch(err => {
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end("Invalid Credentials");
-        })
-});
+//     console.log("Inside Login Post Request");
+//     var email = req.body.email;
+//     var password = req.body.password;
+//     console.log(email, password)
+//     Owner.findOne({ email: email }).exec()
+//         .then(result => {
+//             console.log("owner_id: ", result._id)
+//             req.session.user = result;
+//             res.cookie("ownerlogin", result._id.toString(), {
+//                 maxAge: 900000,
+//                 httpOnly: false,
+//                 path: '/'
+//             })
+//             res.cookie("owneremail", result.email, {
+//                 maxAge: 900000,
+//                 httpOnly: false,
+//                 path: '/',
+//                 overwrite: true
+//             })
+//             const jsonResponse = {
+//                 "_id" : result._id,
+//                 "email" : result.email
+//             }
+//             res.writeHead(200, {
+//                 'Content-Type': 'text/plain'
+//             })
+//             res.end(JSON.stringify(jsonResponse));
+//         })
+//         .catch(err => {
+//             res.writeHead(200, {
+//                 'Content-Type': 'text/plain'
+//             })
+//             res.end("Invalid Credentials");
+//         })
+// });
 
 
-router.post('/signup', function (req, res, next) {
-    console.log("Inside signup Post Request");
-    var email = req.body.email;
-    var password = bcrypt.hashSync(req.body.password);
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
+// router.post('/signup', function (req, res, next) {
+//     console.log("Inside signup Post Request");
+//     var email = req.body.email;
+//     var password = bcrypt.hashSync(req.body.password);
+//     var firstname = req.body.firstname;
+//     var lastname = req.body.lastname;
 
-    var owner = new Owner({
-        email: email,
-        password: password,
-        firstname: firstname,
-        lastname: lastname
-    })
+//     var owner = new Owner({
+//         email: email,
+//         password: password,
+//         firstname: firstname,
+//         lastname: lastname
+//     })
 
-    owner.save()
-        .then(result => {
-            console.log(result)
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end("Successful added");
-        })
-        .catch(err => {
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end("Something wrong with data");
-        })
-})
+//     owner.save()
+//         .then(result => {
+//             console.log(result)
+//             res.writeHead(200, {
+//                 'Content-Type': 'text/plain'
+//             })
+//             res.end("Successful added");
+//         })
+//         .catch(err => {
+//             res.writeHead(200, {
+//                 'Content-Type': 'text/plain'
+//             })
+//             res.end("Something wrong with data");
+//         })
+// })
 
 
 router.get("/:ownerid", function (req, res, next) {

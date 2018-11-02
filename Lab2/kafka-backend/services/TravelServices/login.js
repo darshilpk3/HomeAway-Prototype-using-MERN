@@ -1,4 +1,4 @@
-var Traveler = require('../models/traveler')
+var Traveler = require('../../models/traveler')
 
 function handle_request(msg, callback){
    

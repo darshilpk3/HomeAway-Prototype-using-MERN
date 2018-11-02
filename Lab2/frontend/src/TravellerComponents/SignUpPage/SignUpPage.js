@@ -99,7 +99,7 @@ class SignUpPage extends Component {
             password: this.state.password
         }
 
-        axios.post("http://localhost:3001/travel/signup", data)
+        axios.post("http://localhost:3001/travelsignup", data)
             .then(response => {
                 console.log(response.data);
 
