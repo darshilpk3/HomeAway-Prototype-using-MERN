@@ -190,7 +190,18 @@ router.put("/:travelid", function (req, res, next) {
     }
     kafka.make_request('editUserDetails',requestData,function(err,results){
         console.log("result is: ",results)
-        if(err){
+        if(err == "Email-Id already exist"){
+            console.log("Email Id error")
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Email-Id already exist")
+        }else if(err == "Error in Profile Section Data"){
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Error in Profile Section Data")
+        }else if(err){
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
@@ -206,9 +217,9 @@ router.put("/:travelid", function (req, res, next) {
                 httpOnly: false,
             })
             res.writeHead(200, {
-                'Content-Type': 'text/plain'
+                'Content-Type': 'application/json'
             })
-            res.end("Successfully updated")   
+            res.end(JSON.stringify(results))   
         }
     })
     // Traveler.findByIdAndUpdate(req.params.travelid, {
@@ -267,17 +278,17 @@ router.put("/editpassword/:travelid", function (req, res, next) {
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
-            res.end("something wrong with data")
+            res.end("something wrong with password")
         }else if(results.message){
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
-            res.end("something wrong with data")
+            res.end("something wrong with password")
         }else{
             res.writeHead(200, {
-                'Content-Type': 'text/plain'
+                'Content-Type': 'application/json'
             })
-            res.end("Successfully updated")
+            res.end(JSON.stringify(results))
         }
     })
     // Traveler.findByIdAndUpdate(req.params.travelid, {
@@ -315,7 +326,7 @@ router.get("/:travel_id/bookingdetails", function (req, res, next) {
             })
             res.end("error fetching bookings")
         }else{
-            console.log(results[0].booking_from)
+            //console.log(results[0].booking_from)
             res.writeHead(200, {
                 'Content-Type': 'application/json'
             })

@@ -14,9 +14,9 @@ function handle_request(msg, callback) {
         .then(result => {
             callback(null,result)
         })
-        .catch(error => {
-            console.log(error)
-            callback(error,error)  
+        .catch(err => {
+            console.log(err)
+            callback(err,err)  
         })
     console.log("after callback");
 };

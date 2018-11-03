@@ -81,18 +81,22 @@ class LoginPage extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        console.log(nextProps.travelerInfo)
+        console.log(nextProps.error)
         if(nextProps.travelerInfo){
             this.props.history.push('/traveller/home')
+        }else if(nextProps.error){
+            this.setState({
+                message : nextProps.error
+            })
         }
     }
 
     render() {
 
         let redirectVar = null;
-        if (cookie.load("loginuser")) {
-             redirectVar = <Redirect to="/traveller/home" />
-          }
+        // if (cookie.load("loginuser")) {
+        //      redirectVar = <Redirect to="/traveller/home" />
+        //   }
         return (
             <div>
                 {redirectVar}
@@ -145,11 +149,13 @@ class LoginPage extends Component {
 
 LoginPage.propTypes = {
     authenticatetraveler : PropTypes.func.isRequired,
-    travelerInfo:PropTypes.object
+    travelerInfo:PropTypes.object,
+    error:PropTypes.string
 }
 
 const mapStatetoProps = state => ({
-    travelerInfo:state.traveler.travelerInfo
+    travelerInfo:state.traveler.travelerInfo,
+    error:state.traveler.error
 })
 
 export default connect(mapStatetoProps,{authenticatetraveler})(LoginPage);

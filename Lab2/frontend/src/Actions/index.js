@@ -16,10 +16,12 @@ export const authenticatetraveler = (credentials) => dispatch => {
     const request = axios
         .post(`${ROOT_URL}/travellogin`, credentials)
         .then( response => {
-            dispatch({ 
-                type:AUTHENTICATE_TRAVELER,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:AUTHENTICATE_TRAVELER,
+                    payload:response.data
+                })
+            }
         });
 }
 
@@ -29,10 +31,12 @@ export const  travelerProfile= (id) => dispatch => {
     const request = axios
         .get(`${ROOT_URL}/travel/${id}`)
         .then( response => {
-            dispatch({ 
-                type:TRAVELER_PROFILE,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:TRAVELER_PROFILE,
+                    payload:response.data
+                })
+            }
         });
 }
 
@@ -42,10 +46,12 @@ export const  travelerBookings= (id) => dispatch => {
     const request = axios
         .get(`${ROOT_URL}/travel/${id}/bookingdetails`)
         .then( response => {
-            dispatch({ 
-                type:TRAVELER_BOOKINGS,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:TRAVELER_BOOKINGS,
+                    payload:response.data
+                })
+            }
         });
 }
 
@@ -55,10 +61,12 @@ export const  editProfile= (id,data) => dispatch => {
     const request = axios
         .put(`${ROOT_URL}/travel/${id}`,data)
         .then( response => {
-            dispatch({ 
-                type:EDIT_PROFILE,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:EDIT_PROFILE,
+                    payload:response.data
+                })
+            }
         });
 }
 
@@ -68,10 +76,12 @@ export const  editProfilePic= (id,formData) => dispatch => {
     const request = axios
         .post(`${ROOT_URL}/travel/${id}/upload`,formData)
         .then( response => {
-            dispatch({ 
-                type:EDIT_PROFILEPIC,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:EDIT_PROFILEPIC,
+                    payload:response.data
+                })
+            }
         });
 }
 
@@ -81,9 +91,11 @@ export const  editPassword= (id,data) => dispatch => {
     const request = axios
         .put(`${ROOT_URL}/travel/editpassword/${id}`,data)
         .then( response => {
-            dispatch({ 
-                type:EDIT_PASSWORD,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:EDIT_PASSWORD,
+                    payload:response.data
+                })
+            }
         });
 }

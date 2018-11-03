@@ -12,7 +12,7 @@ var Question = require('../models/question')
 var Owner = require('../models/owner')
 var Property = require('../models/property')
 var Booking = require('../models/booking')
-
+var kafka = require('../kafka/client')
 
 // router.post('/login', function (req, res, next) {
 
@@ -86,189 +86,336 @@ var Booking = require('../models/booking')
 
 router.get("/:ownerid", function (req, res, next) {
     console.log("getting details of user having id: " + req.params.ownerid)
-    Owner.findById(req.params.ownerid).exec()
-        .then(result => {
-            console.log(JSON.stringify(result))
-            res.writeHead(200, {
-                'Content-Type': 'application/json'
-            })
-            res.end(JSON.stringify(result))
-        })
-        .catch(err => {
-            console.log(err)
+    kafka.make_request("getOwnerDetails",req.params,function(err,result){
+        if(err){
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
             res.end("Couldnt fetch data")
-        })
+        }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Couldnt fetch data")
+        }else{
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            })
+            res.end(JSON.stringify(result))
+        }
+    })
+
+    // Owner.findById(req.params.ownerid).exec()
+    //     .then(result => {
+    //         console.log(JSON.stringify(result))
+    //         res.writeHead(200, {
+    //             'Content-Type': 'application/json'
+    //         })
+    //         res.end(JSON.stringify(result))
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //         res.writeHead(400, {
+    //             'Content-Type': 'text/plain'
+    //         })
+    //         res.end("Couldnt fetch data")
+    //     })
 })
 
 
 router.put("/:ownerid/editpassword", function (req, res, next) {
     console.log("changing owner details")
-    var password = bcrypt.hashSync(req.body.password, 10);
+    
+    const requestData = {
+        "password" : bcrypt.hashSync(req.body.password, 10),
+        "ownerid" : req.params.ownerid
+    }
 
-    Owner.findByIdAndUpdate(req.params.ownerid, {
-        $set: {
-            password: password
-        }
-    }).exec()
-        .then(result => {
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end("Successfully updated")
-        })
-        .catch(err => {
+    kafka.make_request("editOwnerPassword",requestData,function(err,result){
+       if(err){
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
-            res.end("something wrong with data while entering email and " + sql)
-        })
+            res.end("something wrong with data while changing password")
+       }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("something wrong with data while changing password")
+       }else{
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Successfully updated") 
+       }
+    })
+
+    // Owner.findByIdAndUpdate(req.params.ownerid, {
+    //     $set: {
+    //         password: password
+    //     }
+    // }).exec()
+    //     .then(result => {
+    //         res.writeHead(200, {
+    //             'Content-Type': 'text/plain'
+    //         })
+    //         res.end("Successfully updated")
+    //     })
+    //     .catch(err => {
+    //         res.writeHead(400, {
+    //             'Content-Type': 'text/plain'
+    //         })
+    //         res.end("something wrong with data while entering email and " + sql)
+    //     })
 })
 
 router.put("/:ownerid", function (req, res, next) {
     console.log("changing owner details")
-    var email = req.body.email;
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var company = req.body.company;
-    var address = req.body.address;
-    var city = req.body.city;
-    var state = req.body.state;
-    var zipcode = req.body.zipcode;
-    var country = req.body.country;
-    var number = req.body.number;
-
-    try {
-        Owner.findByIdAndUpdate(req.params.ownerid, {
-            $set: {
-                email: email
-            }
-        }).exec()
-            .then(result => {
-                Owner.findByIdAndUpdate(req.params.ownerid, {
-                    $set: {
-                        firstname: firstname,
-                        lastname: lastname,
-                        company: company,
-                        billing_address: address,
-                        city: city,
-                        state: state,
-                        zipcode: zipcode,
-                        country: country,
-                        number: number
-                    }
-                }).then(result => {
-                    res.cookie("owneremail", email, {
-                        maxAge: 900000,
-                        httpOnly: false,
-                    })
-                    res.writeHead(200, {
-                        'Content-Type': 'text/plain'
-                    })
-                    res.end("Successfully updated")
-                })
-            })
-    } catch (err) {
-        console.log(err)
-        res.writeHead(400, {
-            'Content-Type': 'text/plain'
-        })
-        res.end("something wrong with data while entering other details")
+    const requestData = {
+        "email": req.body.email,
+        "firstname" : req.body.firstname,
+        "lastname" : req.body.lastname,
+        "company" : req.body.company,
+        "address" : req.body.address,
+        "city" : req.body.city,
+        "state" : req.body.state,
+        "zipcode" : req.body.zipcode,
+        "country" : req.body.country,
+        "number" : req.body.number,
+        "ownerid" : req.params.ownerid
     }
+
+    kafka.make_request("editOwnerDetails",requestData,function(err,result){
+        if(err){    
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("something wrong with data while entering details")
+        }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("something wrong with data while entering details")
+        }else{
+            res.cookie("owneremail", req.body.email, {
+                maxAge: 900000,
+                httpOnly: false,
+            })
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Successfully updated")
+        }
+    })
+
+    // try {
+    //     Owner.findByIdAndUpdate(req.params.ownerid, {
+    //         $set: {
+    //             email: email
+    //         }
+    //     }).exec()
+    //         .then(result => {
+    //             Owner.findByIdAndUpdate(req.params.ownerid, {
+    //                 $set: {
+    //                     firstname: firstname,
+    //                     lastname: lastname,
+    //                     company: company,
+    //                     billing_address: address,
+    //                     city: city,
+    //                     state: state,
+    //                     zipcode: zipcode,
+    //                     country: country,
+    //                     number: number
+    //                 }
+    //             }).then(result => {
+    //                 res.cookie("owneremail", email, {
+    //                     maxAge: 900000,
+    //                     httpOnly: false,
+    //                 })
+    //                 res.writeHead(200, {
+    //                     'Content-Type': 'text/plain'
+    //                 })
+    //                 res.end("Successfully updated")
+    //             })
+    //         })
+    // } catch (err) {
+    //     console.log(err)
+    //     res.writeHead(400, {
+    //         'Content-Type': 'text/plain'
+    //     })
+    //     res.end("something wrong with data while entering other details")
+    // }
 })
 
 router.get("/:owner_id/property/", async (req, res, next) => {
     console.log("Trying to get properties listed by owner id: ", req.params.owner_id)
-    Owner.findById(req.params.owner_id)
-        .exec()
-        .then(result => {
-            console.log(result.properties)
-            Property.find({
-                _id: { $in: result.properties }
-            }).exec()
-                .then(result => {
-                    res.writeHead(200, {
-                        'Content-Type': 'application/json'
-                    })
-                    //console.log(JSON.stringify(result))
-                    res.end(JSON.stringify(result))
-                })
-        })
-        .catch(err => {
-            console.log(err)
-        })
+
+    kafka.make_request("getOwnerProperties",req.params,function(err,result){
+        if(err){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Couldn't get properties")
+        }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end("Couldn't get properties")
+        }else{
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            })
+            res.end(JSON.stringify(result))
+        }
+    })
+    // Owner.findById(req.params.owner_id)
+    //     .exec()
+    //     .then(result => {
+    //         console.log(result.properties)
+    //         Property.find({
+    //             _id: { $in: result.properties }
+    //         }).exec()
+    //             .then(result => {
+    //                 res.writeHead(200, {
+    //                     'Content-Type': 'application/json'
+    //                 })
+    //                 //console.log(JSON.stringify(result))
+    //                 res.end(JSON.stringify(result))
+    //             })
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
 })
 
 
 router.get("/:owner_id/dashboard", function (req, res, next) {
     console.log("Trying to fetch booking details")
-    Booking.find({ owner: req.params.owner_id })
-        .populate('property')
-        .populate('traveler')
-        .populate('owner')
-        .exec()
-        .then(result => {
-            //console.log(JSON.stringify(result)) 
-            res.writeHead(200, {
-                'Content-Type': 'application/json'
-            })
-            res.end(JSON.stringify(result))
-        })
-        .catch(err => {
-            console.log(err)
+
+    kafka.make_request("getOwnerBookings",req.params,function(err,result){
+        if(err){
             res.writeHead(400, {
                 'Content-Type': 'text/plain'
             })
             res.end(JSON.stringify(err))
-        })
+        }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            })
+            res.end(JSON.stringify(result))
+        }else{
+            console.log("Got the booking data for ",req.params.owner_id)
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            })
+            res.end(JSON.stringify(result))
+        }
+    })
+
+    // Booking.find({ owner: req.params.owner_id })
+    //     .populate('property')
+    //     .populate('traveler')
+    //     .populate('owner')
+    //     .exec()
+    //     .then(result => {
+    //         //console.log(JSON.stringify(result)) 
+    //         res.writeHead(200, {
+    //             'Content-Type': 'application/json'
+    //         })
+    //         res.end(JSON.stringify(result))
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //         res.writeHead(400, {
+    //             'Content-Type': 'text/plain'
+    //         })
+    //         res.end(JSON.stringify(err))
+    //     })
 })
 
 
 router.post("/:ownerid/question", function (req, res, next) {
     console.log("Asking a question")
-    var _id = req.body._id
-    var answer = req.body.answer
-    console.log(_id, " ", answer)
+    const requestData = {
+        "_id" : req.body._id,
+        "answer" : req.body.answer,
+        "ownerid" : req.params.ownerid
+    }
 
-    Question.findByIdAndUpdate(_id, {
-        $set: {
-            answer: answer
-        }
-    }).exec()
-        .then(result => {
-            //console.log(result)
+    kafka.make_request("postOwnerAnswer",requestData,function(err,result){
+        if(err){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            });
+            res.end("unable to record the answer")
+        }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            });
+            res.end("unable to record the answer")
+        }else{
             res.writeHead(200, {
                 'Content-Type': 'application/json'
             });
             res.end(JSON.stringify(result))
-        })
-        .catch(err => {
+        }
+    })
 
-        })
+    // Question.findByIdAndUpdate(_id, {
+    //     $set: {
+    //         answer: answer
+    //     }
+    // }).exec()
+    //     .then(result => {
+    //         //console.log(result)
+    //         res.writeHead(200, {
+    //             'Content-Type': 'application/json'
+    //         });
+    //         res.end(JSON.stringify(result))
+    //     })
+    //     .catch(err => {
+
+    //     })
 })
 
 router.get("/:ownerid/question", function (req, res, next) {
     console.log("getting questions")
 
-    Question.find({
-        owner: req.params.ownerid
-    })
-        .populate('traveler')
-        .populate('property')
-        .populate('owner')
-        .exec()
-        .then(result => {
-            //console.log(result)
+    kafka.make_request("getOwnerInbox",req.params,function(err,result){
+        if(err){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            });
+            res.end(JSON.stringify(err))
+        }else if(result.message){
+            res.writeHead(400, {
+                'Content-Type': 'text/plain'
+            });
+            res.end(JSON.stringify(result))
+        }else{
             res.writeHead(200, {
                 'Content-Type': 'application/json'
             });
             res.end(JSON.stringify(result))
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        }
+    })
+    // Question.find({
+    //     owner: req.params.ownerid
+    // })
+    //     .populate('traveler')
+    //     .populate('property')
+    //     .populate('owner')
+    //     .exec()
+    //     .then(result => {
+    //         //console.log(result)
+    //         res.writeHead(200, {
+    //             'Content-Type': 'application/json'
+    //         });
+    //         res.end(JSON.stringify(result))
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
 })
 
 module.exports = router

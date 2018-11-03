@@ -27,14 +27,14 @@ function handle_request(msg, callback) {
                     console.log("result: ",result)
                     callback(null,result)
                 })
-                .catch(error => {
-                    console.log("err type: ",typeof error)
-                    callback(error,error)
+                .catch(err => {
+                    console.log("err type: ",typeof err)
+                    callback(err,"Error in Profile Section Data")
                 })
         })
-        .catch(error => {
-            console.log("err type is: ",typeof error)
-            callback(error,error)
+        .catch(err => {
+            console.log("err type is: ",typeof err)
+            callback(err,"Email-Id already exist")
         })
     console.log("after callback");
 };

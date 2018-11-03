@@ -1,6 +1,6 @@
 import _ from "lodash";
 import cookies from 'react-cookies'
-import { GET_PROPERTY, EDITING_PROPERTY } from "../Actions/propertyActions";
+import { GET_PROPERTY, EDITING_PROPERTY,GET_PROPERTIES } from "../Actions/propertyActions";
 
 
 //Reducer listening to different action types
@@ -16,6 +16,11 @@ export default function (state = {}, action) {
     case EDITING_PROPERTY:
       return {
         ...state,
+      }
+    case GET_PROPERTIES:
+      return {
+        ...state,
+        propertyList:action.payload
       }
     default:
       return state;

@@ -15,6 +15,21 @@ var EditUserPassword = require('./services/TravelServices/editUserPassword.js')
 var GetUserBookings = require('./services/TravelServices/getUserBookings.js')
 var GetUserInbox = require('./services/TravelServices/getUserInbox.js')
 var PostUserQuestion = require('./services/TravelServices/postUserQuestion.js')
+
+var GetOwnerDetails = require('./services/OwnerServices/getOwnerDetails.js')
+var EditOwnerDetails = require('./services/OwnerServices/editOwnerDetails.js')
+var EditOwnerPassword = require('./services/OwnerServices/editOwnerPassword.js')
+var GetOwnerProperties = require('./services/OwnerServices/getOwnerProperties.js')
+var GetOwnerBookings = require('./services/OwnerServices/getOwnerBookings.js')
+var GetOwnerInbox = require('./services/OwnerServices/getOwnerInbox.js')
+var PostOwnerAnswer = require('./services/OwnerServices/postOwnerAnswer.js')
+
+var SearchProperties = require('./services/PropertyServices/searchProperties.js')
+var AddProperty = require('./services/PropertyServices/addProperty.js')
+var EditPropertyDetails = require('./services/PropertyServices/editPropertyDetails.js')
+var BookProperty = require('./services/PropertyServices/bookProperty.js')
+var GetPropertyDetails = require('./services/PropertyServices/getPropertyDetails.js')
+
 function handleTopicRequest(topic_name,fname){
     //var topic_name = 'root_topic';
     var consumer = connection.getConsumer(topic_name);
@@ -55,3 +70,17 @@ handleTopicRequest("editUserPassword",EditUserPassword)
 handleTopicRequest("getUserBookings",GetUserBookings)
 handleTopicRequest("getUserInbox",GetUserInbox)
 handleTopicRequest("postUserQuestion",PostUserQuestion)
+
+handleTopicRequest("getOwnerDetails",GetOwnerDetails)
+handleTopicRequest("editOwnerDetails",EditOwnerDetails)
+handleTopicRequest("editOwnerPassword",EditOwnerPassword)
+handleTopicRequest("getOwnerProperties",GetOwnerProperties)
+handleTopicRequest("getOwnerBookings",GetOwnerBookings)
+handleTopicRequest("getOwnerInbox",GetOwnerInbox)
+handleTopicRequest("postOwnerAnswer",PostOwnerAnswer)
+
+handleTopicRequest("searchProperties",SearchProperties)
+handleTopicRequest("addProperty",AddProperty)
+handleTopicRequest("editPropertyDetails",EditPropertyDetails)
+handleTopicRequest("bookProperty",BookProperty)
+handleTopicRequest("getPropertyDetails",GetPropertyDetails)

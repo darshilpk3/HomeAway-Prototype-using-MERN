@@ -8,21 +8,20 @@ var Question = require('../../models/question')
 function handle_request(msg, callback){
     console.log("Inside getOwnerDetails kafka backend");
     
-    Owner.findById(msg.owner_id)
-        .exec()
+    Property.find({
+        available_from: { $lte: msg.available_from },
+        available_to: { $gte: msg.available_to },
+        accomodates: { $gte: msg.accomodates },
+        location_city: { $regex: new RegExp('^' + msg.place, 'i') },
+        dates: { $in: msg.range }
+      })
         .then(result => {
-            Property.find({
-                _id: { $in: result.properties }
-            }).exec()
-                .then(result => {
-                    callback(null,result)
-                })
-                .catch(err => {
-                    callback(err,err)
-                })
+          //console.log(result)
+          callback(null,result)
         })
         .catch(err => {
-            callback(err,err)
+          console.log(err)
+          callback(err,err)
         })
 
     console.log("after callback");

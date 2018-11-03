@@ -8,18 +8,13 @@ var Question = require('../../models/question')
 function handle_request(msg, callback){
     console.log("Inside getOwnerDetails kafka backend");
     
-    Question.findByIdAndUpdate(msg._id, {
-        $set: {
-            answer: msg.answer
-        }
-    }).exec()
-        .then(result => {
-            callback(null,result)
-        })
-        .catch(err => {
-            callback(err,err)
-        })
-
+    Property.findById(msg.propertyid).exec()
+    .then(result => {
+      callback(null,result)
+    })
+    .catch(err => {
+      callback(err,err)
+    })
     console.log("after callback");
 };
 

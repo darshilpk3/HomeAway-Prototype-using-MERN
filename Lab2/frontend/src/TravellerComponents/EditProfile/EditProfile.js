@@ -146,6 +146,7 @@ class EditProfile extends Component {
                 bookingDetails: nextProps.bookingInfo
             })
         }
+
     }
 
     handleChange = (e) => {
@@ -260,6 +261,15 @@ class EditProfile extends Component {
         const id = cookie.load("loginuser")
         this.props.editProfile(id,data)
         this.props.history.push("/traveller/home")
+
+        // if(this.props.error){
+        //     this.setState({
+        //         message : this.props.error
+        //     })
+        // }else{
+        //     //this.props.history.push("/traveller/home")
+        // }
+        
         // axios.put("http://localhost:3001/travel/" + id, data)
         //     .then(response => {
         //         //console.log("Trying to update")
@@ -535,12 +545,14 @@ EditProfile.propTypes = {
     editPassword:PropTypes.func.isRequired,
     editProfilePic : PropTypes.func.isRequired,
     profileInfo:PropTypes.object,
-    bookingInfo:PropTypes.object
+    bookingInfo:PropTypes.object,
+    error : PropTypes.string
 }
 
 const mapStatetoProps = state => ({
     bookingInfo : state.traveler.bookingInfo,
-    profileInfo : state.traveler.profileInfo
+    profileInfo : state.traveler.profileInfo,
+    error : state.traveler.error
 })
 
 
