@@ -31,7 +31,7 @@ class OwnerHomePage extends Component {
         var headers = new Headers()
         axios.defaults.withCredentials = true;
 
-        let id = cookie.load("ownerlogin")
+        let id = localStorage.getItem("ownerlogin")
         this.props.ownerBookings(id)
         // axios.get("http://localhost:3001/owner/" + id+"/dashboard")
         //     .then(response => {
@@ -143,8 +143,8 @@ class OwnerHomePage extends Component {
     render() {
 
         let redirectVar = null;
-        console.log(cookie.load("ownerlogin"))
-        if (!cookie.load("ownerlogin")) {
+        console.log(localStorage.getItem("ownerlogin"))
+        if (!localStorage.getItem("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
 

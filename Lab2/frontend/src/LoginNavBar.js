@@ -5,7 +5,7 @@ import {Redirect} from 'react-router'
 class LoginNavBar extends Component {
     render() {
         let redirectVar = null;
-        if(cookie.load("loginuser")){
+        if(localStorage.getItem("loginuser")){
             redirectVar = <Redirect to="/home"/>
         }
         return (

@@ -20,7 +20,7 @@ class Inbox extends Component {
     componentDidMount() {
         var headers = new Headers();
         axios.defaults.withCredentials = true;
-        var id = cookie.load("loginuser")
+        var id = localStorage.getItem("loginuser")
         // console.log("Sending get request to http://localhost:3001/edit/" + id)
         axios.get("http://localhost:3001/travel/" + id + "/question")
             .then(response => {
@@ -39,7 +39,7 @@ class Inbox extends Component {
 
         let redirectVar = null
         console.log(this.state.image)
-        if (!cookie.load("loginuser")) {
+        if (!localStorage.getItem("loginuser")) {
             redirectVar = <Redirect to="/traveller/login" />
         }
         console.log("Rendering")

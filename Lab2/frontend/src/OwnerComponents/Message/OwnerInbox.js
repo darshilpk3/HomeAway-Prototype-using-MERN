@@ -42,14 +42,14 @@ class OwnerInbox extends Component {
             _id : e.target.id,
             answer:this.state.answer
         }
-        const id = cookie.load("ownerlogin")
+        const id = localStorage.getItem("ownerlogin")
         this.props.answerQuestion(id,data)
         this.props.history.go(0)
     }
     componentDidMount() {
         var headers = new Headers();
         axios.defaults.withCredentials = true;
-        var id = cookie.load("ownerlogin")
+        var id = localStorage.getItem("ownerlogin")
 
         this.props.loadInbox(id);
         // console.log("Sending get request to http://localhost:3001/edit/" + id)
@@ -77,7 +77,7 @@ class OwnerInbox extends Component {
 
         let redirectVar = null
         console.log(this.state.image)
-        if (!cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
         console.log("Rendering")

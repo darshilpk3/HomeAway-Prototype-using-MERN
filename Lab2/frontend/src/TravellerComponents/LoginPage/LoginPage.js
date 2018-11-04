@@ -83,6 +83,8 @@ class LoginPage extends Component {
     componentWillReceiveProps(nextProps){
         console.log(nextProps.error)
         if(nextProps.travelerInfo){
+            localStorage.setItem("loginuser",nextProps.travelerInfo._id)
+            localStorage.setItem("loginemail",nextProps.travelerInfo.email)
             this.props.history.push('/traveller/home')
         }else if(nextProps.error){
             this.setState({
@@ -94,9 +96,9 @@ class LoginPage extends Component {
     render() {
 
         let redirectVar = null;
-        // if (cookie.load("loginuser")) {
-        //      redirectVar = <Redirect to="/traveller/home" />
-        //   }
+        if (localStorage.getItem("loginuser")) {
+             redirectVar = <Redirect to="/traveller/home" />
+          }
         return (
             <div>
                 {redirectVar}

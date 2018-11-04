@@ -26,7 +26,7 @@ class BookProperty extends Component {
         axios.defaults.withCredentials = true
 
         const data = {
-            travel_id: cookie.load("loginuser"),
+            travel_id: localStorage.getItem("loginuser"),
             _id: this.props.location.state && this.props.location.state.response._id,
             booking_from: this.props.location.state && this.props.location.state.book_from,
             booking_to: this.props.location.state && this.props.location.state.book_to,

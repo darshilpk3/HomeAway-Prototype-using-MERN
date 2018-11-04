@@ -128,7 +128,7 @@ class ListPlaces extends Component {
             topic: this.state.topic,
             question: this.state.question
         }
-        axios.post("http://localhost:3001/travel/" + cookie.load('loginuser') + "/question", data)
+        axios.post("http://localhost:3001/travel/" + localStorage.getItem('loginuser') + "/question", data)
             .then(response => {
                 if (response.status === 200) {
                     console.log("Question posted")
@@ -196,7 +196,7 @@ class ListPlaces extends Component {
 
     render() {
         let redirectVar = null
-        if (!cookie.load("loginuser")) {
+        if (!localStorage.getItem("loginuser")) {
             redirectVar = <Redirect to="/traveller/login" />
         }
         if (this.state.responseData) {

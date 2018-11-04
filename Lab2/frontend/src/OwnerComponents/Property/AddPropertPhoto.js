@@ -51,7 +51,7 @@ class AddPropertyPhoto extends Component {
     render() {
         console.log("while rendering: ", this.state.imagePaths)
         let redirectVar = null
-        if(!cookie.load("ownerlogin")){
+        if(!localStorage.getItem("ownerlogin")){
             redirectVar = <Redirect to ="/owner/home"/>
         }
         return (

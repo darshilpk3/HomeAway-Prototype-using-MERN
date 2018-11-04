@@ -31,25 +31,25 @@ router.post('/travellogin',function(req,res,next){
                     expiresIn: 60*60*24
                 });
                 req.session.user = result;
-                res.cookie("loginuser",result._id.toString(), {
-                    maxAge: 900000,
-                    httpOnly: false,
-                    path: '/'
-                })
-                res.cookie("loginemail",result.email, {
-                    maxAge: 900000,
-                    httpOnly: false,
-                    path: '/',
-                    overwrite: true
-                })
-                res.cookie("token",token,{
-                    maxAge: 900000,
-                    httpOnly: false,
-                    path: '/',
-                    overwrite: true
-                })
+                // res.cookie("loginuser",result._id.toString(), {
+                //     maxAge: 900000,
+                //     httpOnly: false,
+                //     path: '/'
+                // })
+                // res.cookie("loginemail",result.email, {
+                //     maxAge: 900000,
+                //     httpOnly: false,
+                //     path: '/',
+                //     overwrite: true
+                // })
+                // res.cookie("token",token,{
+                //     maxAge: 900000,
+                //     httpOnly: false,
+                //     path: '/',
+                //     overwrite: true
+                // })
                 const jsonResponse = {
-                    "_id" : result._id,
+                    "_id" : result._id.toString(),
                     "email" : result.email,
                     "token" : token,
                 }
@@ -108,19 +108,19 @@ router.post('/ownerlogin', function (req, res, next) {
         .then(result => {
             console.log("owner_id: ", result._id)
             req.session.user = result;
-            res.cookie("ownerlogin", result._id.toString(), {
-                maxAge: 900000,
-                httpOnly: false,
-                path: '/'
-            })
-            res.cookie("owneremail", result.email, {
-                maxAge: 900000,
-                httpOnly: false,
-                path: '/',
-                overwrite: true
-            })
+            // res.cookie("ownerlogin", result._id.toString(), {
+            //     maxAge: 900000,
+            //     httpOnly: false,
+            //     path: '/'
+            // })
+            // res.cookie("owneremail", result.email, {
+            //     maxAge: 900000,
+            //     httpOnly: false,
+            //     path: '/',
+            //     overwrite: true
+            // })
             const jsonResponse = {
-                "_id" : result._id,
+                "_id" : result._id.toString(),
                 "email" : result.email
             }
             res.writeHead(200, {

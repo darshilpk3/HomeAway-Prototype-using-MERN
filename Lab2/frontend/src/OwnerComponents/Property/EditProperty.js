@@ -228,7 +228,7 @@ class EditProperty extends Component {
         var id = this.state._id
         console.log("Trying to edit property");
         const data = {
-            owner_id: cookie.load("ownerlogin") && cookie.load("ownerlogin"),
+            owner_id: localStorage.getItem("ownerlogin") && localStorage.getItem("ownerlogin"),
             place_name: this.state.place_name,
             location_city: this.state.location_city,
             street: this.state.street,
@@ -304,7 +304,7 @@ class EditProperty extends Component {
         console.log("Tab while rendering: ", this.state.tab)
         console.log(this.state.available_from)
         let redirectVar = null
-        if (!cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
         // if (this.state.redirect) {

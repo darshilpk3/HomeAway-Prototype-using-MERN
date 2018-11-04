@@ -27,7 +27,7 @@ class ShowProperties extends Component {
 
     componentDidMount() {
         var headers = new Headers();
-        var id = cookie.load("ownerlogin") && cookie.load("ownerlogin")
+        var id = localStorage.getItem("ownerlogin") && localStorage.getItem("ownerlogin")
         axios.defaults.withCredentials = true;
         console.log("Getting the list of properties")
         this.props.getProperties(id)
@@ -98,7 +98,7 @@ class ShowProperties extends Component {
 
     render() {
         let renderRedirect = null;
-        if (!cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("ownerlogin")) {
             console.log("should redirect")
             renderRedirect = <Redirect to="/owner/login" />
         }

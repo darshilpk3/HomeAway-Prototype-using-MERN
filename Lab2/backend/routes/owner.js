@@ -197,14 +197,14 @@ router.put("/:ownerid", function (req, res, next) {
             })
             res.end("something wrong with data while entering details")
         }else{
-            res.cookie("owneremail", req.body.email, {
-                maxAge: 900000,
-                httpOnly: false,
-            })
+            // res.cookie("owneremail", req.body.email, {
+            //     maxAge: 900000,
+            //     httpOnly: false,
+            // })
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             })
-            res.end("Successfully updated")
+            res.end(JSON.stringify(result))
         }
     })
 

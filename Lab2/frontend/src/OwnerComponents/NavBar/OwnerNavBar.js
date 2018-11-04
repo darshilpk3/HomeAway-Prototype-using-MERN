@@ -29,7 +29,9 @@ class OwnerNavBar extends Component {
     }
 
     handleLogout = (e) => {
-        console.log(cookie.load('loginuser'))
+        console.log(localStorage.getItem('ownerlogin'))
+        localStorage.removeItem("ownerlogin")
+        localStorage.removeItem("owneremail")
         cookie.remove('ownerlogin', {
             path: "/"
         });
@@ -47,7 +49,7 @@ class OwnerNavBar extends Component {
     render() {
 
         let navVar = null;
-        if (!cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("ownerlogin")) {
             navVar = <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Login</a>
                 <div class="dropdown-menu">
@@ -58,9 +60,9 @@ class OwnerNavBar extends Component {
         }
         else {
             navVar = <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {cookie.load('owneremail') && cookie.load('owneremail')}</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {localStorage.getItem('owneremail') && localStorage.getItem('owneremail')}</a>
                 <div class="dropdown-menu">
-                    <Link class="dropdown-item" to={"/owner/edit/" + cookie.load("ownerlogin")}>Profile Settings</Link>
+                    <Link class="dropdown-item" to={"/owner/edit/" + localStorage.getItem("ownerlogin")}>Profile Settings</Link>
                     <Link class="dropdown-item" to={"/owner/property/show"}>Property Details</Link>
                     <Link class="dropdown-item" to={"/owner/property/add"}>Add new Property</Link>
                     <Link class="dropdown-item" to={"/owner/inbox"}>Inbox</Link>

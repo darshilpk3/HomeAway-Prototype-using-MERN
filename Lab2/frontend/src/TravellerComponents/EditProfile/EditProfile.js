@@ -70,7 +70,7 @@ class EditProfile extends Component {
 
     componentDidMount() {
         console.log(this.props.travelerId)
-        var id = cookie.load("loginuser")
+        var id = localStorage.getItem("loginuser")
         this.props.travelerProfile(id)
         this.props.travelerBookings(id)
         console.log("Sending get request to http://localhost:3001/edit/" + id)
@@ -232,7 +232,7 @@ class EditProfile extends Component {
             languages: this.state.languages,
             gender: this.state.gender
         }
-        const id = cookie.load("loginuser")
+        const id = localStorage.getItem("loginuser")
         this.props.editProfile(id,data)
         this.props.history.push("/traveller/home")
 
@@ -266,16 +266,16 @@ class EditProfile extends Component {
         // axios.defaults.withCredentials = true;
         console.log("While sending post request: " + this.state.selectedFile)
         let formData = new FormData();
-        let id = cookie.load('loginuser')
+        let id = localStorage.getItem('loginuser')
         
         formData.append('email', this.state.email)
         formData.append('selectedFile', this.state.selectedFile)
-        formData.append('id', cookie.load('loginuser'))
+        formData.append('id', localStorage.getItem('loginuser'))
 
         console.log("formData is: ", formData.get('selectedFile'))
         this.props.editProfilePic(id,formData)
         this.props.history.go(0)
-        // axios.post("http://localhost:3001/travel/"+cookie.load('loginuser')+"/upload", formData)
+        // axios.post("http://localhost:3001/travel/"+localStorage.getItem('loginuser')+"/upload", formData)
         //     .then(response => {
         //         console.log("file should be  uploaded")
         //         if (response.status === 200) {
@@ -293,7 +293,7 @@ class EditProfile extends Component {
         const data = {
             password: this.state.password
         }
-        const id = cookie.load("loginuser")
+        const id = localStorage.getItem("loginuser")
         this.props.editPassword(id,data)
         this.props.history.push("/traveller/home")
         // axios.put("http://localhost:3001/travel/editpassword/" + id, data)
@@ -406,7 +406,7 @@ class EditProfile extends Component {
 
         let redirectVar = null
         console.log(this.state.image)
-        if (!cookie.load("loginuser")) {
+        if (!localStorage.getItem("loginuser")) {
             redirectVar = <Redirect to="/traveller/login" />
         }
         if (this.state.responseData) {

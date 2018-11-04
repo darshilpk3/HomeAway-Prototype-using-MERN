@@ -105,6 +105,9 @@ class OwnerLoginPage extends Component {
     componentWillReceiveProps(nextProps) {
         console.log(nextProps.ownerInfo)
         if (nextProps.ownerInfo) {
+            localStorage.setItem("ownerlogin",nextProps.ownerInfo._id)
+            localStorage.setItem("owneremail",nextProps.ownerInfo.email)
+
             this.props.history.push('/owner/home')
         }else if(nextProps.error){
             console.log(nextProps.error)
@@ -117,7 +120,7 @@ class OwnerLoginPage extends Component {
     render() {
 
         let redirectVar = null;
-        // if (cookie.load("owneruser") || this.state.redirect) {
+        // if (localStorage.getItem("owneruser") || this.state.redirect) {
         //     console.log("should be redirected")
         //     redirectVar = <Redirect to="/owner/home" />
         // }

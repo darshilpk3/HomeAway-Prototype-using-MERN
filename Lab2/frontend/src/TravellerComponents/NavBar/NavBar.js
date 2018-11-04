@@ -28,13 +28,16 @@ class NavBar extends Component {
     }
 
     handleLogout = (e) => {
-        console.log(cookie.load('loginuser'))
-        cookie.remove('loginuser', {
-            path: "/"
-        });
-        cookie.remove('loginemail', {
-            path: "/"
-        });
+        console.log(localStorage.getItem('loginuser'))
+        localStorage.removeItem("loginuser")
+        localStorage.removeItem("loginemail")
+        //this.props.history.push('/traveller/login')
+        // cookie.remove('loginuser', {
+        //     path: "/"
+        // });
+        // cookie.remove('loginemail', {
+        //     path: "/"
+        // });
         this.setState({
             logininfo: "Logged out"
         })
@@ -46,7 +49,7 @@ class NavBar extends Component {
     render() {
 
         let navVar = null;
-        if (!cookie.load("loginuser") && !cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("loginuser")) {
             navVar = <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Login</a>
                 <div class="dropdown-menu">
@@ -57,9 +60,9 @@ class NavBar extends Component {
         }
         else {
             navVar = <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {cookie.load("loginemail") && cookie.load("loginemail")}</a>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {localStorage.getItem("loginemail") && localStorage.getItem("loginemail")}</a>
                 <div class="dropdown-menu">
-                    <Link class="dropdown-item" to={"/traveller/edit/" + cookie.load("loginuser")}>Account Information</Link>
+                    <Link class="dropdown-item" to={"/traveller/edit/" + localStorage.getItem("loginuser")}>Account Information</Link>
                     <Link class="dropdown-item" to={"/traveller/inbox/"}>Inbox</Link>
                     <button class="dropdown-item" onClick={this.handleLogout}>Logout</button>
                 </div>

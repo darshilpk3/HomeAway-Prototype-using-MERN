@@ -66,7 +66,8 @@ class OwnerEditProfile extends Component {
     componentDidMount() {
         var headers = new Headers();
         axios.defaults.withCredentials = true;
-        var id = cookie.load("ownerlogin")
+
+        var id = localStorage.getItem("ownerlogin")
         console.log("Sending get request to http://localhost:3001/owner/edit/" + id)
         this.props.ownerProfile(id)
     }
@@ -221,7 +222,7 @@ class OwnerEditProfile extends Component {
             zipcode:this.state.zipcode,
             country:this.state.country
         }
-        const id = cookie.load("ownerlogin")
+        const id = localStorage.getItem("ownerlogin")
         this.props.editProfile(id,data)
         this.props.history.push('/owner/home')
         // axios.put("http://localhost:3001/owner/" + id, data)
@@ -248,7 +249,7 @@ class OwnerEditProfile extends Component {
         const data = {
             password: this.state.password
         }
-        const id = cookie.load("ownerlogin")
+        const id = localStorage.getItem("ownerlogin")
         this.props.editPassword(id,data)
         this.props.history.push('owner/home')
         // axios.put("http://localhost:3001/owner/"+id+"/editpassword", data)
@@ -266,7 +267,7 @@ class OwnerEditProfile extends Component {
     render() {
 
         let redirectVar = null
-        if (!cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
 

@@ -212,10 +212,10 @@ router.put("/:travelid", function (req, res, next) {
             })
             res.end("something wrong with data while entering other details")
         }else{
-            res.cookie("loginemail", requestData.email, {
-                maxAge: 900000,
-                httpOnly: false,
-            })
+            // res.cookie("loginemail", requestData.email, {
+            //     maxAge: 900000,
+            //     httpOnly: false,
+            // })
             res.writeHead(200, {
                 'Content-Type': 'application/json'
             })

@@ -148,7 +148,7 @@ class InlineForm extends Component {
 
     render() {
         var redirectVar = null
-        if (!cookie.load("loginuser")) {
+        if (!localStorage.getItem("loginuser")) {
             redirectVar = <Redirect to="/traveller/login" />
         } else if (this.state.responsedata) {
             redirectVar = <Redirect to={{
