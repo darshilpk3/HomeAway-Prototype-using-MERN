@@ -4,6 +4,8 @@ import { Redirect } from 'react-router'
 import axios from 'axios'
 import cookie from 'react-cookies'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import _ from 'lodash'
+import ReactPaginate from 'react-paginate'
 
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
@@ -36,6 +38,11 @@ class EditProfile extends Component {
             selectedFile: "",
             image: "",
             bookingDetails: null,
+            filteredBookingDetails:null,
+            paginatedBookingDetails:null,
+            pageCount:0,
+            filterDate:"",
+            filterPlace:"",
             responseData: null,
             emailValid: false,
             firstnameValid: false,
@@ -67,48 +74,6 @@ class EditProfile extends Component {
         this.props.travelerProfile(id)
         this.props.travelerBookings(id)
         console.log("Sending get request to http://localhost:3001/edit/" + id)
-        // axios.get("http://localhost:3001/travel/" + id)
-        //     .then(response => {
-        //         console.log("inside response")
-        //         if (response.status === 200) {
-        //             var data = response.data
-        //             console.log(data.profilePic)
-            //         this.setState({
-            //             email: data.email,
-            //             firstname: data.firstname,
-            //             password: data.password,
-            //             lastname: data.lastname,
-            //             school: data.school,
-            //             address: data.address,
-            //             company: data.company,
-            //             number: data.number,
-            //             aboutme:data.aboutme,
-            //             languages:data.languages,
-            //             gender:data.gender,
-            //             image: "http://localhost:3001" + data.profilePic,
-            //             emailValid: true,
-            //             firstnameValid: true,
-            //             lastnameValid: true,
-            //             passwordValid: true,
-            //             schoolValid: true,
-            //             addressValid: true,
-            //             companyValid: true,
-            //             numberValid: true,
-            //             formValid: true
-            //         })
-            //     }
-            // })
-
-        // console.log("Sending get request to http://localhost:3001/bookingdetails/" + id)
-        // axios.get("http://localhost:3001/travel/"+id+"/bookingdetails" )
-        //     .then(response => {
-        //         console.log("Booking details available")
-        //         if (response.status == 200) {
-        //             this.setState({
-        //                 bookingDetails: response.data
-        //             })
-        //         }
-        //     })
     }
 
     componentWillReceiveProps(nextProps){
@@ -142,8 +107,17 @@ class EditProfile extends Component {
         }
 
         if(nextProps.bookingInfo){
+            const pageCount = Math.ceil(nextProps.bookingInfo.length / 2)
             this.setState({
-                bookingDetails: nextProps.bookingInfo
+                bookingDetails: nextProps.bookingInfo,
+                filteredBookingDetails:nextProps.bookingInfo,
+                pageCount : pageCount
+            },() => {
+                console.log(this.state.filteredBookingDetails)
+                const filteredBookingDetails = this.state.filteredBookingDetails
+                this.setState({
+                    paginatedBookingDetails : filteredBookingDetails.slice(0,2)
+                })
             })
         }
 
@@ -350,6 +324,84 @@ class EditProfile extends Component {
             })
     }
 
+    handlePageClick = (e) => {
+        var temp = this.state.filteredBookingDetails.slice(e.selected*2,(e.selected*2)+2)
+        console.log(temp)
+        this.setState({
+            paginatedBookingDetails:temp
+        })
+    }
+
+    filterResult = () =>{
+        if(this.state.filterPlace && !this.state.filterDate){
+            const oldList = this.state.bookingDetails
+            const filterPlace = this.state.filterPlace.toLowerCase()
+            console.log("place to be filtered ",filterPlace)
+            console.log("oldList: ",oldList)
+            this.setState({
+                filteredBookingDetails : _.filter(oldList,function(o) { return o.property.place_name.toLowerCase().includes(filterPlace)})
+            },() => {
+                var tempList = this.state.filteredBookingDetails
+                this.setState({
+                    pageCount : Math.ceil(tempList.length / 2),
+                    paginatedBookingDetails : tempList.slice(0,2)
+                })
+                console.log("Filtered List: ",this.state.filteredBookingDetails)
+            })
+        }else if(!this.state.filterPlace && this.state.filterDate){
+            const oldList = this.state.bookingDetails
+            const filterDate = this.state.filterDate
+            this.setState({
+                filteredBookingDetails : _.filter(oldList,function(o) { return (new Date(o.booking_from).valueOf() == new Date(filterDate).valueOf() || new Date(o.booking_to).valueOf() == new Date(filterDate).valueOf())})
+            },() => {
+                var tempList = this.state.filteredBookingDetails
+                this.setState({
+                    pageCount : Math.ceil(tempList.length / 2),
+                    paginatedBookingDetails : tempList.slice(0,2)
+                })
+                console.log("Filtered List: ",this.state.filteredBookingDetails)
+            })
+        }else if(this.state.filterPlace && this.state.filterDate){
+            const oldList = this.state.bookingDetails
+            const filterPlace = this.state.filterPlace.toLowerCase()
+            console.log("place to be filtered ",filterPlace)
+            console.log("oldList: ",oldList)
+            this.setState({
+                filteredBookingDetails : _.filter(oldList,function(o) { return o.property.place_name.toLowerCase().includes(filterPlace)})
+            },() => {
+                var tempList = this.state.filteredBookingDetails
+                const filterDate = this.state.filterDate
+                this.setState({
+                    filteredBookingDetails : _.filter(tempList,function(o) { return (new Date(o.booking_from).valueOf() == new Date(filterDate).valueOf() || new Date(o.booking_to).valueOf() == new Date(filterDate).valueOf())}) 
+                },() => {
+                    var tempList = this.state.filteredBookingDetails
+                    this.setState({
+                        pageCount : Math.ceil(tempList.length / 2),
+                        paginatedBookingDetails : tempList.slice(0,2)
+                    })
+                    console.log("Filtered List: ",this.state.filteredBookingDetails)
+                })
+                
+            })
+        }
+    }
+
+    clearFilter = (e) =>{
+        const oldList = this.state.bookingDetails
+        this.setState({
+            filterPlace:"",
+            filterDate:"",
+            filteredBookingDetails : oldList
+        },() => {
+            var tempList = this.state.filteredBookingDetails
+                this.setState({
+                    pageCount : Math.ceil(tempList.length / 2),
+                    paginatedBookingDetails : tempList.slice(0,2)
+                })
+            console.log("Filtered List: ",this.state.filteredBookingDetails)
+        })
+    }
+
     render() {
 
         let redirectVar = null
@@ -371,17 +423,18 @@ class EditProfile extends Component {
         var placeDetail = null;
         console.log(typeof this.state.bookingDetails)
 
-        if (this.state.bookingDetails) {
-            var buttons = this.state.bookingDetails.map(placeDetail => {
-                console.log(placeDetail)
+        if (this.state.paginatedBookingDetails) {
+            var buttons = this.state.paginatedBookingDetails.map(placeDetail => {
+                console.log(new Date(placeDetail.booking_from))
+                console.log("booking from while making buttons: ",new Date(placeDetail.booking_from).getUTCMonth())
                 return (
                     <tr>
                         <td class="property-detail p-2">
                             <h3><a href="#" class="text-dark" id={placeDetail._id} onClick={this.showDetails}>{placeDetail.property.place_name}</a></h3>
                             <p><b>Location, City: </b>{placeDetail.property.location_city}</p>
                             <p class="text-warning">{placeDetail.property.headline}</p>
-                            <p><b>From: </b>{new Date(placeDetail.booking_from).getFullYear() + "-" + new Date(placeDetail.booking_from).getMonth() + "-" + new Date(placeDetail.booking_from).getDate()}</p>
-                            <p><b>To: </b>{new Date(placeDetail.booking_to).getFullYear() + "-" + new Date(placeDetail.booking_to).getMonth() + "-" + new Date(placeDetail.booking_to).getDate()}</p>
+                            <p><b>From: </b>{new Date(placeDetail.booking_from.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()}</p>
+                            <p><b>To: </b>{new Date(placeDetail.booking_to.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()}</p>
                             <p><b>Guests: </b>{placeDetail.guests}</p>
                             <p class="bg-light"><b>Base Nightly Rate was:</b>{" $" + placeDetail.property.price}</p>
                         </td>
@@ -404,13 +457,53 @@ class EditProfile extends Component {
                             <Tab>Account</Tab>
                         </TabList>
                         <TabPanel>
-                            <h1><b>Previous Trips</b></h1>
+                            <div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="row">
+                                        <div class="col-sm-3 mx-auto">
+                                            <input type="text" class="form-control" onChange={this.handleChange} value={this.state.filterPlace} placeholder="Place Name" name="filterPlace" />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <button type="button" class="form-control-login btn-warning" onClick={this.filterResult}>Filter Place by Name</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mx-auto">
+                                            <div class="input-group">
+                                                <input type="date" class="form-control" value={this.state.filterDate} onChange={this.handleChange} name="filterDate" />
+                                            </div>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <button type="button" class="form-control-login btn-warning" onClick={this.filterResult}>Filter By Date</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mx-auto">
+                                            <button type="button" class="form-control-login btn-warning" onClick={this.clearFilter} >Clear Filter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h1><b>Recent Trips</b></h1>
                             <div class="form-body">
                                 <div class="d-flex justify-content-left">
                                     <table class="w-100">
                                         {buttons}
                                     </table>
                                 </div>
+                            </div>
+                            <div class="center">
+                                <ReactPaginate previousLabel={"previous"}
+                                    nextLabel={"next"}
+                                    breakLabel={<a href="">...</a>}
+                                    breakClassName={"break-me"}
+                                    pageCount={this.state.pageCount}
+                                    marginPagesDisplayed={2}
+                                    pageRangeDisplayed={5}
+                                    onPageChange={this.handlePageClick}
+                                    containerClassName={"pagination"}
+                                    subContainerClassName={"pages pagination"}
+                                    activeClassName={"active"} />
                             </div>
                         </TabPanel>
                         <TabPanel>

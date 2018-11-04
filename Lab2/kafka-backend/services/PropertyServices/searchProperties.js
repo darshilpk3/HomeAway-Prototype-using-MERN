@@ -8,12 +8,13 @@ var Question = require('../../models/question')
 function handle_request(msg, callback){
     console.log("Inside getOwnerDetails kafka backend");
     
+    console.log("booking criteria: ",msg.range)
     Property.find({
         available_from: { $lte: msg.available_from },
         available_to: { $gte: msg.available_to },
         accomodates: { $gte: msg.accomodates },
         location_city: { $regex: new RegExp('^' + msg.place, 'i') },
-        dates: { $in: msg.range }
+        dates: { $all: msg.range }
       })
         .then(result => {
           //console.log(result)

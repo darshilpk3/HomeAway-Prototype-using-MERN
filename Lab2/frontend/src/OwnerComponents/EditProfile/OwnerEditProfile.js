@@ -36,7 +36,6 @@ class OwnerEditProfile extends Component {
             message: "",
             selectedFile: "",
             image: "",
-            bookingDetails: null,
             responseData: null,
             emailValid: false,
             firstnameValid: false,
@@ -70,38 +69,6 @@ class OwnerEditProfile extends Component {
         var id = cookie.load("ownerlogin")
         console.log("Sending get request to http://localhost:3001/owner/edit/" + id)
         this.props.ownerProfile(id)
-        // axios.get("http://localhost:3001/owner/" + id)
-        //     .then(response => {
-        //         console.log("inside response")
-        //         if (response.status === 200) {
-        //             var data = response.data
-        //             console.log(data.email)
-                    // this.setState({
-                    //     email: data.email,
-                    //     firstname: data.firstname,
-                    //     lastname: data.lastname,
-                    //     address: data.billing_address,
-                    //     company: data.company,
-                    //     city: data.city,
-                    //     state: data.state,
-                    //     zipcode: data.zipcode,
-                    //     country: data.country,
-                    //     number: data.number,
-                    //     emailValid: true,
-                    //     firstnameValid: true,
-                    //     lastnameValid: true,
-                    //     passwordValid: true,
-                    //     addressValid: true,
-                    //     cityValid: true,
-                    //     stateValid: true,
-                    //     zipcodeValid: true,
-                    //     countryValid: true,
-                    //     companyValid: true,
-                    //     numberValid: true,
-                    //     formValid: true
-                    // })
-        //         }
-        //     })
     }
 
     componentWillReceiveProps(nextProps){

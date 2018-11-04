@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import OwnerNavBar from '../NavBar/OwnerNavBar'
-import {Redirect} from 'react-router'
+import { Redirect } from 'react-router'
 import axios from 'axios'
 import '../../App.css'
 import cookie from 'react-cookies';
@@ -8,22 +8,22 @@ import NavBar from '../../TravellerComponents/NavBar/NavBar';
 import { FormErrors } from '../../FormErrors';
 
 import PropTypes from 'prop-types';
-import {authenticateowner} from '../../Actions/ownerActions'
+import { authenticateowner } from '../../Actions/ownerActions'
 
 
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { store } from '../../store';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class OwnerLoginPage extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            email:"",
-            password:"",
-            message:"",
-            redirect:false,
+            email: "",
+            password: "",
+            message: "",
+            redirect: false,
             formErrors: { email: "", password: "" },
             emailValid: false,
             passwordValid: false,
@@ -78,10 +78,10 @@ class OwnerLoginPage extends Component {
         var headers = new Headers();
         e.preventDefault();
         axios.defaults.withCredentials = true;
-        
+
         const data = {
-            email:this.state.email,
-            password:this.state.password
+            email: this.state.email,
+            password: this.state.password
         }
         this.props.authenticateowner(data)
         // axios.post("http://localhost:3001/owner/login",data)
@@ -102,59 +102,58 @@ class OwnerLoginPage extends Component {
         //     })
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         console.log(nextProps.ownerInfo)
-        if(nextProps.ownerInfo){
+        if (nextProps.ownerInfo) {
             this.props.history.push('/owner/home')
+        }else if(nextProps.error){
+            console.log(nextProps.error)
+            this.setState({
+                message:nextProps.error
+            })
         }
     }
 
     render() {
 
         let redirectVar = null;
-        if(cookie.load("owneruser") || this.state.redirect){
-            console.log("should be redirected")
-            redirectVar = <Redirect to="/owner/home"/>
-        }
+        // if (cookie.load("owneruser") || this.state.redirect) {
+        //     console.log("should be redirected")
+        //     redirectVar = <Redirect to="/owner/home" />
+        // }
         return (
             <div>
                 {redirectVar}
                 <div>
-                    <NavBar/>
+                    <NavBar />
                 </div>
                 <div class="clearfix"></div>
                 <div class="bg-grey">
-                    <div class="container-fluid bg-grey">
-                        <div class="row">
-                            <div class="col-md-4 offset-md-4 text-align-center">
-                                <h1 class="form-header text-center">Log in to HomeAway</h1>
-                            </div>
-                            <div class="col-md-4 offset-md-4 text-align-center">
-                                <footer class="form-footer">Need an account? <a href="/owner/signup">Sign Up</a></footer>
-                                <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
-                                <footer class="form-footer text-danger">{this.state.message}</footer>
-                            </div>
-                        </div>
+
+                <div class = "d-flex flex-row justify-content-center align-items-center">
+                    <div class="px-2">
+                        <img src="https://csvcus.homeaway.com/rsrcs/stab-cms-resources/0.10.35/images/cas/login-banner-sept16-1.png" id="#personyzeContent" />
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="form-body-login">
-                        <fieldset>
-                            <p>Owner Account login</p>
-                            <hr></hr>
-                            <form class="form-group">
-                                <input class="form-control" type="text" onChange = {this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
-                                <div class="clearfix"></div>
-                                <input class="form-control" type="password" onChange = {this.handleChange} value={this.state.password} placeholder="Password" name="password" />
-                                <div class="clearfix"></div>
-                                <a class="form-footer" href="#">Forgot password?</a>
-                                <div class="clearfix"></div>
-                                <input type="checkbox" value="Keep me signed in" checked></input>
-                                <label class="form-footer">Keep me signed in</label>
-                                <div class="clearfix"></div>
-                                <input type="submit" class="form-control-login btn btn-warning" disabled={!this.state.formValid} onClick = {this.login} value="Log in"></input>
-                            </form>
-                        </fieldset>
+                    <div class="d-flex flex-column px-5">
+                        <h1 class="form-header text-center">Owner Login</h1>
+                        <footer class="form-footer">Need an account? <a href="/owner/signup">Sign Up</a></footer>
+                        <hr></hr>
+                        <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
+                        <footer class="form-footer text-danger">{this.state.message}</footer>
+                        <form class="form-group">
+                            <input class="form-control" type="text" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+                            <div class="clearfix"></div>
+                            <input class="form-control" type="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" name="password" />
+                            <div class="clearfix"></div>
+                            <a class="form-footer" href="#">Forgot password?</a>
+                            <div class="clearfix"></div>
+                            <input type="checkbox" value="Keep me signed in" checked></input>
+                            <label class="form-footer">Keep me signed in</label>
+                            <div class="clearfix"></div>
+                            <input type="submit" class="form-control-login btn btn-warning" disabled={!this.state.formValid} onClick={this.login} value="Log in"></input>
+                        </form>
                     </div>
+                </div>
                     <div class="clearfix"></div>
                 </div>
             </div>
@@ -162,13 +161,46 @@ class OwnerLoginPage extends Component {
     }
 }
 
-OwnerLoginPage.propTypes = {
-    authenticateowner : PropTypes.func.isRequired,
-    ownerInfo:PropTypes.object
+OwnerLoginPage.PropTypes = {
+    authenticateowner: PropTypes.func.isRequired,
+    ownerInfo: PropTypes.object,
+    error:PropTypes.string
 }
 
 const mapStatetoProps = state => ({
-    ownerInfo:state.owner.ownerInfo
+    ownerInfo: state.owner.ownerInfo,
+    error:state.owner.error
 })
 
-export default connect(mapStatetoProps,{authenticateowner})(OwnerLoginPage);
+export default connect(mapStatetoProps, { authenticateowner })(OwnerLoginPage);
+
+
+// <div class="container-fluid bg-grey">
+//                                 <div class="row">
+//                                     <div class="col-md-4 offset-md-8 text-align-center">
+
+//                                     </div>
+//                                     <div class="col-md-4 offset-md-8 text-align-center">
+
+//                                     </div>
+//                                 </div>
+//                             </div>
+//                             <div class="clearfix"></div>
+//                             <div class="form-body-login">
+//                                 <fieldset>
+//                                     <p>Owner Account login</p>
+//                                     <hr></hr>
+//                                     <form class="form-group">
+//                                         <input class="form-control" type="text" onChange={this.handleChange} value={this.state.email} placeholder="Email address" name="email" />
+//                                         <div class="clearfix"></div>
+//                                         <input class="form-control" type="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" name="password" />
+//                                         <div class="clearfix"></div>
+//                                         <a class="form-footer" href="#">Forgot password?</a>
+//                                         <div class="clearfix"></div>
+//                                         <input type="checkbox" value="Keep me signed in" checked></input>
+//                                         <label class="form-footer">Keep me signed in</label>
+//                                         <div class="clearfix"></div>
+//                                         <input type="submit" class="form-control-login btn btn-warning" disabled={!this.state.formValid} onClick={this.login} value="Log in"></input>
+//                                     </form>
+//                                 </fieldset>
+//                             </div>

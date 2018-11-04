@@ -99,19 +99,19 @@ class OwnerSignUpPage extends Component {
         axios.post("http://localhost:3001/ownersignup", data)
             .then(response => {
                 console.log(response.data);
-
-                if (response.data === "Could not add the user") {
-                    console.log("couldnt add")
-                    this.setState({
-                        message: "Account creation unsuccessfull"
-                    })
+                if(response.status == 200){
+                    if (response.data === "Email-Id already exist") {
+                        console.log("couldnt add")
+                        this.setState({
+                            message: "Email-Id already exist"
+                        })
+                    }
+                    else {
+                        console.log("added")
+                        this.props.history.push('/owner/login')
+                    }
                 }
-                else {
-                    console.log("added")
-                    this.setState({
-                        redirect: true
-                    })
-                }
+                
             })
     }
 
@@ -130,38 +130,36 @@ class OwnerSignUpPage extends Component {
                 </div>
                 <div class="clearfix"></div>
                 <div class="bg-grey">
-                    <div class="container-fluid bg-grey">
-                        <div class="row">
-                            <div class="col-md-4 offset-md-4 text-align-center">
-                                <h1 class="form-header text-center">Owner SignUp</h1>
-                            </div>
-                            <div class="col-md-4 offset-md-4 text-align-center">
-                                <footer class="form-footer">Already have an account? <a href="/owner/login">Log in</a></footer>
-                                <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
-                                <footer class="form-footer text-danger">{this.state.message}</footer>
-                            </div>
-                        </div>
+
+                <div class = "d-flex flex-row justify-content-center align-items-center">
+                    <div class="px-2">
+                        <img src="https://csvcus.homeaway.com/rsrcs/stab-cms-resources/0.10.35/images/cas/login-banner-sept16-1.png" id="#personyzeContent" />
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="form-body-login">
-                        <fieldset>
-                            <form class="form-group">
-                                <div class="flex-it">
-                                    <input class="form-control" type="text" placeholder="First Name" onChange={this.handleChange} value={this.state.firstname} name="firstname" required />
-                                    <input class="form-control" type="text" onChange={this.handleChange} value={this.state.lastname} placeholder="Last Name" name="lastname" required />
-                                </div>
-                                <div class="clearfix"></div>
-                                <input class="form-control" type="email" onChange={this.handleChange} value={this.state.email} placeholder="Email Address" name="email" required />
-                                <div class="clearfix"></div>
-                                <input class="form-control" type="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" name="password" required />
-                                <div class="clearfix"></div>
-                                <button class="form-control-login btn btn-warning" value="Sign me up" disabled={!this.state.formValid} onClick={this.signUp}>Sign me up</button>
-                                <div class="clearfix"></div>
-                                <footer class="form-footer">By creating an account you are accepting our <a href="#">Terms and Conditions and Privacy Policy</a>.</footer>
-                            </form>
-                        </fieldset>
+                    <div class="d-flex flex-column px-5">
+                        <h1 class="form-header text-center">Owner SignUp</h1>
+                        <footer class="form-footer">Already have an account? <a href="/owner/login">Log in</a></footer>
+                        <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
+                        <footer class="form-footer text-danger">{this.state.message}</footer>
+                        <hr></hr>
+                        <form class="form-group">
+                            <div class="flex-it">
+                                <input class="form-control" type="text" placeholder="First Name" onChange={this.handleChange} value={this.state.firstname} name="firstname" required />
+                                <input class="form-control" type="text" onChange={this.handleChange} value={this.state.lastname} placeholder="Last Name" name="lastname" required />
+                            </div>
+                            <div class="clearfix"></div>
+                            <input class="form-control" type="email" onChange={this.handleChange} value={this.state.email} placeholder="Email Address" name="email" required />
+                            <div class="clearfix"></div>
+                            <input class="form-control" type="password" onChange={this.handleChange} value={this.state.password} placeholder="Password" name="password" required />
+                            <div class="clearfix"></div>
+                            <button class="form-control-login btn btn-warning" value="Sign me up" disabled={!this.state.formValid} onClick={this.signUp}>Sign me up</button>
+                            <div class="clearfix"></div>
+                            <footer class="form-footer">By creating an account you are accepting our <a href="#">Terms and Conditions and Privacy Policy</a>.</footer>
+                        </form>
                     </div>
-                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+                <p class="text-center form-footer">Use of this Web site constitutes acceptance of the HomeAway.com Terms and Conditions and Privacy Policy.</p>
+                <p class="text-center form-footer">©2018 HomeAway. All rights reserved.</p>
                 </div>
             </div>
         )

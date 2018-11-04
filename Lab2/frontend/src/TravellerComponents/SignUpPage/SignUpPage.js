@@ -102,18 +102,17 @@ class SignUpPage extends Component {
         axios.post("http://localhost:3001/travelsignup", data)
             .then(response => {
                 console.log(response.data);
-
-                if (response.data === "Could not add the user" || response.data === "Something wrong with data") {
-                    console.log("couldnt add")
-                    this.setState({
-                        message: "Account creation unsuccessfull"
-                    })
-                }
-                else {
-                    console.log("added")
-                    this.setState({
-                        redirect: true
-                    })
+                if(response.status === 200){
+                    if (response.data == "Email-Id already exist") {
+                        console.log(response.data)
+                        this.setState({
+                            message: "Email-Id already exist"
+                        })
+                    }
+                    else {
+                        console.log("added")
+                        this.props.history.push('/traveller/login')
+                    }
                 }
             })
     }

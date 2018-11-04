@@ -455,3 +455,11 @@ h1, .h1 {
     border-bottom-right-radius: 3px;
     border-top-right-radius: 3px;
   }
+
+  #personyzeContent {
+    height: 295px;
+    overflow: hidden;
+    display: block;
+    background-image: url('//csvcus.homeaway.com/rsrcs/stab-cms-resources/0.10.35/images/cas/login-banner-sept16-1.png'); 
+    outline: none;
+  }

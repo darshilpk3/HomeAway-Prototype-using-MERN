@@ -9,10 +9,19 @@ export default function (state = {}, action) {
   switch (action.type) {
     //target 
     case AUTHENTICATE_OWNER:
-      return {
-        ...state,
-        ownerInfo: action.payload
+      console.log(action.payload)
+      if(action.payload == "Invalid Credentials"){
+        return {
+          ...state,
+          error: action.payload
+        }
+      }else{
+        return {
+          ...state,
+          ownerInfo: action.payload
+        }
       }
+      
     case OWNER_PROFILE:
       return {
         ...state,

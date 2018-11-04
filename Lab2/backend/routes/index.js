@@ -69,22 +69,7 @@ router.post('/travellogin',function(req,res,next){
         })
 })
 
-// router.post('/travellogin',function(req,res,next){
-//     kafka.make_request('post_login',req.body, function(err,results){
-//         if(err){
-//             console.log(err)
-//             res.writeHead(400,{
-//                 'Content-Type':'text/plain'
-//             })
-//             res.end(err)
-//         }else{
-//             res.writeHead(200,{
-//                 'Content-Type':'application/json'
-//             })
-//             res.end(JSON.stringify(results))
-//         }
-//     })
-// })
+
 router.post('/travelsignup',function(req,res,next){
     console.log("Inside signup Post Request");
     var email = req.body.email;
@@ -103,13 +88,13 @@ router.post('/travelsignup',function(req,res,next){
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             })
-            res.end("Successful added");
+            res.end(JSON.stringify(result));
         })
         .catch(err=>{
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             })
-            res.end("Something wrong with data"); 
+            res.end("Email-Id already exist"); 
         })
 })
 
@@ -178,7 +163,7 @@ router.post('/ownersignup', function (req, res, next) {
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             })
-            res.end("Something wrong with data");
+            res.end("Email-Id already exist");
         })
 })
 

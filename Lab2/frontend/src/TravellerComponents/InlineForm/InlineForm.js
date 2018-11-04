@@ -4,6 +4,11 @@ import axios from 'axios'
 import { Redirect } from 'react-router'
 import cookie from 'react-cookies'
 import { FormErrors } from '../../FormErrors';
+
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+import { getProperties } from '../../Actions/propertyActions'
+
 class InlineForm extends Component {
 
     constructor(props) {
@@ -111,24 +116,34 @@ class InlineForm extends Component {
             accomodates: this.state.accomodates
         }
         console.log(data)
-        axios.post("http://localhost:3001/property/search", data)
-            .then(response => {
-                console.log("properties should be listed")
-                var rowdata;
-                if (response.status === 400) {
-                    console.log(response.data)
-                } else if (response.status === 200 && response.data !== "No places available") {
-                    for (rowdata of response.data) {
-                        console.log(rowdata.place_name)
-                    }
-                    this.setState({
-                        responsedata: response.data
-                    })
-                } else {
-                    console.log(response.data)
-                }
-            })
 
+        this.props.getProperties(data)
+
+        // axios.post("http://localhost:3001/property/search", data)
+        //     .then(response => {
+        //         console.log("properties should be listed")
+        //         var rowdata;
+        //         if (response.status === 400) {
+        //             console.log(response.data)
+        //         } else if (response.status === 200 && response.data !== "No places available") {
+        //             for (rowdata of response.data) {
+        //                 console.log(rowdata.place_name)
+        //             }
+        //             this.setState({
+        //                 responsedata: response.data
+        //             })
+        //         } else {
+        //             console.log(response.data)
+        //         }
+        //     })
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.propertyList){
+            this.setState({
+                responsedata : nextProps.propertyList
+            })
+        }
     }
 
     render() {
@@ -182,4 +197,14 @@ class InlineForm extends Component {
     }
 }
 
-export default InlineForm
+InlineForm.propTypes = {
+    getProperties: PropTypes.func.isRequired,
+    propertyList: PropTypes.object,
+}
+
+const mapStatetoProps = state => ({
+    propertyList: state.property.propertyList,
+})
+
+
+export default connect(mapStatetoProps, { getProperties })(InlineForm);

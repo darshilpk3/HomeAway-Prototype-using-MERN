@@ -19,10 +19,12 @@ export const authenticateowner = (credentials) => dispatch => {
     const request = axios
         .post(`${ROOT_URL}/ownerlogin`, credentials)
         .then( response => {
-            dispatch({ 
-                type:AUTHENTICATE_OWNER,
-                payload:response.data
-            })
+            if(response.status === 200){
+                dispatch({ 
+                    type:AUTHENTICATE_OWNER,
+                    payload:response.data
+                })    
+            }
         });
 }
 

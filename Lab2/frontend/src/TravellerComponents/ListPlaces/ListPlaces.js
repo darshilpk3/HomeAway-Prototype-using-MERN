@@ -10,11 +10,12 @@ import InlineForm from '../InlineForm/InlineForm';
 import axios from 'axios'
 import Filter from '../Filter/Filter'
 import _ from "lodash";
+
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import { getProperties } from '../../Actions/propertyActions'
 import ReactPaginate from 'react-paginate'
-
+import {store} from '../../store'
 
 class ListPlaces extends Component {
     constructor(props) {
@@ -157,20 +158,28 @@ class ListPlaces extends Component {
     }
 
     componentDidMount() {
+        console.log("component has mounted")
         if (this.props.location.state) {
             console.log("component did mount should call getProperties")
-            const data = {
-                place: this.props.location.state && this.props.location.state.place,
-                available_from: this.props.location.state && this.props.location.state.available_from,
-                available_to: this.props.location.state && this.props.location.state.available_to,
-                accomodates: this.props.location.state && this.props.location.state.accomodates
-            }
-            this.props.getProperties(data)
+            console.log("properties from inline: ",this.props.location.state.places_list.length)
+            const pageCount = Math.ceil(this.props.location.state.places_list.length / 2)
+            this.setState({
+                propertyList: this.props.location.state.places_list,
+                filteredList: this.props.location.state.places_list,
+                pageCount: pageCount
+            }, () => {
+                var temp = this.state.filteredList.slice(0, 2)
+                this.setState({
+                    paginatedList: temp
+                })
+            })
         }
     }
-
+            
     componentWillReceiveProps(nextProps) {
-        if (nextProps.propertyList) {
+        console.log("props received: ",nextProps.propertyList)
+        if (nextProps.propertyList != this.props.propertyList) {
+            console.log("Updated Property List: ",nextProps.propertyList)
             const pageCount = Math.ceil(nextProps.propertyList.length / 2)
             this.setState({
                 propertyList: nextProps.propertyList,
@@ -184,6 +193,7 @@ class ListPlaces extends Component {
             })
         }
     }
+
     render() {
         let redirectVar = null
         if (!cookie.load("loginuser")) {
@@ -331,7 +341,7 @@ class ListPlaces extends Component {
                 </div>
                 <div class="center">
                     <ReactPaginate previousLabel={"previous"}
-                    nextLabel={"next"}
+                    nextLabel={"next"} 
                     breakLabel={<a href="">...</a>}
                     breakClassName={"break-me"}
                     pageCount={this.state.pageCount}
