@@ -28,9 +28,7 @@ router.post('/travellogin', function (req, res, next) {
                     'Content-Type': 'text/plain'
                 })
                 res.end("Invalid Credentials");
-            } else {
-                console.log(result.password, " ", password)
-                console.log(bcrypt.compareSync(password, result.password))
+            }else{
                 if (bcrypt.compareSync(password, result.password)) {
                     console.log("password matched")
                     var token = jwt.sign(result.toJSON(), 'secretToken', {
@@ -46,14 +44,13 @@ router.post('/travellogin', function (req, res, next) {
                         'Content-Type': 'application/json'
                     })
                     res.end(JSON.stringify(jsonResponse));
-                } else {
+                }else{
                     res.writeHead(200, {
                         'Content-Type': 'text/plain'
                     })
                     res.end("Invalid Credentials");
                 }
             }
-
         })
         .catch(err => {
             console.log(err)
@@ -102,7 +99,7 @@ router.post('/ownerlogin', function (req, res, next) {
                     'Content-Type': 'text/plain'
                 })
                 res.end("Invalid Credentials");
-            } else {
+            }else{
                 console.log("checking: ",bcrypt.compareSync(password, result.password))
                 if (bcrypt.compareSync(password, result.password)) {
                     console.log("password matched")
@@ -119,7 +116,7 @@ router.post('/ownerlogin', function (req, res, next) {
                         'Content-Type': 'text/plain'
                     })
                     res.end(JSON.stringify(jsonResponse));
-                } else {
+                }else {
                     console.log("Password didnt match")
                     res.writeHead(200, {
                         'Content-Type': 'text/plain'
