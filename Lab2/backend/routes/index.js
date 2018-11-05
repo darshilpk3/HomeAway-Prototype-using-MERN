@@ -15,7 +15,7 @@ var kafka = require('../kafka/client')
 router.use(cookieParser())
 
 
-router.post('/travellogin',function(req,res,next){
+router.post('/travellogin', function (req, res, next) {
     console.log("Inside Login Post Request");
     var email = req.body.email;
     var password = (req.body.password);
@@ -23,54 +23,45 @@ router.post('/travellogin',function(req,res,next){
     Traveler.findOne({ email: email })
         .exec()
         .then(result => {
-            console.log(result.password," ",password)
-            console.log(bcrypt.compareSync(password, result.password))
-            if (bcrypt.compareSync(password, result.password)) {
-                console.log("password matched")
-                var token = jwt.sign(result.toJSON(), 'secretToken', {
-                    expiresIn: 60*60*24
-                });
-                req.session.user = result;
-                // res.cookie("loginuser",result._id.toString(), {
-                //     maxAge: 900000,
-                //     httpOnly: false,
-                //     path: '/'
-                // })
-                // res.cookie("loginemail",result.email, {
-                //     maxAge: 900000,
-                //     httpOnly: false,
-                //     path: '/',
-                //     overwrite: true
-                // })
-                // res.cookie("token",token,{
-                //     maxAge: 900000,
-                //     httpOnly: false,
-                //     path: '/',
-                //     overwrite: true
-                // })
-                const jsonResponse = {
-                    "_id" : result._id.toString(),
-                    "email" : result.email,
-                    "token" : token,
-                }
-                res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                })
-                res.end(JSON.stringify(jsonResponse));
-            }else{
+            if (!result) {
                 res.writeHead(200, {
                     'Content-Type': 'text/plain'
                 })
                 res.end("Invalid Credentials");
+            } else {
+                console.log(result.password, " ", password)
+                console.log(bcrypt.compareSync(password, result.password))
+                if (bcrypt.compareSync(password, result.password)) {
+                    console.log("password matched")
+                    var token = jwt.sign(result.toJSON(), 'secretToken', {
+                        expiresIn: 60 * 60 * 24
+                    });
+                    req.session.user = result;
+                    const jsonResponse = {
+                        "_id": result._id.toString(),
+                        "email": result.email,
+                        "token": token,
+                    }
+                    res.writeHead(200, {
+                        'Content-Type': 'application/json'
+                    })
+                    res.end(JSON.stringify(jsonResponse));
+                } else {
+                    res.writeHead(200, {
+                        'Content-Type': 'text/plain'
+                    })
+                    res.end("Invalid Credentials");
+                }
             }
+
         })
-        .catch( err => {
+        .catch(err => {
             console.log(err)
         })
 })
 
 
-router.post('/travelsignup',function(req,res,next){
+router.post('/travelsignup', function (req, res, next) {
     console.log("Inside signup Post Request");
     var email = req.body.email;
     var password = bcrypt.hashSync(req.body.password, 10);
@@ -78,10 +69,10 @@ router.post('/travelsignup',function(req,res,next){
     var lastname = req.body.lastname;
 
     var traveler = new Traveler({
-        firstname:firstname,
-        lastname:lastname,
-        email:email,
-        password:password
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        password: password
     })
     traveler.save()
         .then(result => {
@@ -90,11 +81,11 @@ router.post('/travelsignup',function(req,res,next){
             })
             res.end(JSON.stringify(result));
         })
-        .catch(err=>{
+        .catch(err => {
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             })
-            res.end("Email-Id already exist"); 
+            res.end("Email-Id already exist");
         })
 })
 
@@ -106,27 +97,36 @@ router.post('/ownerlogin', function (req, res, next) {
     console.log(email, password)
     Owner.findOne({ email: email }).exec()
         .then(result => {
-            console.log("owner_id: ", result._id)
-            req.session.user = result;
-            // res.cookie("ownerlogin", result._id.toString(), {
-            //     maxAge: 900000,
-            //     httpOnly: false,
-            //     path: '/'
-            // })
-            // res.cookie("owneremail", result.email, {
-            //     maxAge: 900000,
-            //     httpOnly: false,
-            //     path: '/',
-            //     overwrite: true
-            // })
-            const jsonResponse = {
-                "_id" : result._id.toString(),
-                "email" : result.email
+            if (!result) {
+                res.writeHead(200, {
+                    'Content-Type': 'text/plain'
+                })
+                res.end("Invalid Credentials");
+            } else {
+                console.log("checking: ",bcrypt.compareSync(password, result.password))
+                if (bcrypt.compareSync(password, result.password)) {
+                    console.log("password matched")
+                    var token = jwt.sign(result.toJSON(), 'secretToken', {
+                        expiresIn: 60 * 60 * 24
+                    });
+                    req.session.user = result;
+                    const jsonResponse = {
+                        "_id": result._id.toString(),
+                        "email": result.email,
+                        "token": token
+                    }
+                    res.writeHead(200, {
+                        'Content-Type': 'text/plain'
+                    })
+                    res.end(JSON.stringify(jsonResponse));
+                } else {
+                    console.log("Password didnt match")
+                    res.writeHead(200, {
+                        'Content-Type': 'text/plain'
+                    })
+                    res.end("Invalid Credentials");
+                }
             }
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            })
-            res.end(JSON.stringify(jsonResponse));
         })
         .catch(err => {
             res.writeHead(200, {

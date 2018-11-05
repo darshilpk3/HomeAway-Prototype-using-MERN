@@ -107,7 +107,7 @@ class OwnerLoginPage extends Component {
         if (nextProps.ownerInfo) {
             localStorage.setItem("ownerlogin",nextProps.ownerInfo._id)
             localStorage.setItem("owneremail",nextProps.ownerInfo.email)
-
+            localStorage.setItem("token",nextProps.ownerInfo.token)
             this.props.history.push('/owner/home')
         }else if(nextProps.error){
             console.log(nextProps.error)

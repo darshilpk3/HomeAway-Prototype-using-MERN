@@ -85,6 +85,7 @@ class LoginPage extends Component {
         if(nextProps.travelerInfo){
             localStorage.setItem("loginuser",nextProps.travelerInfo._id)
             localStorage.setItem("loginemail",nextProps.travelerInfo.email)
+            localStorage.setItem("token",nextProps.travelerInfo.token)
             this.props.history.push('/traveller/home')
         }else if(nextProps.error){
             this.setState({
