@@ -24,16 +24,16 @@ function handle_request(msg, callback) {
                 }
             }).exec()
                 .then(result => {
-                    console.log("result: ",result)
+                    //console.log("result: ",result)
                     callback(null,result)
                 })
                 .catch(err => {
-                    console.log("err type: ",typeof err)
+                    //console.log("err type: ",typeof err)
                     callback(err,"Error in Profile Section Data")
                 })
         })
         .catch(err => {
-            console.log("err type is: ",typeof err)
+            //console.log("err type is: ",typeof err)
             callback(err,"Email-Id already exist")
         })
     console.log("after callback");

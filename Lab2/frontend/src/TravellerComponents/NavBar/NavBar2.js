@@ -5,6 +5,8 @@ import '../../App.css'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import {Link} from 'react-router-dom'
+import { withRouter } from "react-router";
+import {connect} from "react-redux"
 
 class NavBar2 extends Component {
 
@@ -37,9 +39,10 @@ class NavBar2 extends Component {
         cookie.remove('loginemail', {
             path: "/"
         });
-        this.setState({
-            logininfo: "Logged out"
-        })
+        // this.setState({
+        //     logininfo: "Logged out"
+        // })
+        this.props.history.push('/traveller/login')
     }
 
     componentWillMount() {
@@ -108,4 +111,4 @@ class NavBar2 extends Component {
     }
 }
 
-export default NavBar2;
+export default withRouter(connect((null,null))(NavBar2));

@@ -12,7 +12,7 @@ function handle_request(msg, callback) {
             callback(null,result)
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
             callback(err,err)
         })
     console.log("after callback");

@@ -446,7 +446,7 @@ router.post("/:travelid/question", function (req, res, next) {
 
 router.get("/:travelid/question", function (req, res, next) {
     console.log("getting questions")
-
+    console.log("Travel id: ",req.params.travelid)
     kafka.make_request('getUserInbox',req.params,function(err,results){
         if(err){
             res.writeHead(400, {

@@ -139,7 +139,7 @@ class OwnerLoginPage extends Component {
                     </div>
                     <div class="d-flex flex-column px-5">
                         <h1 class="form-header text-center">Owner Login</h1>
-                        <footer class="form-footer">Need an account? <a href="/owner/signup">Sign Up</a></footer>
+                        <footer class="form-footer">Need an account? <Link to="/owner/signup">Sign Up</Link></footer>
                         <hr></hr>
                         <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
                         <footer class="form-footer text-danger">{this.state.message}</footer>

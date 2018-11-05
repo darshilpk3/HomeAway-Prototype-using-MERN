@@ -260,10 +260,10 @@ class EditProfile extends Component {
 
     changeProfilePic = (e) => {
 
-        // var headers = new Headers();
+        var headers = new Headers();
         e.preventDefault();
 
-        // axios.defaults.withCredentials = true;
+        axios.defaults.withCredentials = true;
         console.log("While sending post request: " + this.state.selectedFile)
         let formData = new FormData();
         let id = localStorage.getItem('loginuser')
@@ -273,18 +273,15 @@ class EditProfile extends Component {
         formData.append('id', localStorage.getItem('loginuser'))
 
         console.log("formData is: ", formData.get('selectedFile'))
-        this.props.editProfilePic(id,formData)
-        this.props.history.go(0)
-        // axios.post("http://localhost:3001/travel/"+localStorage.getItem('loginuser')+"/upload", formData)
-        //     .then(response => {
-        //         console.log("file should be  uploaded")
-        //         if (response.status === 200) {
-        //             console.log("http://localhost:3001/" + response.data)
-        //             this.setState({
-        //                 image: "http://localhost:3001" + response.data
-        //             })
-        //         }
-        //     })
+        
+        axios.post("http://localhost:3001/travel/"+id+"/upload", formData)
+            .then(response => {
+                console.log("file should be  uploaded")
+                if (response.status === 200) {
+                    console.log("http://localhost:3001/" + response.data)
+                    this.props.history.go(0)
+                }
+            })
     }
 
     changePassword = (e) => {

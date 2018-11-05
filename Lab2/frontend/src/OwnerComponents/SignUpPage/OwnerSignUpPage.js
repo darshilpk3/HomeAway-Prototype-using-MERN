@@ -4,6 +4,7 @@ import '../../App.css'
 import axios from 'axios'
 import OwnerNavBar from '../NavBar/OwnerNavBar';
 import { FormErrors } from '../../FormErrors';
+import { Link } from 'react-router-dom'
 
 class OwnerSignUpPage extends Component {
 
@@ -137,7 +138,7 @@ class OwnerSignUpPage extends Component {
                     </div>
                     <div class="d-flex flex-column px-5">
                         <h1 class="form-header text-center">Owner SignUp</h1>
-                        <footer class="form-footer">Already have an account? <a href="/owner/login">Log in</a></footer>
+                        <footer class="form-footer">Already have an account? <Link to="/owner/login">Log in</Link></footer>
                         <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
                         <footer class="form-footer text-danger">{this.state.message}</footer>
                         <hr></hr>

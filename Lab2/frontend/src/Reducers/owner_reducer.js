@@ -57,7 +57,6 @@ export default function (state = {}, action) {
     case ANSWER_QUESTION : 
       return{
         ...state,
-        ownerInbox : action.payload
       }
     default:
       return state;

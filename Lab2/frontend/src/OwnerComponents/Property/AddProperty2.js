@@ -296,9 +296,9 @@ class AddProperty2 extends Component {
         if (!localStorage.getItem("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
-        if (this.state.redirect) {
-            redirectVar = <Redirect to="/owner/home" />
-        }
+        // if (this.state.redirect) {
+        //     redirectVar = <Redirect to="/owner/home" />
+        // }
         return (
             <div>
                 {redirectVar}

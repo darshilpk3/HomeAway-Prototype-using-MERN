@@ -7,20 +7,16 @@ var Question = require('../../models/question')
 function handle_request(msg, callback) {
 
     console.log("getting user inbox under getUserInbox kafka request")
-    console.log(msg.travelid)
+    console.log("Travelid: ",msg.travelid)
     Question.find({
         travel: msg.travelid
     })
-        .populate('travel')
         .populate('property')
-        .populate('owner')
         .exec()
         .then(result => {
-            console.log(result)
             callback(null,result)
         })
         .catch(err => {
-            console.log(err)
             callback(err,err)
         })
 

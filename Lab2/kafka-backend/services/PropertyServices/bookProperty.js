@@ -45,7 +45,7 @@ function handle_request(msg, callback){
             })
         })
         .catch(err => {
-          console.log(err)
+          //console.log(err)
           callback(err,err)
         })
 

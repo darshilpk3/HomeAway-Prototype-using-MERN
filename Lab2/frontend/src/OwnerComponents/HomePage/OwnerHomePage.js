@@ -25,7 +25,7 @@ class OwnerHomePage extends Component {
             filterDate: "",
             filterPlace: ""
         }
-    }
+    } 
 
     componentDidMount() {
         var headers = new Headers()
@@ -67,6 +67,14 @@ class OwnerHomePage extends Component {
             this.setState({
                 [name]: value
             })
+    }
+
+    handlePageClick = (e) => {
+        var temp = this.state.filteredBookingDetails.slice(e.selected*2,(e.selected*2)+2)
+        console.log(temp)
+        this.setState({
+            paginatedBookingDetails:temp
+        })
     }
 
     filterResult = () => {

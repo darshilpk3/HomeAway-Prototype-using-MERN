@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import LoginNavBar from '../LoginNavBar'
+import { Link } from 'react-router-dom'
+
 class LandingPage extends Component {
     render() {
         return (
@@ -9,7 +11,7 @@ class LandingPage extends Component {
                     <ul class="text-center">
                         <li><h1 class="form-header">Welcome to HomeAway</h1></li>
                         <li>
-                            <a href="/login" class="btn btn-primary btn-lg">Traveller Login</a>
+                            <Link to="/login" class="btn btn-primary btn-lg">Traveller Login</Link>
                         </li>
                         <li>
                             <button class="btn btn-primary btn-lg">Owner Login</button>

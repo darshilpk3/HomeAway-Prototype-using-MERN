@@ -151,8 +151,17 @@ class ListPlaces extends Component {
         axios.get("http://localhost:3001/property/" + _id)
             .then(response => {
                 console.log("Response from get method: ", response.data)
-                this.setState({
-                    responseData: response.data
+                // this.setState({
+                //     responseData: response.data
+                // })
+                this.props.history.push({
+                    pathname: "/traveller/property/show",
+                    state: {
+                        response: response.data,
+                        book_from: this.props.location.state && this.props.location.state.available_from,
+                        book_to: this.props.location.state && this.props.location.state.available_to,
+                        guests: this.props.location.state && this.props.location.state.accomodates
+                    }
                 })
             })
     }
@@ -222,22 +231,27 @@ class ListPlaces extends Component {
         //var places_list = this.props.loaction.state && this.props.location.state.places_list;
         //console.log(this.props.location.state.places_list)
         if (this.state.paginatedList) {
+
+            var photos = (images) => images.map(image => {
+                console.log(image)
+                return (
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src={"http://localhost:3001" + image} alt="Photo slide" />
+                    </div>
+                )
+            })
+
             var buttons = this.state.paginatedList.map(placeDetail => {
-                var images = placeDetail.property_images
+                //var images = placeDetail.property_images
                 return (
                     <tr>
                         <td class="property-image-carousel">
                             <div id={"carouselExampleControls" + placeDetail._id} class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="d-block w-100" src={"http://localhost:3001" + images[1]} alt="First slide" />
+                                        <img class="d-block w-100" src={"http://localhost:3001/public/uploads/ha.jpeg"} alt="First slide" />
                                     </div>
-                                    <div class="carousel-item">
-                                        <img class="d-block w-100" src={"http://localhost:3001" + images[2]} alt="Second slide" />
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img class="d-block w-100" src={"http://localhost:3001" + images[3]} alt="Third slide" />
-                                    </div>
+                                    {photos(placeDetail.property_images)}
                                 </div>
                                 <a class="carousel-control-prev" href={"#carouselExampleControls" + placeDetail._id} role="button" data-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>

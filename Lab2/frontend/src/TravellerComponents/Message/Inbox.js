@@ -29,8 +29,10 @@ class Inbox extends Component {
                     var data = response.data
                     this.setState({
                         questions: data
+                    },() => {
+                        console.log(this.state.questions)
                     })
-                    console.log(data)
+                    
                 }
             })
     }

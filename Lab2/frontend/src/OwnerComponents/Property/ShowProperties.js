@@ -108,13 +108,13 @@ class ShowProperties extends Component {
         //         state: { responseData: this.state.propertyData }
         //     }} />
         // }
-        if (this.state.redirect !== null) {
-            console.log("should be redirected")
-            renderRedirect = <Redirect to={{
-                pathname: '/property/upload',
-                state: { _id: this.state.redirect }
-            }} />
-        }
+        // if (this.state.redirect !== null) {
+        //     console.log("should be redirected")
+        //     renderRedirect = <Redirect to={{
+        //         pathname: '/property/upload',
+        //         state: { _id: this.state.redirect }
+        //     }} />
+        // }
         var list = null
         if (this.state.responseData) {
 
@@ -127,7 +127,7 @@ class ShowProperties extends Component {
                 )
             })
             var buttons = this.state.responseData.map(placeDetail => {
-                var images = placeDetail.property_images
+                //var images = placeDetail.property_images
                 console.log(placeDetail._id)
                 return (
                     <tr>

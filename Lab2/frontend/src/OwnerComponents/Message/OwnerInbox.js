@@ -35,16 +35,22 @@ class OwnerInbox extends Component {
     } 
 
     answerQuestion = (e) => {
-        // var headers = new Headers()
-        // axios.defaults.withCredentials = true
+        var headers = new Headers()
+        axios.defaults.withCredentials = true
         console.log(e.target.id)
         const data = {
             _id : e.target.id,
             answer:this.state.answer
         }
         const id = localStorage.getItem("ownerlogin")
-        this.props.answerQuestion(id,data)
-        this.props.history.go(0)
+        axios.post('http://localhost:3001/owner/'+id+'/question',data)
+            .then(response => {
+                if(response.status === 200){
+                    this.props.history.go(0)
+                }
+            })
+        //this.props.answerQuestion(id,data)
+        //this.props.history.go(0)
     }
     componentDidMount() {
         var headers = new Headers();
@@ -148,7 +154,7 @@ class OwnerInbox extends Component {
 }
 
 
-OwnerInbox.PropTypes = {
+OwnerInbox.propTypes = {
     loadInbox : PropTypes.func.isRequired,
     answerQuestion : PropTypes.func.isRequired,
     ownerInbox : PropTypes.object   

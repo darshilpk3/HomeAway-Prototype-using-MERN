@@ -81,20 +81,23 @@ class BookProperty extends Component {
             redirectVar = <Redirect to="/traveller/home"></Redirect>
         }
 
-        if (this.props.location.state && this.props.location.state.response.property_images) {
+        if (this.props.location.state.response && this.props.location.state.response.property_images) {
             var images = this.props.location.state.response.property_images
+            var photos = images.map(image => {
+                console.log(image)
+                return (
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src={"http://localhost:3001" + image} alt="Photo slide" />
+                    </div>
+                )
+            })
             var buttons =
                 <div id={"carouselExampleControls"} class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="d-block w-100" src={"http://localhost:3001" + images[1]} alt="First slide" />
+                            <img class="d-block w-100" src={"http://localhost:3001/public/uploads/ha.jpeg"} alt="First slide" />
                         </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src={"http://localhost:3001" + images[2]} alt="Second slide" />
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src={"http://localhost:3001" + images[3]} alt="Third slide" />
-                        </div>
+                        {photos}
                     </div>
                     <a class="carousel-control-prev" href={"#carouselExampleControls"} role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -109,7 +112,7 @@ class BookProperty extends Component {
         return (
             <div>
                 {redirectVar}
-                < NavBar />
+                <NavBar />
                 <div class="clearfix" />
                 <hr></hr>
                 <h2 class="text-dark p-2">Property Details</h2>
@@ -188,11 +191,11 @@ class BookProperty extends Component {
                                 <label class="text-center"><strong>Departure: </strong></label>
                                 <p>{this.props.location.state && this.props.location.state.book_to}</p>
                                 <label class="text-center"><strong>Base rate/night: </strong></label>
-                                <p>${this.props.location.state && this.props.location.state.response.price}</p>
+                                <p>${this.props.location.state.response && this.props.location.state.response.price}</p>
                                 <label class="text-center"><strong>Total Nights: </strong></label>
                                 <p>{nights}</p>
                                 <h4 class="text-center text-danger"><strong>Total to be paid at checkout</strong></h4>
-                                <h4 class="text-center text-danger"><strong>${nights * (this.props.location.state && this.props.location.state.response.price)}</strong></h4>
+                                <h4 class="text-center text-danger"><strong>${nights * (this.props.location.state.response && this.props.location.state.response.price)}</strong></h4>
                                 <button class="form-control-login btn btn-warning btn-lg" disabled={!this.state.formValid} onClick={this.bookPlace}>Book Now</button>
                             </div>
                         </div>

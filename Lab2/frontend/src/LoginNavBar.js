@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import cookie from 'react-cookies'
 import {Redirect} from 'react-router'
+import { Link } from 'react-router-dom'
 
 class LoginNavBar extends Component {
     render() {
@@ -11,7 +12,7 @@ class LoginNavBar extends Component {
         return (
             <nav class="navbar navbar-expand navbar-dark">
                 <div class="container-fluid padding">
-                    <a href="index.html" class="navbar-brand"><img class="navbar-brand" src="logo-white.svg" /></a>
+                    <Link to="index.html" class="navbar-brand"><img class="navbar-brand" src="logo-white.svg" /></Link>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                         <span class="navbar-tosggler-icon"></span>
                     </button>

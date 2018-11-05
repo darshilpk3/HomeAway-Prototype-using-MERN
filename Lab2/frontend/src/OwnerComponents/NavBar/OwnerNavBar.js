@@ -5,7 +5,8 @@ import '../../App.css'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import {Link} from 'react-router-dom'
-
+import { withRouter } from "react-router";
+import {connect} from "react-redux"
 
 class OwnerNavBar extends Component {
 
@@ -38,9 +39,10 @@ class OwnerNavBar extends Component {
         cookie.remove('owneremail', {
             path: "/"
         });
-        this.setState({
-            logininfo: "Logged out"
-        })
+        this.props.history.push("/owner/login")
+        // this.setState({
+        //     logininfo: "Logged out"
+        // })
     }
 
     componentWillMount() {
@@ -66,14 +68,14 @@ class OwnerNavBar extends Component {
                     <Link class="dropdown-item" to={"/owner/property/show"}>Property Details</Link>
                     <Link class="dropdown-item" to={"/owner/property/add"}>Add new Property</Link>
                     <Link class="dropdown-item" to={"/owner/inbox"}>Inbox</Link>
-                    <button class="dropdown-item" onClick={this.handleLogout}>Sign out</button>
+                    <Link class="dropdown-item" to={"/owner/login"} onClick={this.handleLogout}>Sign out</Link>
                 </div>
             </li>
         }
         return (
             <nav class="navbar navbar-expand navbar-light">
                 <div class="container-fluid padding">
-                    <a href="/owner/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></a>
+                    <Link to="/owner/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></Link>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -108,4 +110,4 @@ class OwnerNavBar extends Component {
     }
 }
 
-export default OwnerNavBar;
+export default withRouter(connect((null,null))(OwnerNavBar));
