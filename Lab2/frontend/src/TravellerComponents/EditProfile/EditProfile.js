@@ -6,7 +6,7 @@ import cookie from 'react-cookies'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import _ from 'lodash'
 import ReactPaginate from 'react-paginate'
-
+import {Link} from 'react-router-dom'
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
@@ -427,7 +427,12 @@ class EditProfile extends Component {
                 return (
                     <tr>
                         <td class="property-detail p-2">
-                            <h3><a href="#" class="text-dark" id={placeDetail._id} onClick={this.showDetails}>{placeDetail.property.place_name}</a></h3>
+                            <h3><Link to={{
+                                pathname: "/property/details",
+                                state : {
+                                    _id : placeDetail.property._id
+                                }
+                            }}>{placeDetail.property.place_name}</Link></h3>
                             <p><b>Location, City: </b>{placeDetail.property.location_city}</p>
                             <p class="text-warning">{placeDetail.property.headline}</p>
                             <p><b>From: </b>{new Date(placeDetail.booking_from.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()}</p>

@@ -11,7 +11,7 @@ function handle_request(msg, callback){
     Question.find({
         owner: msg.ownerid
     })
-        .populate('traveler')
+        .populate('travel')
         .populate('property')
         .populate('owner')
         .exec()

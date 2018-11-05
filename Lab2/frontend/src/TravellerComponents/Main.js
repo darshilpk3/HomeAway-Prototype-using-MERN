@@ -20,6 +20,7 @@ import EditProperty from '../OwnerComponents/Property/EditProperty';
 import AddPropertyPhoto from '../OwnerComponents/Property/AddPropertPhoto';
 import Inbox from './Message/Inbox';
 import OwnerInbox from '../OwnerComponents/Message/OwnerInbox';
+import PropertyDetails from '../OwnerComponents/PropertyDetails';
 
 
 class Main extends Component{
@@ -44,6 +45,7 @@ class Main extends Component{
                 <Route path="/property/upload" component={AddPropertyPhoto}/>
                 <Route path="/traveller/inbox" component={Inbox} />
                 <Route path="/owner/inbox" component={OwnerInbox} />
+                <Route path="/property/details" component={PropertyDetails}/>
             </div>
         )
     }

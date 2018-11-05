@@ -9,7 +9,7 @@ import ReactPaginate from 'react-paginate'
 
 import PropTypes from 'prop-types';
 import { ownerBookings } from '../../Actions/ownerActions'
-
+import {Link} from 'react-router-dom'
 
 import { connect } from 'react-redux'
 
@@ -162,7 +162,12 @@ class OwnerHomePage extends Component {
                 return (
                     <tr>
                         <td class="property-detail p-2">
-                            <h3><p class="text-dark" id={placeDetail.property._id}>{placeDetail.property.place_name}</p></h3>
+                            <h3><Link to={{
+                                pathname: "/property/details",
+                                state : {
+                                    _id : placeDetail.property._id
+                                }
+                            }}>{placeDetail.property.place_name}</Link></h3>
                             <p class="text-warning">{placeDetail.property.headline}</p>
                             <p><b>Booked By: </b>{placeDetail.traveler.firstname + " " + placeDetail.traveler.lastname}</p>
                             <p><b>From: </b>{new Date(placeDetail.booking_from.replace(/-/g, '\/').replace(/T.+/, '')).toDateString()}</p>

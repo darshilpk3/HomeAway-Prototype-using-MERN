@@ -8,7 +8,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
-
+import {Link} from 'react-router-dom'
 
 import PropTypes from 'prop-types';
 import {loadInbox, answerQuestion} from '../../Actions/ownerActions'
@@ -97,9 +97,15 @@ class OwnerInbox extends Component {
                 return (
                     <tr>
                         <td class="property-detail p-2">
-                            <h3><a href="#" class="text-dark" id={question.property._id}>{question.property.place_name}</a></h3>
+                            <h3><Link to={{
+                                pathname: "/property/details",
+                                state : {
+                                    _id : question.property._id
+                                }
+                            }}>{question.property.place_name}</Link></h3>
                             <p>{question.property.location_city}</p>
                             <h3 class="text-dark"><b>Topic:</b>{question.topic}</h3>
+                            <p><b>Asked By: {question.travel.firstname + " "+question.travel.lastname }</b></p>
                             <p><b>Question: {question.question}</b></p>
                             <p><b>Answer: </b>{question.answer}</p>
                             <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target={"#exampleModalCenter"+question._id}>

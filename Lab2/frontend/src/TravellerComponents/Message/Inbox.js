@@ -4,6 +4,7 @@ import { Redirect } from 'react-router'
 import axios from 'axios'
 import cookie from 'react-cookies'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import {Link} from 'react-router-dom'
 
 import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
@@ -55,7 +56,12 @@ class Inbox extends Component {
                 return (
                     <tr>
                         <td class="property-detail p-2">
-                            <h3><a href="#" class="text-dark" id={question.property._id}>{question.property.place_name}</a></h3>
+                            <h3><Link to={{
+                                pathname: "/property/details",
+                                state : {
+                                    _id : question.property._id
+                                }
+                            }}>{question.property.place_name}</Link></h3>
                             <p>{question.property.location_city}</p>
                             <h3 class="text-dark"><b>Topic:</b>{question.topic}</h3>
                             <p><b>Question: {question.question}</b></p>

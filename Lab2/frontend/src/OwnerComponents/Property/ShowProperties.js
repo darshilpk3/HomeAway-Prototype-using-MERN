@@ -7,7 +7,7 @@ import '../../App.css'
 
 import PropTypes from 'prop-types';
 import {getProperties} from '../../Actions/ownerActions'
-
+import {Link} from 'react-router-dom'
 
 import {connect} from 'react-redux'
 
@@ -150,7 +150,12 @@ class ShowProperties extends Component {
                             </div>
                         </td>
                         <td class="property-detail p-2">
-                            <h3><a href="#" class="text-dark" id={placeDetail._id} onClick={this.showDetails}>{placeDetail.place_name}</a></h3>
+                            <h3><Link to={{
+                                pathname: "/property/details",
+                                state : {
+                                    _id : placeDetail._id
+                                }
+                            }}>{placeDetail.place_name}</Link></h3>
                             <p class="text-warning">{placeDetail.headline}</p>
                             <p><b>Description: </b>{placeDetail.description}</p>
                             <p><b>Property Details: </b>{placeDetail.bedrooms} BR &middot;{placeDetail.bathrooms} BA &middot;Sleeps {placeDetail.accomodates}</p>
