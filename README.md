@@ -1,8 +1,8 @@
-##### Lab 1 Assignment
+## Lab 1 Assignment
 
-###### Calculator App:
+### Calculator App:
 
-###### Steps to run the calculator app:
+##### Steps to run the calculator app:
 
 ###### STARTING THE SERVER
 1) Move to the folder named Calculator.
@@ -22,8 +22,8 @@ STARTING THE CLIENT
 
 HAVE FUN!!!
 
-
-###### Steps to run the HomeAway Prototype
+### HomeAway Prototype
+##### Steps to run the HomeAway Prototype
 
 ###### STARTING THE SERVER
 1) Open the root folder.
@@ -59,9 +59,10 @@ STARTING THE CLIENT
 HAVE FUN!!!
 
 
-##### Lab 2 Assignment
+## Lab 2 Assignment
+### HomeAway Prototype
 
-###### Steps to run the HomeAway Prototype
+##### Steps to run the HomeAway Prototype
 
 ###### STARTING THE NODE-SERVER
 1) Open the root folder. Go to folder named Lab2.
