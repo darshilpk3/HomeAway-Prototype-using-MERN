@@ -33,15 +33,7 @@ class NavBar2 extends Component {
         console.log(localStorage.getItem('loginuser'))
         localStorage.removeItem("loginuser")
         localStorage.removeItem("loginemail")
-        cookie.remove('loginuser', {
-            path: "/"
-        });
-        cookie.remove('loginemail', {
-            path: "/"
-        });
-        // this.setState({
-        //     logininfo: "Logged out"
-        // })
+        localStorage.removeItem("token")
         this.props.history.push('/traveller/login')
     }
 

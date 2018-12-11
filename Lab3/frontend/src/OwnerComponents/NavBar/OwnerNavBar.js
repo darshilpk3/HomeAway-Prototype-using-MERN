@@ -5,8 +5,7 @@ import '../../App.css'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import {Link} from 'react-router-dom'
-import { withRouter } from "react-router";
-import {connect} from "react-redux"
+
 
 class OwnerNavBar extends Component {
 
@@ -30,11 +29,11 @@ class OwnerNavBar extends Component {
     }
 
     handleLogout = (e) => {
-        console.log(localStorage.getItem('ownerlogin'))
         localStorage.removeItem("ownerlogin")
         localStorage.removeItem("owneremail")
-        localStorage.removeItem("token")
-        this.props.history.push("/owner/login")
+        //this.props.history.go(0)
+        window.location.reload()
+
     }
 
     componentWillMount() {
@@ -60,14 +59,14 @@ class OwnerNavBar extends Component {
                     <Link class="dropdown-item" to={"/owner/property/show"}>Property Details</Link>
                     <Link class="dropdown-item" to={"/owner/property/add"}>Add new Property</Link>
                     <Link class="dropdown-item" to={"/owner/inbox"}>Inbox</Link>
-                    <Link class="dropdown-item" to={"/owner/login"} onClick={this.handleLogout}>Sign out</Link>
+                    <button class="dropdown-item" onClick={this.handleLogout}>Sign out</button>
                 </div>
             </li>
         }
         return (
             <nav class="navbar navbar-expand navbar-light">
                 <div class="container-fluid padding">
-                    <Link to="/owner/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></Link>
+                    <a href="/owner/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -102,4 +101,4 @@ class OwnerNavBar extends Component {
     }
 }
 
-export default withRouter(connect((null,null))(OwnerNavBar));
+export default OwnerNavBar;

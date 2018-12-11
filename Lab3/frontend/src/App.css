@@ -1,0 +1,465 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Roboto",Arial,sans-serif;
+    }
+
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+    }
+
+h1, .h1 {
+  font-size: 20px;
+  font-weight: 300;
+  padding: 10px;
+  font-family: "Roboto",Arial,sans-serif;
+  color: #353e44;
+  }
+
+  html {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    }
+
+*, *:before, *:after {
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+    }
+
+.home-header{
+    background-image: url("large.jpg");
+    background-size: cover;
+    display: block;
+    width: 100%;
+    height: 500px;
+}
+
+.home-link{
+    margin: 20px;
+
+}
+
+.right{
+    position: absolute;
+    right: 20px;
+    top:20px;
+}
+
+.dropdown-menu{
+    color: #0067db;
+    font-size: 12px;
+    font-weight: 300;
+    left: -210px;
+    padding: 24px;
+    text-align: left;
+    white-space: normal;
+    width: 264px;
+}
+
+.ValueProps__item {
+    width: 33.33%;
+    text-align: center;
+    color: #fff;
+    font-size: calc(9.567999px - -1 * (1vw - 767px / 100) * .6521009603841537);
+}
+
+.ValueProps {
+    width: 100%;
+    padding-bottom: 16px;
+}
+
+.ValueProps__list {
+    display: -webkit-box;
+    display: flex;
+    list-style-type: none;
+}
+
+.ValueProps__title {
+    color: #fff;
+    margin-bottom: 0;
+    line-height: normal;
+    font-size: 1.5em;
+    display: block;
+}
+
+.ValueProps__blurb {
+    font-size: .9vw;
+    display: block;
+}
+
+.flexitem{
+    display: flex;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+    padding: 10px 0px;
+}
+
+.boxed{
+    border: 1px solid green;
+}
+
+.form-header{
+    font-size: 27px;
+    padding-top: 20px;
+}
+.form-footer{
+    text-align: center;
+    font-size: 10px;
+}
+
+.bg-grey{
+    background-color:#F2F2F2;
+}
+
+.form-body{
+    background-color: white;
+    padding:10px;
+    margin: 10px 60px;
+    border: 1px solid #e6e6e6;
+    width: auto;
+}
+
+.form-body-login{
+    background-color: white;
+    padding:10px;
+    margin: auto;
+    border: 1px solid #e6e6e6;
+    width: 400px;
+}
+
+.btn-primary{
+    background-color: orange;
+}
+
+.navbar{
+    height: 50px;
+    padding: 5px;
+}
+
+.nav-link {
+    color: white;
+    background-color: transparent;
+}
+.navbar-brand{
+    width:auto;
+    padding:auto;
+    height: 50px;
+}
+
+.nav-item{
+    margin:auto;
+    height: 10px;
+    padding: 10px;
+}
+
+.flex-it{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.card-body{
+    padding: 0.1rem;
+}
+
+.card{
+    border:0px;
+}
+
+.card-footer{
+    padding: .05rem;
+    border:0px;
+}
+
+.list-property{
+    background-image:url('//cms.homeaway.com/files/live/sites/hub/files/contributed/homepage/marketing/list-your-property.jpg');
+    background-size: cover;
+    display: block;
+    width: 100%;
+    height: 490px;
+    text-align: center;
+    
+}
+
+.flex-container{
+    display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+    
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    
+    width: 100%;
+    height: 360px;
+    background-image:url('//cms.homeaway.com/files/live/sites/hub/files/contributed/homepage/marketing/list-your-property.jpg');
+    opacity: 0.80;
+  }
+
+.list-property-header{
+    color: #F2F2F2;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 45px;
+    text-align: center;
+}
+
+.page-footer{
+    background-color:#A4A4A4;
+}
+
+.transparent{
+    background: none;
+}
+
+.btn-primary {
+    position: relative;
+    border-radius: 100px;
+    background-color: #0067db;
+    border-color: #0067db;
+    color: #fff;
+    text-shadow: none;
+    -webkit-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+    line-height: 24px;
+    box-shadow: none;
+}
+
+.listing-property{
+    
+    height: 90px;
+}
+
+.property-image-carousel{
+    width:30%;
+}
+
+.property-detail{
+    width:70%;
+}
+
+.fixed-left{
+    position:fixed;
+    left:0;
+}
+
+.left-nav {
+    float: left;
+    width: 20%;
+    height: 500px;
+    background: grey;
+  }
+  
+  .main-div {
+    float: left;
+    width: 60%;
+    height: 500px;
+    background: lightblue;
+  }
+
+  .avatar-pic {
+    width: 150px;
+  }
+
+  .file-upload{
+      width:200px;
+  }
+
+  .col-xs-12{
+      width:100%;
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    height: 56px;
+    padding: 15px 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5rem;
+    color: #323f4d;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d3d8de;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: 0;
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+  .form-control-login {
+    display: block;
+    width: 100%;
+    height: 56px;
+    padding: 15px 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5rem;
+    background-image: none;
+    border: 1px solid #d3d8de;
+    border-radius: 4px;
+    box-shadow: none;
+    outline: 0;
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.property-addition-navbar{
+    float:left
+}
+
+.photo-drop{
+    border: #353e44 dashed 5px;
+}
+
+.hidden{
+    display: none !important ;
+}
+
+.svg-brand {
+    stroke: #0067db;
+    fill: #0067db;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 500px;
+    margin: 22px 0;
+    border-radius: 4px;
+    text-align: center
+  }
+  .pagination > li {
+    display: inline;
+  }
+  .pagination > li > a,
+  .pagination > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    line-height: 1.42857143;
+    text-decoration: none;
+    color: #2c689c;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-left: -1px;
+  }
+  .pagination > li:first-child > a,
+  .pagination > li:first-child > span {
+    margin-left: 0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+  }
+  .pagination > li:last-child > a,
+  .pagination > li:last-child > span {
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+  .pagination > li > a:hover,
+  .pagination > li > span:hover,
+  .pagination > li > a:focus,
+  .pagination > li > span:focus {
+    z-index: 2;
+    color: #1b4060;
+    background-color: #eeeeee;
+    border-color: #ddd;
+  }
+  .pagination > .active > a,
+  .pagination > .active > span,
+  .pagination > .active > a:hover,
+  .pagination > .active > span:hover,
+  .pagination > .active > a:focus,
+  .pagination > .active > span:focus {
+    z-index: 3;
+    color: #fff;
+    background-color: #2c689c;
+    border-color: #2c689c;
+    cursor: default;
+  }
+  .pagination > .disabled > span,
+  .pagination > .disabled > span:hover,
+  .pagination > .disabled > span:focus,
+  .pagination > .disabled > a,
+  .pagination > .disabled > a:hover,
+  .pagination > .disabled > a:focus {
+    color: #777777;
+    background-color: #fff;
+    border-color: #ddd;
+    cursor: not-allowed;
+  }
+  .pagination-lg > li > a,
+  .pagination-lg > li > span {
+    padding: 10px 16px;
+    font-size: 20px;
+    line-height: 1.3333333;
+  }
+  .pagination-lg > li:first-child > a,
+  .pagination-lg > li:first-child > span {
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+  }
+  .pagination-lg > li:last-child > a,
+  .pagination-lg > li:last-child > span {
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  .pagination-sm > li > a,
+  .pagination-sm > li > span {
+    padding: 5px 10px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .pagination-sm > li:first-child > a,
+  .pagination-sm > li:first-child > span {
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+  .pagination-sm > li:last-child > a,
+  .pagination-sm > li:last-child > span {
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  #personyzeContent {
+    height: 295px;
+    overflow: hidden;
+    display: block;
+    background-image: url('//csvcus.homeaway.com/rsrcs/stab-cms-resources/0.10.35/images/cas/login-banner-sept16-1.png'); 
+    outline: none;
+  }

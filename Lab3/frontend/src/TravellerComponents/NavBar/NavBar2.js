@@ -5,10 +5,8 @@ import '../../App.css'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import {Link} from 'react-router-dom'
-import { withRouter } from "react-router";
-import {connect} from "react-redux"
 
-class NavBar extends Component {
+class NavBar2 extends Component {
 
     constructor(props) {
         super(props)
@@ -30,21 +28,8 @@ class NavBar extends Component {
     }
 
     handleLogout = (e) => {
-        console.log(localStorage.getItem('loginuser'))
         localStorage.removeItem("loginuser")
         localStorage.removeItem("loginemail")
-        localStorage.removeItem("token")
-        //this.props.history.push('/traveller/login')
-        // cookie.remove('loginuser', {
-        //     path: "/"
-        // });
-        // cookie.remove('loginemail', {
-        //     path: "/"
-        // });
-        // this.setState({
-        //     logininfo: "Logged out"
-        // })
-        this.props.history.push('/traveller/login')
     }
 
     componentWillMount() {
@@ -53,7 +38,7 @@ class NavBar extends Component {
     render() {
 
         let navVar = null;
-        if (!localStorage.getItem("loginuser")) {
+        if (!localStorage.getItem("loginuser") && !localStorage.getItem("ownerlogin")) {
             navVar = <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Login</a>
                 <div class="dropdown-menu">
@@ -64,7 +49,7 @@ class NavBar extends Component {
         }
         else {
             navVar = <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {localStorage.getItem("loginemail") && localStorage.getItem("loginemail")}</a>
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Welcome {localStorage.getItem("loginemail") && localStorage.getItem("loginemail")}</a>
                 <div class="dropdown-menu">
                     <Link class="dropdown-item" to={"/traveller/edit/" + localStorage.getItem("loginuser")}>Account Information</Link>
                     <Link class="dropdown-item" to={"/traveller/inbox/"}>Inbox</Link>
@@ -73,7 +58,7 @@ class NavBar extends Component {
             </li>
         }
         return (
-                <nav class="navbar navbar-expand navbar-light">
+                <nav class="navbar navbar-expand navbar-dark">
                     <div class="container-fluid padding">
                         <Link to="/traveller/home" class="navbar-brand p-3"><img class="navbar-brand" src="../../logo-white.svg" /></Link>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
@@ -83,7 +68,7 @@ class NavBar extends Component {
                             <ul class="navbar-nav ml-auto">
                                 {navVar}
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                                         Help
                         </a>
                                     <div class="dropdown-menu">
@@ -97,6 +82,8 @@ class NavBar extends Component {
                                         <a class="dropdown-item" href="#">How it works</a>
                                         <a class="dropdown-item" href="#">Community</a>
                                         <a class="dropdown-item" href="#">Discovery Hub</a>
+                                        <div class="dropdown-divider"></div>
+                                        <p class="dropdown-header">Property Managers</p>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown navbar-brand">
@@ -111,4 +98,4 @@ class NavBar extends Component {
     }
 }
 
-export default withRouter(connect((null,null))(NavBar));
+export default NavBar2;

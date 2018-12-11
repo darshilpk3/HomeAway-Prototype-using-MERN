@@ -9,12 +9,18 @@ import '../../App.css'
 import 'react-tabs/style/react-tabs.css'
 import { FormErrors } from '../../FormErrors';
 
+import PropTypes from 'prop-types';
+import {getProperty,editingProperty} from '../../Actions//propertyActions'
 
-class AddProperty2 extends Component {
+
+import {connect} from 'react-redux'
+
+class EditProperty extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
+            _id : "",
             street: "",
             apt: "",
             location_city: "",
@@ -61,39 +67,48 @@ class AddProperty2 extends Component {
         }
 
         this.handleChange = this.handleChange.bind(this);
-        this.addProperty = this.addProperty.bind(this);
+        this.editProperty = this.editProperty.bind(this);
     }
 
     componentDidMount() {
-        if (this.props.location.state) {
+        
+        if(this.props.location.state){
+            console.log(this.props.location.state._id)
             this.setState({
-                street: (this.props.location.state && this.props.location.state.responseData[0].street),
-                apt: (this.props.location.state && this.props.location.state.responseData[0].apt),
-                location_city: (this.props.location.state && this.props.location.state.responseData[0].location_city),
-                state: (this.props.location.state && this.props.location.state.responseData[0].state),
-                zipcode: (this.props.location.state && this.props.location.state.responseData[0].zipcode),
-                country: (this.props.location.state && this.props.location.state.responseData[0].country),
-                place_name: (this.props.location.state && this.props.location.state.responseData[0].place_name),
-                headline: (this.props.location.state && this.props.location.state.responseData[0].headline),
-                description: (this.props.location.state && this.props.location.state.responseData[0].description),
-                bedrooms: (this.props.location.state && this.props.location.state.responseData[0].bedrooms),
-                bathrooms: (this.props.location.state && this.props.location.state.responseData[0].bathrooms),
-                accomodates: (this.props.location.state && this.props.location.state.responseData[0].accomodates),
-                price: (this.props.location.state && this.props.location.state.responseData[0].price),
-                streetValid: true,
-                location_cityValid: true,
-                stateValid: true,
-                zipcodeValid: true,
-                countryValid: true,
-                place_nameValid: true,
-                bedroomsValid: true,
-                bathroomsValid: true,
-                accomodatesValid: true,
-                priceValid: true,
-                formValid: false,
-
+                _id : this.props.location.state._id
             })
+            const id = this.props.location.state._id
+            this.props.getProperty(id)
         }
+        // if (this.props.location.state) {
+            // this.setState({
+            //     street: (this.props.location.state && this.props.location.state.responseData.street),
+            //     apt: (this.props.location.state && this.props.location.state.responseData.apt),
+            //     location_city: (this.props.location.state && this.props.location.state.responseData.location_city),
+            //     state: (this.props.location.state && this.props.location.state.responseData.state),
+            //     zipcode: (this.props.location.state && this.props.location.state.responseData.zipcode),
+            //     country: (this.props.location.state && this.props.location.state.responseData.country),
+            //     place_name: (this.props.location.state && this.props.location.state.responseData.place_name),
+            //     headline: (this.props.location.state && this.props.location.state.responseData.headline),
+            //     description: (this.props.location.state && this.props.location.state.responseData.description),
+            //     bedrooms: (this.props.location.state && this.props.location.state.responseData.bedrooms),
+            //     bathrooms: (this.props.location.state && this.props.location.state.responseData.bathrooms),
+            //     accomodates: (this.props.location.state && this.props.location.state.responseData.accomodates),
+            //     price: (this.props.location.state && this.props.location.state.responseData.price),
+            //     streetValid: true,
+            //     location_cityValid: true,
+            //     stateValid: true,
+            //     zipcodeValid: true,
+            //     countryValid: true,
+            //     place_nameValid: true,
+            //     bedroomsValid: true,
+            //     bathroomsValid: true,
+            //     accomodatesValid: true,
+            //     priceValid: true,
+            //     formValid: false,
+
+            // })
+        // }
     }
     handleChange = (e) => {
 
@@ -209,13 +224,11 @@ class AddProperty2 extends Component {
         this.setState({ formValid: this.state.streetValid && this.state.location_cityValid && this.state.stateValid && this.state.countryValid && this.state.zipcodeValid && this.state.bedroomsValid && this.state.bathroomsValid && this.state.accomodatesValid && this.state.priceValid && this.state.available_fromValid && this.state.available_toValid });
     }
 
-    addProperty = (e) => {
-        var headers = new Headers();
-        e.preventDefault();
-        axios.defaults.withCredentials = true;
-        console.log("Trying to add property");
+    editProperty = (e) => {
+        var id = this.state._id
+        console.log("Trying to edit property");
         const data = {
-            owner_id: cookie.load("ownerlogin") && cookie.load("ownerlogin"),
+            owner_id: localStorage.getItem("ownerlogin") && localStorage.getItem("ownerlogin"),
             place_name: this.state.place_name,
             location_city: this.state.location_city,
             street: this.state.street,
@@ -232,35 +245,71 @@ class AddProperty2 extends Component {
             description: this.state.description,
             price: this.state.price
         }
-
-        axios.post("http://localhost:3001/property/", data)
-            .then(response => {
-                console.log(response.data);
-                if (response.data === "Could not add the property") {
-                    console.log("couldnt add")
-                    this.setState({
-                        message: "Property addition unsuccessfull"
-                    })
-                } else {
-                    console.log("added")
-                    this.setState({
-                        redirect: true
-                    })
-                }
-            })
+        this.props.editingProperty(id,data)
+        this.props.history.push('/owner/property/show')
+        // axios.put("http://localhost:3001/property/"+id, data)
+        //     .then(response => {
+        //         console.log(response.data);
+        //         if (response.data === "Could not add the property") {
+        //             console.log("couldnt add")
+        //             this.setState({
+        //                 message: "Property addition unsuccessfull"
+        //             })
+        //         } else {
+        //             console.log("updated")
+        //             this.setState({
+        //                 redirect: true
+        //             })
+        //         }
+        //     })
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.propertyInfo){
+            const data = nextProps.propertyInfo
+            this.setState({
+                street: (data.street),
+                apt: (data.apt),
+                location_city: (data.location_city),
+                state: (data.state),
+                zipcode: (data.zipcode),
+                country: (data.country),
+                place_name: (data.place_name),
+                headline: (data.headline),
+                available_from: new Date(data.available_from).toDateString(),
+                available_to: new Date(data.available_to).toDateString(),
+                description: (data.description),
+                bedrooms: (data.bedrooms),
+                bathrooms: (data.bathrooms),
+                accomodates: (data.accomodates),
+                price: (data.price),
+                streetValid: true,
+                location_cityValid: true,
+                stateValid: true,
+                zipcodeValid: true,
+                countryValid: true,
+                place_nameValid: true,
+                bedroomsValid: true,
+                available_fromValid : true,
+                available_toValid : true,
+                bathroomsValid: true,
+                accomodatesValid: true,
+                priceValid: true,
+                formValid: false,
+            })
+        }
+    }
     render() {
         console.log("rendering")
         console.log("Tab while rendering: ", this.state.tab)
         console.log(this.state.available_from)
         let redirectVar = null
-        if (!cookie.load("ownerlogin")) {
+        if (!localStorage.getItem("ownerlogin")) {
             redirectVar = <Redirect to="/owner/login" />
         }
-        if (this.state.redirect) {
-            redirectVar = <Redirect to="/owner/home" />
-        }
+        // if (this.state.redirect) {
+        //     redirectVar = <Redirect to="/owner/property/show" />
+        // }
         return (
             <div>
                 {redirectVar}
@@ -384,7 +433,7 @@ class AddProperty2 extends Component {
                                         <p>Enter the amount you want to charge for 1 night(in $)</p>
                                         <input type="number" class="form-control" onChange={this.handleChange} value={this.state.price} placeholder="Nightly Base Rate" name="price"></input>
                                         <br></br>
-                                        <input type="submit" class="btn btn-primary btn-large" disabled={!this.state.formValid} onClick={this.addProperty} value="Add my property"></input>
+                                        <input type="submit" class="btn btn-primary btn-large" disabled={!this.state.formValid} onClick={this.editProperty} value="Edit my property"></input>
                                         <br></br>
                                         <p class="form-footer">Use of this Web site constitutes acceptance of the HomeAway.com Terms and conditions and Privacy policy.</p>
                                         <p class="form-footer">©2018 HomeAway. All rights reserved</p>
@@ -400,4 +449,14 @@ class AddProperty2 extends Component {
     }
 }
 
-export default AddProperty2
+EditProperty.PropTypes = {
+    getProperty : PropTypes.func.isRequired,
+    editingProperty : PropTypes.func.isRequired,
+    propertyInfo : PropTypes.object
+}
+
+const mapStatetoProps = state => ({
+    propertyInfo:state.property.propertyInfo
+})
+
+export default connect(mapStatetoProps,{getProperty,editingProperty})(EditProperty)

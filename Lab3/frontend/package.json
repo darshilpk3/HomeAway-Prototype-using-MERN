@@ -1,0 +1,38 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "apollo-boost": "^0.1.22",
+    "axios": "^0.18.0",
+    "graphql": "^14.0.2",
+    "graphql-type-json": "^0.2.1",
+    "lodash": "^4.17.11",
+    "md5": "^2.2.1",
+    "npm": "^6.4.1",
+    "react": "^16.5.1",
+    "react-apollo": "^2.3.2",
+    "react-bootstrap": "^0.32.4",
+    "react-cookies": "^0.1.0",
+    "react-dom": "^16.5.1",
+    "react-js-pagination": "^3.0.2",
+    "react-paginate": "^5.2.5",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.5",
+    "react-tabs": "^2.3.0",
+    "reactjs-popup": "^1.2.0",
+    "redux": "^4.0.0",
+    "redux-form": "^7.4.2",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.3.0",
+    "sweetalert": "^2.1.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

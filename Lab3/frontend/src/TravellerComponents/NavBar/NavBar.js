@@ -5,8 +5,6 @@ import '../../App.css'
 import cookie from 'react-cookies'
 import { Redirect } from 'react-router'
 import {Link} from 'react-router-dom'
-import { withRouter } from "react-router";
-import {connect} from "react-redux"
 
 class NavBar extends Component {
 
@@ -30,21 +28,8 @@ class NavBar extends Component {
     }
 
     handleLogout = (e) => {
-        console.log(localStorage.getItem('loginuser'))
         localStorage.removeItem("loginuser")
         localStorage.removeItem("loginemail")
-        localStorage.removeItem("token")
-        //this.props.history.push('/traveller/login')
-        // cookie.remove('loginuser', {
-        //     path: "/"
-        // });
-        // cookie.remove('loginemail', {
-        //     path: "/"
-        // });
-        // this.setState({
-        //     logininfo: "Logged out"
-        // })
-        this.props.history.push('/traveller/login')
     }
 
     componentWillMount() {
@@ -53,7 +38,7 @@ class NavBar extends Component {
     render() {
 
         let navVar = null;
-        if (!localStorage.getItem("loginuser")) {
+        if (!localStorage.getItem("loginuser") && !localStorage.getItem("ownerlogin")) {
             navVar = <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Login</a>
                 <div class="dropdown-menu">
@@ -111,4 +96,4 @@ class NavBar extends Component {
     }
 }
 
-export default withRouter(connect((null,null))(NavBar));
+export default NavBar;

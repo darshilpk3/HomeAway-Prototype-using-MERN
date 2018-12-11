@@ -164,4 +164,35 @@ router.post('/ownersignup', function (req, res, next) {
         })
 })
 
+
+router.get("/:userID/kafka/joblist", async function (req, res, next) {
+
+    kafka.make_request('getJobList', req.params, function (err, result) {
+      console.log("Request Made")
+      if (err) {
+        res.writeHead(400, {
+          'Content-Type': 'application/json'
+        })
+        const data = {
+          "status": 0,
+          "msg": err,
+          "info": {
+            "error": err
+          }
+        }
+        res.end(JSON.stringify(data))
+      } else {
+        res.writeHead(200, {
+          'Content-Type': 'application/json'
+        })
+        const data = {
+          "status": 1,
+          "msg": "Successfully obtained Job List",
+          "info": result
+        }
+        res.end(JSON.stringify(data))
+      }
+    })
+  })
+  
 module.exports = router;
