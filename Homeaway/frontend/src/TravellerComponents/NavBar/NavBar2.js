@@ -34,7 +34,7 @@ class NavBar2 extends Component {
         localStorage.removeItem("loginuser")
         localStorage.removeItem("loginemail")
         localStorage.removeItem("token")
-        this.props.history.push('/traveller/login')
+        this.props.history.push('/')
     }
 
     componentWillMount() {
@@ -47,7 +47,7 @@ class NavBar2 extends Component {
             navVar = <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">Login</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/traveller/login">Traveller Login</a>
+                    <a class="dropdown-item" href="/">Traveller Login</a>
                     <a class="dropdown-item" href="/owner/login">Owner Login</a>
                 </div>
             </li>

@@ -404,7 +404,7 @@ class EditProfile extends Component {
         let redirectVar = null
         console.log(this.state.image)
         if (!localStorage.getItem("loginuser")) {
-            redirectVar = <Redirect to="/traveller/login" />
+            redirectVar = <Redirect to="/" />
         }
         if (this.state.responseData) {
             console.log("should be redirected")

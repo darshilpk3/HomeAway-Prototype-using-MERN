@@ -206,7 +206,7 @@ class ListPlaces extends Component {
     render() {
         let redirectVar = null
         if (!localStorage.getItem("loginuser")) {
-            redirectVar = <Redirect to="/traveller/login" />
+            redirectVar = <Redirect to="/" />
         }
         if (this.state.responseData) {
             console.log("should be redirected")

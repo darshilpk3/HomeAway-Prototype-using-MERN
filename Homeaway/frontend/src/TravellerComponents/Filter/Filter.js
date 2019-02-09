@@ -152,7 +152,7 @@ class Filter extends Component {
     render() {
         var redirectVar = null
         if (!localStorage.getItem("loginuser")) {
-            redirectVar = <Redirect to="/traveller/login" />
+            redirectVar = <Redirect to="/" />
         } else if (this.state.responsedata) {
             redirectVar = <Redirect to={{
                 pathname: '/traveller/show',

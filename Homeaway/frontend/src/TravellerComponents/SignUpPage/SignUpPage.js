@@ -111,7 +111,7 @@ class SignUpPage extends Component {
                     }
                     else {
                         console.log("added")
-                        this.props.history.push('/traveller/login')
+                        this.props.history.push('/')
                     }
                 }
             })
@@ -121,7 +121,7 @@ class SignUpPage extends Component {
         let renderRedirect = null;
         if (this.state.redirect == true) {
             console.log("should redirect")
-            renderRedirect = <Redirect to="/traveller/login" />
+            renderRedirect = <Redirect to="/" />
         }
         return (
 
@@ -138,7 +138,7 @@ class SignUpPage extends Component {
                                 <h1 class="form-header text-center">SignUp HomeAway</h1>
                             </div>
                             <div class="col-md-4 offset-md-4 text-align-center">
-                                <footer class="form-footer">Already have an account? <Link to="/traveller/login">Log in</Link></footer>
+                                <footer class="form-footer">Already have an account? <Link to="/">Log in</Link></footer>
                                 <p class="form-footer text-danger"><FormErrors formErrors={this.state.formErrors} /></p>
                                 <footer class="form-footer text-danger">{this.state.message}</footer>
                             </div>

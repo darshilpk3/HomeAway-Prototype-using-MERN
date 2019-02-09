@@ -29,23 +29,23 @@ class Main extends Component{
         console.log("Inside Main");
         return(
             <div>
-                <Route path="/traveller/login" component = {LoginPage}/>
-                <Route path="/traveller/signup" component = {SignUpPage}/>
-                <Route path="/traveller/home" component = {Home}/>
-                <Route path="/traveller/edit" component = {EditProfile}/>
-                <Route path="/traveller/show" component={ListPlaces}/>
-                <Route path="/traveller/property/show" component={BookProperty}/>
-                <Route path="/owner/login" component={OwnerLoginPage}/>
-                <Route path="/owner/signup" component={OwnerSignUpPage}/>
-                <Route path="/owner/edit" component={OwnerEditProfile} />
-                <Route path="/owner/home" component={OwnerHomePage}/>
-                <Route path="/owner/property/show" component={ShowProperties}/>
-                <Route path="/owner/property/add" component={AddProperty2}/>
-                <Route path="/owner/property/edit" component={EditProperty}/>
-                <Route path="/property/upload" component={AddPropertyPhoto}/>
-                <Route path="/traveller/inbox" component={Inbox} />
-                <Route path="/owner/inbox" component={OwnerInbox} />
-                <Route path="/property/details" component={PropertyDetails}/>
+                <Route exact path="/" component = {LoginPage}/>
+                <Route exact path="/traveller/signup" component = {SignUpPage}/>
+                <Route exact path="/traveller/home" component = {Home}/>
+                <Route exact path="/traveller/edit" component = {EditProfile}/>
+                <Route exact path="/traveller/show" component={ListPlaces}/>
+                <Route exact path="/traveller/property/show" component={BookProperty}/>
+                <Route exact path="/owner/login" component={OwnerLoginPage}/>
+                <Route exact path="/owner/signup" component={OwnerSignUpPage}/>
+                <Route exact path="/owner/edit" component={OwnerEditProfile} />
+                <Route exact path="/owner/home" component={OwnerHomePage}/>
+                <Route exact path="/owner/property/show" component={ShowProperties}/>
+                <Route exact path="/owner/property/add" component={AddProperty2}/>
+                <Route exact path="/owner/property/edit" component={EditProperty}/>
+                <Route exact path="/property/upload" component={AddPropertyPhoto}/>
+                <Route exact path="/traveller/inbox" component={Inbox} />
+                <Route exact path="/owner/inbox" component={OwnerInbox} />
+                <Route exact path="/property/details" component={PropertyDetails}/>
             </div>
         )
     }
